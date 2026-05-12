@@ -95,18 +95,17 @@
             </div>
         </section>
 
-        <!-- 3. TEACHER DASHBOARD (WITH 20+ PORTAL) -->
+        <!-- 3. TEACHER DASHBOARD -->
         <section id="admin-screen" class="hidden animate-pop">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
-                <!-- PORTAL SIDEBAR: Question List -->
+                <!-- PORTAL SIDEBAR -->
                 <div class="lg:col-span-1 glass-card rounded-[2rem] p-6 shadow-xl h-[80vh] flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="font-black text-blue-900">Task Portal</h2>
-                        <span id="portal-count" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">0 / 20+</span>
+                        <span id="portal-count" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">0</span>
                     </div>
                     <div id="portal-list" class="flex-1 overflow-y-auto scroll-custom space-y-2 pr-2">
-                        <!-- Questions will appear here -->
                     </div>
                     <button onclick="clearQ()" class="mt-4 text-red-500 text-xs font-bold border border-red-100 py-2 rounded-lg hover:bg-red-50">Reset All Data</button>
                 </div>
@@ -122,18 +121,27 @@
                     </div>
 
                     <div id="tab-add" class="space-y-4">
-                        <div class="flex gap-4 items-end">
-                            <div class="flex-1">
-                                <label class="text-[10px] font-bold text-slate-400 uppercase">Input Style</label>
-                                <select id="in-type" onchange="toggleInputType()" class="w-full p-3 bg-slate-50 rounded-xl border font-bold text-sm">
-                                    <option value="mcq">Multiple Choice Options</option>
-                                    <option value="text">Direct Typing (Open-Ended)</option>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Target Level</label>
+                                <select id="in-level" class="w-full p-3 bg-blue-50 rounded-xl border font-bold text-sm">
+                                    <option value="Basic 3-5">Basic 3 - 5</option>
+                                    <option value="Basic 6-7">Basic 6 - 7</option>
+                                    <option value="Basic 8">Basic 8</option>
                                 </select>
                             </div>
-                            <div class="flex-1">
-                                <label class="text-[10px] font-bold text-slate-400 uppercase">Illustration (URL)</label>
-                                <input type="text" id="in-img" placeholder="Paste image link here..." class="w-full p-3 bg-slate-50 rounded-xl border text-sm">
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Input Style</label>
+                                <select id="in-type" onchange="toggleInputType()" class="w-full p-3 bg-slate-50 rounded-xl border font-bold text-sm">
+                                    <option value="mcq">Multiple Choice</option>
+                                    <option value="text">Direct Typing</option>
+                                </select>
                             </div>
+                        </div>
+
+                        <div class="flex-1">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase">Illustration (URL)</label>
+                            <input type="text" id="in-img" placeholder="Paste image link here..." class="w-full p-3 bg-slate-50 rounded-xl border text-sm">
                         </div>
 
                         <textarea id="in-q" placeholder="What is the question?" class="w-full p-4 bg-slate-50 rounded-xl border-2 border-transparent focus:border-blue-400 outline-none transition h-24"></textarea>
@@ -152,20 +160,20 @@
                         </div>
 
                         <div id="admin-text-input" class="hidden">
-                            <input type="text" id="in-text-ans" placeholder="Type the single correct word/answer here..." class="w-full p-4 bg-green-50 border-2 border-green-200 rounded-xl outline-none font-bold">
+                            <input type="text" id="in-text-ans" placeholder="Type correct answer..." class="w-full p-4 bg-green-50 border-2 border-green-200 rounded-xl outline-none font-bold">
                         </div>
 
-                        <textarea id="in-bot" placeholder="Bot Explanation (Why is this the answer?)" class="w-full p-4 bg-slate-50 rounded-xl border outline-none h-20 text-sm italic"></textarea>
+                        <textarea id="in-bot" placeholder="Bot Explanation" class="w-full p-4 bg-slate-50 rounded-xl border outline-none h-20 text-sm italic"></textarea>
                         
-                        <button onclick="save()" class="w-full heddy-gradient text-white py-5 rounded-2xl font-black shadow-lg hover:scale-[1.01] transition-all">
-                            ADD TO QUESTION PORTAL <i class="fas fa-plus-circle ml-2"></i>
+                        <button onclick="save()" class="w-full heddy-gradient text-white py-5 rounded-2xl font-black shadow-lg">
+                            ADD TO PORTAL <i class="fas fa-plus-circle ml-2"></i>
                         </button>
                     </div>
 
                     <div id="tab-view" class="hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm">
-                                <thead class="bg-slate-50 text-slate-400 uppercase text-[10px] tracking-widest">
+                                <thead class="bg-slate-50 text-slate-400 uppercase text-[10px]">
                                     <tr><th class="p-4">Date</th><th>Student</th><th>Level</th><th>Score</th></tr>
                                 </thead>
                                 <tbody id="results-body"></tbody>
@@ -180,9 +188,9 @@
     <script>
         let questions = JSON.parse(localStorage.getItem('h_supreme_q')) || [];
         let results = JSON.parse(localStorage.getItem('h_supreme_r')) || [];
+        let activeQuestions = [];
         let cur = 0, score = 0, user = {};
 
-        // On Load
         window.onload = () => {
             document.getElementById('in-date').valueAsDate = new Date();
             updatePortal();
@@ -191,7 +199,6 @@
         function adminLogin() {
             if(prompt("Teacher Pass:") === "1234") {
                 document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('quiz-screen').classList.add('hidden');
                 document.getElementById('admin-screen').classList.remove('hidden');
                 renderResults();
             }
@@ -206,6 +213,7 @@
         function save() {
             const q = {
                 id: Date.now(),
+                level: document.getElementById('in-level').value,
                 date: document.getElementById('in-date').value,
                 type: document.getElementById('in-type').value,
                 text: document.getElementById('in-q').value,
@@ -215,29 +223,20 @@
                 correctIdx: parseInt(document.getElementById('in-correct').value),
                 correctAns: document.getElementById('in-text-ans').value.trim().toLowerCase()
             };
-
-            if(!q.text) return alert("Please enter a question!");
-
+            if(!q.text) return alert("Enter a question!");
             questions.push(q);
             localStorage.setItem('h_supreme_q', JSON.stringify(questions));
             updatePortal();
-            
-            // Clear current inputs
             document.getElementById('in-q').value = '';
-            document.getElementById('in-img').value = '';
-            document.getElementById('in-bot').value = '';
-            document.getElementById('in-text-ans').value = '';
-            document.querySelectorAll('#admin-mcq-inputs input').forEach(i => i.value = '');
         }
 
         function updatePortal() {
             const list = document.getElementById('portal-list');
-            document.getElementById('portal-count').innerText = `${questions.length} / 20+`;
-            
+            document.getElementById('portal-count').innerText = questions.length;
             list.innerHTML = questions.map((q, idx) => `
                 <div class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center shadow-sm">
                     <div class="truncate mr-2">
-                        <p class="text-[10px] font-bold text-blue-500 uppercase">Q${idx + 1} - ${q.type}</p>
+                        <p class="text-[9px] font-bold text-blue-500 uppercase">${q.level} | ${q.type}</p>
                         <p class="text-xs font-bold text-slate-700 truncate">${q.text}</p>
                     </div>
                     <button onclick="removeQ(${q.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
@@ -260,27 +259,18 @@
         function tab(t) {
             document.getElementById('tab-add').classList.toggle('hidden', t !== 'add');
             document.getElementById('tab-view').classList.toggle('hidden', t !== 'view');
-            
-            const addBtn = document.getElementById('tab-add-btn');
-            const viewBtn = document.getElementById('tab-view-btn');
-            
-            if(t === 'add') {
-                addBtn.className = "font-black text-blue-900 text-lg border-b-4 border-blue-900";
-                viewBtn.className = "font-bold text-slate-400 text-lg";
-            } else {
-                viewBtn.className = "font-black text-blue-900 text-lg border-b-4 border-blue-900";
-                addBtn.className = "font-bold text-slate-400 text-lg";
-            }
         }
 
-        function clearQ() { if(confirm("Erase all questions and scores?")) {localStorage.clear(); location.reload();}}
+        function clearQ() { if(confirm("Reset everything?")) {localStorage.clear(); location.reload();}}
 
-        // Student Session Functions
         function begin() {
             user.name = document.getElementById('s-name').value;
             user.group = document.getElementById('s-group').value;
-            if(!user.name || !user.group) return alert("Please enter name and group!");
-            if(questions.length === 0) return alert("Teacher hasn't uploaded questions yet!");
+            if(!user.name || !user.group) return alert("Enter name and level!");
+            
+            // Filter questions based on student level
+            activeQuestions = questions.filter(q => q.level === user.group);
+            if(activeQuestions.length === 0) return alert("No questions available for " + user.group);
             
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
@@ -288,24 +278,20 @@
         }
 
         function load() {
-            const q = questions[cur];
-            document.getElementById('h-date-display').innerText = "Session Date: " + q.date;
-            document.getElementById('q-count').innerText = `Progress: Question ${cur + 1} / ${questions.length}`;
+            const q = activeQuestions[cur];
+            document.getElementById('h-date-display').innerText = "Level: " + user.group;
+            document.getElementById('q-count').innerText = `Question ${cur + 1} of ${activeQuestions.length}`;
             document.getElementById('q-text').innerText = q.text;
             document.getElementById('bot-response').classList.add('hidden');
             
             const imgCont = document.getElementById('q-image-container');
-            if(q.img) {
-                document.getElementById('q-image').src = q.img;
-                imgCont.classList.remove('hidden');
-            } else { imgCont.classList.add('hidden'); }
+            if(q.img) { document.getElementById('q-image').src = q.img; imgCont.classList.remove('hidden'); }
+            else { imgCont.classList.add('hidden'); }
 
             const mcqBox = document.getElementById('mcq-options');
             const textBox = document.getElementById('text-entry');
-            
             if(q.type === 'mcq') {
-                mcqBox.classList.remove('hidden');
-                textBox.classList.add('hidden');
+                mcqBox.classList.remove('hidden'); textBox.classList.add('hidden');
                 mcqBox.innerHTML = '';
                 q.options.forEach((opt, idx) => {
                     if(!opt) return;
@@ -313,62 +299,53 @@
                     btn.className = 'option-btn w-full p-5 rounded-2xl font-bold text-left shadow-sm bg-white';
                     btn.innerText = opt;
                     btn.onclick = () => {
-                        const btns = document.querySelectorAll('.option-btn');
-                        btns.forEach(b => b.disabled = true);
+                        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
                         if(idx === q.correctIdx) { btn.classList.add('correct'); score++; }
-                        else { btn.classList.add('wrong'); btns[q.correctIdx].classList.add('correct'); }
+                        else { btn.classList.add('wrong'); document.querySelectorAll('.option-btn')[q.correctIdx].classList.add('correct'); }
                         showBot(q.bot);
                     };
                     mcqBox.appendChild(btn);
                 });
             } else {
-                mcqBox.classList.add('hidden');
-                textBox.classList.remove('hidden');
-                const inp = document.getElementById('text-answer');
-                inp.value = '';
-                inp.disabled = false;
-                inp.className = "w-full p-5 border-4 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-xl font-bold";
+                mcqBox.classList.add('hidden'); textBox.classList.remove('hidden');
+                document.getElementById('text-answer').value = '';
+                document.getElementById('text-answer').disabled = false;
             }
         }
 
         function checkTextAns() {
-            const q = questions[cur];
-            const input = document.getElementById('text-answer');
-            const val = input.value.trim().toLowerCase();
-            input.disabled = true;
-            if(val === q.correctAns) { input.classList.add('correct'); score++; }
-            else { input.classList.add('wrong'); }
-            showBot(q.bot + " (Answer: " + q.correctAns + ")");
+            const q = activeQuestions[cur];
+            const inp = document.getElementById('text-answer');
+            const val = inp.value.trim().toLowerCase();
+            inp.disabled = true;
+            if(val === q.correctAns) { inp.classList.add('correct'); score++; }
+            else { inp.classList.add('wrong'); }
+            showBot(q.bot + " (Ans: " + q.correctAns + ")");
         }
 
         function showBot(msg) {
-            document.getElementById('bot-msg').innerText = msg || "Good effort! Let's keep moving.";
+            document.getElementById('bot-msg').innerText = msg || "Keep going!";
             document.getElementById('bot-response').classList.remove('hidden');
-            document.getElementById('score-ring').innerText = Math.round((score/questions.length)*100) + "%";
+            document.getElementById('score-ring').innerText = Math.round((score/activeQuestions.length)*100) + "%";
         }
 
         function next() {
             cur++;
-            if(cur < questions.length) load();
+            if(cur < activeQuestions.length) load();
             else finish();
         }
 
         function finish() {
-            const final = Math.round((score/questions.length)*100);
-            results.push({ date: questions[0].date, name: user.name, group: user.group, score: final });
+            const final = Math.round((score/activeQuestions.length)*100);
+            results.push({ date: new Date().toLocaleDateString(), name: user.name, group: user.group, score: final });
             localStorage.setItem('h_supreme_r', JSON.stringify(results));
-            document.getElementById('quiz-screen').innerHTML = `
-                <div class="text-center p-12 glass-card rounded-[3rem] animate-pop shadow-2xl">
-                    <div class="text-7xl mb-6">🎖️</div>
-                    <h2 class="text-4xl font-black text-blue-900 mb-2">Great Session!</h2>
-                    <p class="text-slate-500 mb-8 font-bold">${user.name}, your score was recorded.</p>
-                    <div class="bg-blue-600 text-white py-10 px-16 rounded-[2.5rem] inline-block shadow-2xl">
-                        <p class="text-xs uppercase font-bold tracking-widest mb-2">Accuracy Score</p>
-                        <p class="text-8xl font-black">${final}%</p>
-                    </div>
-                    <button onclick="location.reload()" class="w-full mt-10 bg-slate-900 text-white font-black py-5 rounded-2xl hover:bg-black transition">Close Portal</button>
+            document.getElementById('quiz-screen').innerHTML = `<div class="text-center p-12 glass-card rounded-[3rem] shadow-2xl">
+                <h2 class="text-4xl font-black text-blue-900 mb-2">Done!</h2>
+                <div class="bg-blue-600 text-white py-10 px-16 rounded-[2.5rem] inline-block my-8">
+                    <p class="text-8xl font-black">${final}%</p>
                 </div>
-            `;
+                <button onclick="location.reload()" class="w-full bg-slate-900 text-white font-black py-5 rounded-2xl">Close</button>
+            </div>`;
         }
     </script>
 </body>
