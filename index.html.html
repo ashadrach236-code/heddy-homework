@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEDDY SUPREME SESSION</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #f0f4ff; color: #1e293b; }
+        .heddy-gradient { background: linear-gradient(135deg, #1e40af 0%, #1e1b4b 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .option-btn { transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid #e2e8f0; }
+        .option-btn:hover:not(:disabled) { border-color: #3b82f6; background: #eff6ff; transform: scale(1.02); }
+        .correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #166534; }
+        .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
+        .animate-pop { animation: pop 0.3s ease-out; }
+        @keyframes pop { 0% { transform: scale(0.9); } 100% { transform: scale(1); } }
+        .hidden { display: none; }
+        .scroll-custom::-webkit-scrollbar { width: 6px; }
+        .scroll-custom::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="heddy-gradient text-white py-4 px-6 sticky top-0 z-50 shadow-xl">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-yellow-400 p-2 rounded-xl text-blue-900 shadow-lg">
+                    <i class="fas fa-bolt-lightning text-xl"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-tight">HEDDY <span class="text-yellow-400 italic">SUPREME</span></h1>
+            </div>
+            <button onclick="adminLogin()" class="bg-white/10 border border-white/20 hover:bg-yellow-400 hover:text-blue-900 px-5 py-2 rounded-full text-xs font-bold transition-all">
+                TEACHER DASHBOARD
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-4 md:p-8">
+
+        <!-- 1. STUDENT LOGIN -->
+        <section id="login-screen" class="mt-8 animate-pop">
+            <div class="glass-card rounded-[3rem] p-10 shadow-2xl border border-white text-center max-w-lg mx-auto">
+                <div class="text-6xl mb-4">✨</div>
+                <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Student Portal</h2>
+                <p class="text-slate-500 mb-8 font-medium">Select your group and enter your name</p>
+                <div class="space-y-4 text-left">
+                    <input type="text" id="s-name" placeholder="Your Full Name" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl focus:border-blue-500 outline-none transition">
+                    <select id="s-group" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl focus:border-blue-500 outline-none transition font-bold">
+                        <option value="">-- Choose Your Level --</option>
+                        <option value="Basic 3-5">Basic 3 - 5 (Primary)</option>
+                        <option value="Basic 6-7">Basic 6 - 7 (Junior High)</option>
+                        <option value="Basic 8">Basic 8 (Advanced)</option>
+                    </select>
+                    <button onclick="begin()" class="w-full heddy-gradient text-white font-black py-5 rounded-2xl shadow-xl hover:shadow-blue-200 transition-all">
+                        ENTER SESSION <i class="fas fa-paper-plane ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. QUIZ INTERFACE -->
+        <section id="quiz-screen" class="hidden max-w-4xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <div id="h-date-display" class="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-md"></div>
+                <div id="score-ring" class="text-2xl font-black text-blue-900">0%</div>
+            </div>
+
+            <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl border-b-[12px] border-yellow-400">
+                <div id="q-image-container" class="hidden mb-6 rounded-2xl overflow-hidden shadow-md">
+                    <img id="q-image" src="" alt="Question Illustration" class="w-full h-auto max-h-64 object-contain bg-slate-100">
+                </div>
+                <p id="q-count" class="text-blue-500 font-bold uppercase text-xs tracking-widest mb-2"></p>
+                <h3 id="q-text" class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-8 leading-tight"></h3>
+
+                <div id="mcq-options" class="grid gap-3"></div>
+                <div id="text-entry" class="hidden">
+                    <input type="text" id="text-answer" placeholder="Type your answer here..." class="w-full p-5 border-4 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-xl font-bold">
+                    <button onclick="checkTextAns()" class="w-full mt-4 bg-slate-800 text-white py-4 rounded-2xl font-bold hover:bg-slate-700 transition">Submit Answer</button>
+                </div>
+
+                <div id="bot-response" class="hidden mt-8 p-6 bg-blue-900 rounded-[2rem] text-white animate-pop">
+                    <div class="flex gap-4">
+                        <div class="text-3xl">🤖</div>
+                        <div class="flex-1">
+                            <p class="text-yellow-400 font-black text-xs uppercase mb-1">Heddy Bot Analysis</p>
+                            <p id="bot-msg" class="text-slate-200 font-medium italic"></p>
+                        </div>
+                    </div>
+                    <button onclick="next()" class="w-full mt-6 bg-white text-blue-900 font-black py-4 rounded-xl hover:bg-yellow-400 transition">Next Question <i class="fas fa-arrow-right ml-2"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. TEACHER DASHBOARD (WITH 20+ PORTAL) -->
+        <section id="admin-screen" class="hidden animate-pop">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- PORTAL SIDEBAR: Question List -->
+                <div class="lg:col-span-1 glass-card rounded-[2rem] p-6 shadow-xl h-[80vh] flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="font-black text-blue-900">Task Portal</h2>
+                        <span id="portal-count" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">0 / 20+</span>
+                    </div>
+                    <div id="portal-list" class="flex-1 overflow-y-auto scroll-custom space-y-2 pr-2">
+                        <!-- Questions will appear here -->
+                    </div>
+                    <button onclick="clearQ()" class="mt-4 text-red-500 text-xs font-bold border border-red-100 py-2 rounded-lg hover:bg-red-50">Reset All Data</button>
+                </div>
+
+                <!-- MAIN EDITOR -->
+                <div class="lg:col-span-2 bg-white rounded-[2rem] p-8 shadow-2xl border border-slate-200">
+                    <div class="flex justify-between mb-8 border-b pb-4">
+                        <div class="flex gap-4">
+                            <button onclick="tab('add')" id="tab-add-btn" class="font-black text-blue-900 text-lg border-b-4 border-blue-900">Create Question</button>
+                            <button onclick="tab('view')" id="tab-view-btn" class="font-bold text-slate-400 text-lg">Student Records</button>
+                        </div>
+                        <input type="date" id="in-date" class="p-2 bg-slate-50 rounded-lg border text-xs font-bold">
+                    </div>
+
+                    <div id="tab-add" class="space-y-4">
+                        <div class="flex gap-4 items-end">
+                            <div class="flex-1">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Input Style</label>
+                                <select id="in-type" onchange="toggleInputType()" class="w-full p-3 bg-slate-50 rounded-xl border font-bold text-sm">
+                                    <option value="mcq">Multiple Choice Options</option>
+                                    <option value="text">Direct Typing (Open-Ended)</option>
+                                </select>
+                            </div>
+                            <div class="flex-1">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Illustration (URL)</label>
+                                <input type="text" id="in-img" placeholder="Paste image link here..." class="w-full p-3 bg-slate-50 rounded-xl border text-sm">
+                            </div>
+                        </div>
+
+                        <textarea id="in-q" placeholder="What is the question?" class="w-full p-4 bg-slate-50 rounded-xl border-2 border-transparent focus:border-blue-400 outline-none transition h-24"></textarea>
+                        
+                        <div id="admin-mcq-inputs" class="grid grid-cols-2 gap-3">
+                            <input type="text" id="opt-0" placeholder="Option A" class="p-3 border rounded-xl text-sm">
+                            <input type="text" id="opt-1" placeholder="Option B" class="p-3 border rounded-xl text-sm">
+                            <input type="text" id="opt-2" placeholder="Option C" class="p-3 border rounded-xl text-sm">
+                            <input type="text" id="opt-3" placeholder="Option D" class="p-3 border rounded-xl text-sm">
+                            <select id="in-correct" class="col-span-2 p-3 bg-blue-50 rounded-xl border font-bold text-blue-900">
+                                <option value="0">Answer is A</option>
+                                <option value="1">Answer is B</option>
+                                <option value="2">Answer is C</option>
+                                <option value="3">Answer is D</option>
+                            </select>
+                        </div>
+
+                        <div id="admin-text-input" class="hidden">
+                            <input type="text" id="in-text-ans" placeholder="Type the single correct word/answer here..." class="w-full p-4 bg-green-50 border-2 border-green-200 rounded-xl outline-none font-bold">
+                        </div>
+
+                        <textarea id="in-bot" placeholder="Bot Explanation (Why is this the answer?)" class="w-full p-4 bg-slate-50 rounded-xl border outline-none h-20 text-sm italic"></textarea>
+                        
+                        <button onclick="save()" class="w-full heddy-gradient text-white py-5 rounded-2xl font-black shadow-lg hover:scale-[1.01] transition-all">
+                            ADD TO QUESTION PORTAL <i class="fas fa-plus-circle ml-2"></i>
+                        </button>
+                    </div>
+
+                    <div id="tab-view" class="hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-slate-400 uppercase text-[10px] tracking-widest">
+                                    <tr><th class="p-4">Date</th><th>Student</th><th>Level</th><th>Score</th></tr>
+                                </thead>
+                                <tbody id="results-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let questions = JSON.parse(localStorage.getItem('h_supreme_q')) || [];
+        let results = JSON.parse(localStorage.getItem('h_supreme_r')) || [];
+        let cur = 0, score = 0, user = {};
+
+        // On Load
+        window.onload = () => {
+            document.getElementById('in-date').valueAsDate = new Date();
+            updatePortal();
+        };
+
+        function adminLogin() {
+            if(prompt("Teacher Pass:") === "1234") {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('quiz-screen').classList.add('hidden');
+                document.getElementById('admin-screen').classList.remove('hidden');
+                renderResults();
+            }
+        }
+
+        function toggleInputType() {
+            const isText = document.getElementById('in-type').value === 'text';
+            document.getElementById('admin-mcq-inputs').classList.toggle('hidden', isText);
+            document.getElementById('admin-text-input').classList.toggle('hidden', !isText);
+        }
+
+        function save() {
+            const q = {
+                id: Date.now(),
+                date: document.getElementById('in-date').value,
+                type: document.getElementById('in-type').value,
+                text: document.getElementById('in-q').value,
+                img: document.getElementById('in-img').value,
+                bot: document.getElementById('in-bot').value,
+                options: [document.getElementById('opt-0').value, document.getElementById('opt-1').value, document.getElementById('opt-2').value, document.getElementById('opt-3').value],
+                correctIdx: parseInt(document.getElementById('in-correct').value),
+                correctAns: document.getElementById('in-text-ans').value.trim().toLowerCase()
+            };
+
+            if(!q.text) return alert("Please enter a question!");
+
+            questions.push(q);
+            localStorage.setItem('h_supreme_q', JSON.stringify(questions));
+            updatePortal();
+            
+            // Clear current inputs
+            document.getElementById('in-q').value = '';
+            document.getElementById('in-img').value = '';
+            document.getElementById('in-bot').value = '';
+            document.getElementById('in-text-ans').value = '';
+            document.querySelectorAll('#admin-mcq-inputs input').forEach(i => i.value = '');
+        }
+
+        function updatePortal() {
+            const list = document.getElementById('portal-list');
+            document.getElementById('portal-count').innerText = `${questions.length} / 20+`;
+            
+            list.innerHTML = questions.map((q, idx) => `
+                <div class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center shadow-sm">
+                    <div class="truncate mr-2">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase">Q${idx + 1} - ${q.type}</p>
+                        <p class="text-xs font-bold text-slate-700 truncate">${q.text}</p>
+                    </div>
+                    <button onclick="removeQ(${q.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function removeQ(id) {
+            questions = questions.filter(q => q.id !== id);
+            localStorage.setItem('h_supreme_q', JSON.stringify(questions));
+            updatePortal();
+        }
+
+        function renderResults() {
+            document.getElementById('results-body').innerHTML = results.map(r => `
+                <tr class="border-b"><td class="p-4 text-slate-400 font-bold">${r.date}</td><td class="font-bold">${r.name}</td><td class="text-blue-600 font-bold text-xs">${r.group}</td><td class="font-black text-blue-900">${r.score}%</td></tr>
+            `).reverse().join('');
+        }
+
+        function tab(t) {
+            document.getElementById('tab-add').classList.toggle('hidden', t !== 'add');
+            document.getElementById('tab-view').classList.toggle('hidden', t !== 'view');
+            
+            const addBtn = document.getElementById('tab-add-btn');
+            const viewBtn = document.getElementById('tab-view-btn');
+            
+            if(t === 'add') {
+                addBtn.className = "font-black text-blue-900 text-lg border-b-4 border-blue-900";
+                viewBtn.className = "font-bold text-slate-400 text-lg";
+            } else {
+                viewBtn.className = "font-black text-blue-900 text-lg border-b-4 border-blue-900";
+                addBtn.className = "font-bold text-slate-400 text-lg";
+            }
+        }
+
+        function clearQ() { if(confirm("Erase all questions and scores?")) {localStorage.clear(); location.reload();}}
+
+        // Student Session Functions
+        function begin() {
+            user.name = document.getElementById('s-name').value;
+            user.group = document.getElementById('s-group').value;
+            if(!user.name || !user.group) return alert("Please enter name and group!");
+            if(questions.length === 0) return alert("Teacher hasn't uploaded questions yet!");
+            
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            load();
+        }
+
+        function load() {
+            const q = questions[cur];
+            document.getElementById('h-date-display').innerText = "Session Date: " + q.date;
+            document.getElementById('q-count').innerText = `Progress: Question ${cur + 1} / ${questions.length}`;
+            document.getElementById('q-text').innerText = q.text;
+            document.getElementById('bot-response').classList.add('hidden');
+            
+            const imgCont = document.getElementById('q-image-container');
+            if(q.img) {
+                document.getElementById('q-image').src = q.img;
+                imgCont.classList.remove('hidden');
+            } else { imgCont.classList.add('hidden'); }
+
+            const mcqBox = document.getElementById('mcq-options');
+            const textBox = document.getElementById('text-entry');
+            
+            if(q.type === 'mcq') {
+                mcqBox.classList.remove('hidden');
+                textBox.classList.add('hidden');
+                mcqBox.innerHTML = '';
+                q.options.forEach((opt, idx) => {
+                    if(!opt) return;
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn w-full p-5 rounded-2xl font-bold text-left shadow-sm bg-white';
+                    btn.innerText = opt;
+                    btn.onclick = () => {
+                        const btns = document.querySelectorAll('.option-btn');
+                        btns.forEach(b => b.disabled = true);
+                        if(idx === q.correctIdx) { btn.classList.add('correct'); score++; }
+                        else { btn.classList.add('wrong'); btns[q.correctIdx].classList.add('correct'); }
+                        showBot(q.bot);
+                    };
+                    mcqBox.appendChild(btn);
+                });
+            } else {
+                mcqBox.classList.add('hidden');
+                textBox.classList.remove('hidden');
+                const inp = document.getElementById('text-answer');
+                inp.value = '';
+                inp.disabled = false;
+                inp.className = "w-full p-5 border-4 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-xl font-bold";
+            }
+        }
+
+        function checkTextAns() {
+            const q = questions[cur];
+            const input = document.getElementById('text-answer');
+            const val = input.value.trim().toLowerCase();
+            input.disabled = true;
+            if(val === q.correctAns) { input.classList.add('correct'); score++; }
+            else { input.classList.add('wrong'); }
+            showBot(q.bot + " (Answer: " + q.correctAns + ")");
+        }
+
+        function showBot(msg) {
+            document.getElementById('bot-msg').innerText = msg || "Good effort! Let's keep moving.";
+            document.getElementById('bot-response').classList.remove('hidden');
+            document.getElementById('score-ring').innerText = Math.round((score/questions.length)*100) + "%";
+        }
+
+        function next() {
+            cur++;
+            if(cur < questions.length) load();
+            else finish();
+        }
+
+        function finish() {
+            const final = Math.round((score/questions.length)*100);
+            results.push({ date: questions[0].date, name: user.name, group: user.group, score: final });
+            localStorage.setItem('h_supreme_r', JSON.stringify(results));
+            document.getElementById('quiz-screen').innerHTML = `
+                <div class="text-center p-12 glass-card rounded-[3rem] animate-pop shadow-2xl">
+                    <div class="text-7xl mb-6">🎖️</div>
+                    <h2 class="text-4xl font-black text-blue-900 mb-2">Great Session!</h2>
+                    <p class="text-slate-500 mb-8 font-bold">${user.name}, your score was recorded.</p>
+                    <div class="bg-blue-600 text-white py-10 px-16 rounded-[2.5rem] inline-block shadow-2xl">
+                        <p class="text-xs uppercase font-bold tracking-widest mb-2">Accuracy Score</p>
+                        <p class="text-8xl font-black">${final}%</p>
+                    </div>
+                    <button onclick="location.reload()" class="w-full mt-10 bg-slate-900 text-white font-black py-5 rounded-2xl hover:bg-black transition">Close Portal</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
