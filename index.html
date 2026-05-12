@@ -6,6 +6,8 @@
     <title>HEDDY SUPREME SESSION</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- NEW FEATURE: Confetti Library for celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         body { font-family: 'Outfit', sans-serif; background: #f0f4ff; color: #1e293b; }
@@ -18,8 +20,6 @@
         .animate-pop { animation: pop 0.3s ease-out; }
         @keyframes pop { 0% { transform: scale(0.9); } 100% { transform: scale(1); } }
         .hidden { display: none; }
-        .scroll-custom::-webkit-scrollbar { width: 6px; }
-        .scroll-custom::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -41,44 +41,62 @@
 
     <main class="max-w-6xl mx-auto p-4 md:p-8">
 
-        <!-- 1. STUDENT LOGIN -->
+        <!-- 1. STUDENT LOGIN & SUBJECT SELECTION -->
         <section id="login-screen" class="mt-8 animate-pop">
             <div class="glass-card rounded-[3rem] p-10 shadow-2xl border border-white text-center max-w-lg mx-auto">
                 <div class="text-6xl mb-4">✨</div>
                 <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Student Portal</h2>
-                <p class="text-slate-500 mb-8 font-medium">Select your group and enter your name</p>
-                <div class="space-y-4 text-left">
+                <div id="login-form" class="space-y-4 text-left mt-6">
                     <input type="text" id="s-name" placeholder="Your Full Name" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl focus:border-blue-500 outline-none transition">
-                    <select id="s-group" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl focus:border-blue-500 outline-none transition font-bold">
+                    <select id="s-group" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl font-bold">
                         <option value="">-- Choose Your Level --</option>
-                        <option value="Basic 3-5">Basic 3 - 5 (Primary)</option>
-                        <option value="Basic 6-7">Basic 6 - 7 (Junior High)</option>
-                        <option value="Basic 8">Basic 8 (Advanced)</option>
+                        <option value="Basic 3-5">Basic 3 - 5</option>
+                        <option value="Basic 6-7">Basic 6 - 7</option>
+                        <option value="Basic 8">Basic 8</option>
                     </select>
-                    <button onclick="begin()" class="w-full heddy-gradient text-white font-black py-5 rounded-2xl shadow-xl hover:shadow-blue-200 transition-all">
-                        ENTER SESSION <i class="fas fa-paper-plane ml-2"></i>
+                    <button onclick="showSubjects()" class="w-full heddy-gradient text-white font-black py-5 rounded-2xl shadow-xl hover:scale-[1.02] transition-transform">
+                        VIEW TODAY'S TASKS <i class="fas fa-list-check ml-2"></i>
                     </button>
+                    
+                    <!-- NEW FEATURE: Hall of Fame Leaderboard -->
+                    <div id="hall-of-fame" class="mt-6 bg-yellow-50 p-5 rounded-2xl border border-yellow-200 hidden">
+                        <h3 class="font-black text-yellow-700 text-sm mb-3 uppercase tracking-wider"><i class="fas fa-trophy mr-1"></i> Top Performers</h3>
+                        <div id="hof-list" class="space-y-2 text-sm font-bold text-slate-700"></div>
+                    </div>
+                </div>
+
+                <div id="subject-selection" class="hidden mt-6 space-y-3">
+                    <p class="text-slate-500 font-bold mb-4">Select a Subject to Begin:</p>
+                    <div id="subject-buttons" class="grid grid-cols-1 gap-3"></div>
+                    <button onclick="backToLogin()" class="text-xs text-slate-400 font-bold mt-6 underline">Change Student Info</button>
                 </div>
             </div>
         </section>
 
         <!-- 2. QUIZ INTERFACE -->
         <section id="quiz-screen" class="hidden max-w-4xl mx-auto">
-            <div class="flex justify-between items-center mb-6">
-                <div id="h-date-display" class="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-md"></div>
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex gap-2">
+                    <div id="h-subject-badge" class="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-md"></div>
+                    <div id="timer-display" class="bg-slate-800 text-white px-4 py-1 rounded-full text-xs font-bold shadow-md">00:00</div>
+                </div>
                 <div id="score-ring" class="text-2xl font-black text-blue-900">0%</div>
+            </div>
+
+            <div class="w-full bg-slate-200 h-2 rounded-full mb-6 overflow-hidden">
+                <div id="progress-fill" class="h-full bg-yellow-400 w-0 transition-all duration-500"></div>
             </div>
 
             <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl border-b-[12px] border-yellow-400">
                 <div id="q-image-container" class="hidden mb-6 rounded-2xl overflow-hidden shadow-md">
-                    <img id="q-image" src="" alt="Question Illustration" class="w-full h-auto max-h-64 object-contain bg-slate-100">
+                    <img id="q-image" src="" class="w-full h-auto max-h-64 object-contain bg-slate-100">
                 </div>
                 <p id="q-count" class="text-blue-500 font-bold uppercase text-xs tracking-widest mb-2"></p>
                 <h3 id="q-text" class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-8 leading-tight"></h3>
 
                 <div id="mcq-options" class="grid gap-3"></div>
                 <div id="text-entry" class="hidden">
-                    <input type="text" id="text-answer" placeholder="Type your answer here..." class="w-full p-5 border-4 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-xl font-bold">
+                    <input type="text" id="text-answer" placeholder="Type your answer..." class="w-full p-5 border-4 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-xl font-bold">
                     <button onclick="checkTextAns()" class="w-full mt-4 bg-slate-800 text-white py-4 rounded-2xl font-bold hover:bg-slate-700 transition">Submit Answer</button>
                 </div>
 
@@ -90,7 +108,7 @@
                             <p id="bot-msg" class="text-slate-200 font-medium italic"></p>
                         </div>
                     </div>
-                    <button onclick="next()" class="w-full mt-6 bg-white text-blue-900 font-black py-4 rounded-xl hover:bg-yellow-400 transition">Next Question <i class="fas fa-arrow-right ml-2"></i></button>
+                    <button onclick="next()" class="w-full mt-6 bg-white text-blue-900 font-black py-4 rounded-xl hover:bg-yellow-400 transition">Next Task <i class="fas fa-arrow-right ml-2"></i></button>
                 </div>
             </div>
         </section>
@@ -98,87 +116,87 @@
         <!-- 3. TEACHER DASHBOARD -->
         <section id="admin-screen" class="hidden animate-pop">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
                 <!-- PORTAL SIDEBAR -->
                 <div class="lg:col-span-1 glass-card rounded-[2rem] p-6 shadow-xl h-[80vh] flex flex-col">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="font-black text-blue-900">Task Portal</h2>
+                        <h2 class="font-black text-blue-900 uppercase text-sm">Active Tasks</h2>
                         <span id="portal-count" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">0</span>
                     </div>
-                    <div id="portal-list" class="flex-1 overflow-y-auto scroll-custom space-y-2 pr-2">
-                    </div>
-                    <button onclick="clearQ()" class="mt-4 text-red-500 text-xs font-bold border border-red-100 py-2 rounded-lg hover:bg-red-50">Reset All Data</button>
+                    <div id="portal-list" class="flex-1 overflow-y-auto space-y-2 pr-2"></div>
+                    <button onclick="clearQ()" class="mt-4 text-red-500 text-[10px] font-bold border border-red-100 py-2 rounded-lg hover:bg-red-50">WIPE ALL SESSIONS</button>
                 </div>
 
                 <!-- MAIN EDITOR -->
                 <div class="lg:col-span-2 bg-white rounded-[2rem] p-8 shadow-2xl border border-slate-200">
                     <div class="flex justify-between mb-8 border-b pb-4">
-                        <div class="flex gap-4">
-                            <button onclick="tab('add')" id="tab-add-btn" class="font-black text-blue-900 text-lg border-b-4 border-blue-900">Create Question</button>
-                            <button onclick="tab('view')" id="tab-view-btn" class="font-bold text-slate-400 text-lg">Student Records</button>
+                        <div class="flex gap-6">
+                            <button onclick="tab('add')" id="tab-add-btn" class="font-black text-blue-900 text-lg border-b-4 border-blue-900 pb-2">New Homework</button>
+                            <button onclick="tab('view')" id="tab-view-btn" class="font-bold text-slate-400 text-lg pb-2">Class Results</button>
                         </div>
-                        <input type="date" id="in-date" class="p-2 bg-slate-50 rounded-lg border text-xs font-bold">
+                        <input type="date" id="in-date" class="p-2 bg-slate-50 rounded-lg border text-[10px] font-bold">
                     </div>
 
                     <div id="tab-add" class="space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-3 gap-3">
                             <div>
-                                <label class="text-[10px] font-bold text-slate-400 uppercase">Target Level</label>
-                                <select id="in-level" class="w-full p-3 bg-blue-50 rounded-xl border font-bold text-sm">
-                                    <option value="Basic 3-5">Basic 3 - 5</option>
-                                    <option value="Basic 6-7">Basic 6 - 7</option>
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Class Level</label>
+                                <select id="in-level" class="w-full p-3 bg-blue-50 rounded-xl border font-bold text-xs">
+                                    <option value="Basic 3-5">Basic 3-5</option>
+                                    <option value="Basic 6-7">Basic 6-7</option>
                                     <option value="Basic 8">Basic 8</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[10px] font-bold text-slate-400 uppercase">Input Style</label>
-                                <select id="in-type" onchange="toggleInputType()" class="w-full p-3 bg-slate-50 rounded-xl border font-bold text-sm">
-                                    <option value="mcq">Multiple Choice</option>
-                                    <option value="text">Direct Typing</option>
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Subject Area</label>
+                                <select id="in-subject" class="w-full p-3 bg-yellow-50 rounded-xl border font-bold text-xs">
+                                    <option value="Mathematics">Mathematics</option>
+                                    <option value="Science">Science</option>
+                                    <option value="Social Studies">Social Studies</option>
+                                    <option value="English Language">English Language</option>
+                                    <option value="ICT / Computing">ICT / Computing</option>
+                                    <option value="Religious & Moral Ed.">RME</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-400 uppercase">Input Mode</label>
+                                <select id="in-type" onchange="toggleInputType()" class="w-full p-3 bg-slate-50 rounded-xl border font-bold text-xs">
+                                    <option value="mcq">MCQ (Options)</option>
+                                    <option value="text">Theory (Typing)</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="flex-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase">Illustration (URL)</label>
-                            <input type="text" id="in-img" placeholder="Paste image link here..." class="w-full p-3 bg-slate-50 rounded-xl border text-sm">
-                        </div>
-
-                        <textarea id="in-q" placeholder="What is the question?" class="w-full p-4 bg-slate-50 rounded-xl border-2 border-transparent focus:border-blue-400 outline-none transition h-24"></textarea>
+                        <input type="text" id="in-img" placeholder="Paste Image Link (Optional)" class="w-full p-3 bg-slate-50 rounded-xl border text-xs">
+                        <textarea id="in-q" placeholder="Enter the question or instruction here..." class="w-full p-4 bg-slate-50 rounded-xl border-2 focus:border-blue-400 outline-none h-24 font-bold text-sm"></textarea>
                         
                         <div id="admin-mcq-inputs" class="grid grid-cols-2 gap-3">
-                            <input type="text" id="opt-0" placeholder="Option A" class="p-3 border rounded-xl text-sm">
-                            <input type="text" id="opt-1" placeholder="Option B" class="p-3 border rounded-xl text-sm">
-                            <input type="text" id="opt-2" placeholder="Option C" class="p-3 border rounded-xl text-sm">
-                            <input type="text" id="opt-3" placeholder="Option D" class="p-3 border rounded-xl text-sm">
-                            <select id="in-correct" class="col-span-2 p-3 bg-blue-50 rounded-xl border font-bold text-blue-900">
-                                <option value="0">Answer is A</option>
-                                <option value="1">Answer is B</option>
-                                <option value="2">Answer is C</option>
-                                <option value="3">Answer is D</option>
+                            <input type="text" id="opt-0" placeholder="Option A" class="p-3 border rounded-xl text-xs">
+                            <input type="text" id="opt-1" placeholder="Option B" class="p-3 border rounded-xl text-xs">
+                            <input type="text" id="opt-2" placeholder="Option C" class="p-3 border rounded-xl text-xs">
+                            <input type="text" id="opt-3" placeholder="Option D" class="p-3 border rounded-xl text-xs">
+                            <select id="in-correct" class="col-span-2 p-3 bg-blue-50 rounded-xl border font-black text-blue-900 text-xs">
+                                <option value="0">Correct: A</option><option value="1">Correct: B</option><option value="2">Correct: C</option><option value="3">Correct: D</option>
                             </select>
                         </div>
 
                         <div id="admin-text-input" class="hidden">
-                            <input type="text" id="in-text-ans" placeholder="Type correct answer..." class="w-full p-4 bg-green-50 border-2 border-green-200 rounded-xl outline-none font-bold">
+                            <input type="text" id="in-text-ans" placeholder="Type the exact correct answer..." class="w-full p-4 bg-green-50 border-2 border-green-200 rounded-xl font-bold">
                         </div>
 
-                        <textarea id="in-bot" placeholder="Bot Explanation" class="w-full p-4 bg-slate-50 rounded-xl border outline-none h-20 text-sm italic"></textarea>
+                        <textarea id="in-bot" placeholder="What should the bot explain if they miss it?" class="w-full p-4 bg-slate-50 rounded-xl border h-20 text-xs italic"></textarea>
                         
-                        <button onclick="save()" class="w-full heddy-gradient text-white py-5 rounded-2xl font-black shadow-lg">
-                            ADD TO PORTAL <i class="fas fa-plus-circle ml-2"></i>
+                        <button onclick="save()" class="w-full heddy-gradient text-white py-5 rounded-2xl font-black shadow-lg hover:scale-[1.01] transition">
+                            PUBLISH TO PORTAL <i class="fas fa-cloud-arrow-up ml-2"></i>
                         </button>
                     </div>
 
                     <div id="tab-view" class="hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-sm">
-                                <thead class="bg-slate-50 text-slate-400 uppercase text-[10px]">
-                                    <tr><th class="p-4">Date</th><th>Student</th><th>Level</th><th>Score</th></tr>
-                                </thead>
-                                <tbody id="results-body"></tbody>
-                            </table>
-                        </div>
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-400 uppercase">
+                                <tr><th class="p-4">Student</th><th>Level</th><th>Subject</th><th>Grade</th></tr>
+                            </thead>
+                            <tbody id="results-body"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -189,15 +207,33 @@
         let questions = JSON.parse(localStorage.getItem('h_supreme_q')) || [];
         let results = JSON.parse(localStorage.getItem('h_supreme_r')) || [];
         let activeQuestions = [];
-        let cur = 0, score = 0, user = {};
+        let userAnswers = []; // NEW: Tracking answers for review
+        let cur = 0, score = 0, user = {}, timerInterval;
+        let seconds = 0;
 
         window.onload = () => {
             document.getElementById('in-date').valueAsDate = new Date();
             updatePortal();
+            loadLeaderboard(); // NEW: Load hall of fame on start
         };
 
+        // NEW: Function to display top 3 recent scores
+        function loadLeaderboard() {
+            if(results.length > 0) {
+                document.getElementById('hall-of-fame').classList.remove('hidden');
+                // Sort by score (highest first) and take top 3
+                const topResults = [...results].sort((a, b) => b.score - a.score).slice(0, 3);
+                document.getElementById('hof-list').innerHTML = topResults.map((r, i) => `
+                    <div class="flex justify-between items-center bg-white p-2 rounded-lg">
+                        <span><span class="text-yellow-500 mr-2">#${i+1}</span> ${r.name}</span>
+                        <span class="text-blue-600">${r.score}%</span>
+                    </div>
+                `).join('');
+            }
+        }
+
         function adminLogin() {
-            if(prompt("Teacher Pass:") === "1234") {
+            if(prompt("Staff ID:") === "1234") {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('admin-screen').classList.remove('hidden');
                 renderResults();
@@ -214,6 +250,7 @@
             const q = {
                 id: Date.now(),
                 level: document.getElementById('in-level').value,
+                subject: document.getElementById('in-subject').value,
                 date: document.getElementById('in-date').value,
                 type: document.getElementById('in-type').value,
                 text: document.getElementById('in-q').value,
@@ -221,9 +258,9 @@
                 bot: document.getElementById('in-bot').value,
                 options: [document.getElementById('opt-0').value, document.getElementById('opt-1').value, document.getElementById('opt-2').value, document.getElementById('opt-3').value],
                 correctIdx: parseInt(document.getElementById('in-correct').value),
-                correctAns: document.getElementById('in-text-ans').value.trim().toLowerCase()
+                correctAns: document.getElementById('in-text-ans').value ? document.getElementById('in-text-ans').value.trim().toLowerCase() : ''
             };
-            if(!q.text) return alert("Enter a question!");
+            if(!q.text) return alert("Task content is empty!");
             questions.push(q);
             localStorage.setItem('h_supreme_q', JSON.stringify(questions));
             updatePortal();
@@ -233,13 +270,13 @@
         function updatePortal() {
             const list = document.getElementById('portal-list');
             document.getElementById('portal-count').innerText = questions.length;
-            list.innerHTML = questions.map((q, idx) => `
+            list.innerHTML = questions.map(q => `
                 <div class="bg-white p-3 rounded-xl border border-slate-100 flex justify-between items-center shadow-sm">
                     <div class="truncate mr-2">
-                        <p class="text-[9px] font-bold text-blue-500 uppercase">${q.level} | ${q.type}</p>
-                        <p class="text-xs font-bold text-slate-700 truncate">${q.text}</p>
+                        <p class="text-[8px] font-black text-blue-500 uppercase">${q.level} | ${q.subject}</p>
+                        <p class="text-[10px] font-bold text-slate-700 truncate">${q.text}</p>
                     </div>
-                    <button onclick="removeQ(${q.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                    <button onclick="removeQ(${q.id})" class="text-red-200 hover:text-red-500"><i class="fas fa-circle-xmark"></i></button>
                 </div>
             `).join('');
         }
@@ -250,39 +287,48 @@
             updatePortal();
         }
 
-        function renderResults() {
-            document.getElementById('results-body').innerHTML = results.map(r => `
-                <tr class="border-b"><td class="p-4 text-slate-400 font-bold">${r.date}</td><td class="font-bold">${r.name}</td><td class="text-blue-600 font-bold text-xs">${r.group}</td><td class="font-black text-blue-900">${r.score}%</td></tr>
-            `).reverse().join('');
-        }
-
-        function tab(t) {
-            document.getElementById('tab-add').classList.toggle('hidden', t !== 'add');
-            document.getElementById('tab-view').classList.toggle('hidden', t !== 'view');
-        }
-
-        function clearQ() { if(confirm("Reset everything?")) {localStorage.clear(); location.reload();}}
-
-        function begin() {
+        function showSubjects() {
             user.name = document.getElementById('s-name').value;
-            user.group = document.getElementById('s-group').value;
-            if(!user.name || !user.group) return alert("Enter name and level!");
+            user.level = document.getElementById('s-group').value;
+            if(!user.name || !user.level) return alert("Enter your full name and level first!");
+
+            const relevantSubjects = [...new Set(questions.filter(q => q.level === user.level).map(q => q.subject))];
             
-            // Filter questions based on student level
-            activeQuestions = questions.filter(q => q.level === user.group);
-            if(activeQuestions.length === 0) return alert("No questions available for " + user.group);
+            if(relevantSubjects.length === 0) return alert("No homework found for your level today.");
+
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('subject-selection').classList.remove('hidden');
             
+            const btnBox = document.getElementById('subject-buttons');
+            btnBox.innerHTML = relevantSubjects.map(sub => `
+                <button onclick="begin('${sub}')" class="w-full bg-white border-2 border-slate-100 p-5 rounded-2xl font-black text-blue-900 hover:border-blue-500 hover:bg-blue-50 transition flex justify-between items-center">
+                    ${sub} <i class="fas fa-chevron-right text-slate-300"></i>
+                </button>
+            `).join('');
+        }
+
+        function backToLogin() {
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('subject-selection').classList.add('hidden');
+        }
+
+        function begin(subject) {
+            user.subject = subject;
+            activeQuestions = questions.filter(q => q.level === user.level && q.subject === subject);
+            cur = 0; score = 0; userAnswers = []; // Reset tracked answers
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
+            startTimer();
             load();
         }
 
         function load() {
             const q = activeQuestions[cur];
-            document.getElementById('h-date-display').innerText = "Level: " + user.group;
-            document.getElementById('q-count').innerText = `Question ${cur + 1} of ${activeQuestions.length}`;
+            document.getElementById('h-subject-badge').innerText = user.subject;
+            document.getElementById('q-count').innerText = `Task ${cur + 1} of ${activeQuestions.length}`;
             document.getElementById('q-text').innerText = q.text;
             document.getElementById('bot-response').classList.add('hidden');
+            document.getElementById('progress-fill').style.width = ((cur / activeQuestions.length) * 100) + "%";
             
             const imgCont = document.getElementById('q-image-container');
             if(q.img) { document.getElementById('q-image').src = q.img; imgCont.classList.remove('hidden'); }
@@ -296,12 +342,17 @@
                 q.options.forEach((opt, idx) => {
                     if(!opt) return;
                     const btn = document.createElement('button');
-                    btn.className = 'option-btn w-full p-5 rounded-2xl font-bold text-left shadow-sm bg-white';
+                    btn.className = 'option-btn w-full p-5 rounded-2xl font-bold text-left bg-white text-sm';
                     btn.innerText = opt;
                     btn.onclick = () => {
                         document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-                        if(idx === q.correctIdx) { btn.classList.add('correct'); score++; }
+                        let isCorrect = idx === q.correctIdx;
+                        if(isCorrect) { btn.classList.add('correct'); score++; }
                         else { btn.classList.add('wrong'); document.querySelectorAll('.option-btn')[q.correctIdx].classList.add('correct'); }
+                        
+                        // NEW: Save answer for review
+                        userAnswers.push({ question: q.text, studentAns: opt, correctAns: q.options[q.correctIdx], right: isCorrect });
+                        
                         showBot(q.bot);
                     };
                     mcqBox.appendChild(btn);
@@ -318,13 +369,19 @@
             const inp = document.getElementById('text-answer');
             const val = inp.value.trim().toLowerCase();
             inp.disabled = true;
-            if(val === q.correctAns) { inp.classList.add('correct'); score++; }
+            let isCorrect = val === q.correctAns;
+            
+            if(isCorrect) { inp.classList.add('correct'); score++; }
             else { inp.classList.add('wrong'); }
-            showBot(q.bot + " (Ans: " + q.correctAns + ")");
+            
+            // NEW: Save answer for review
+            userAnswers.push({ question: q.text, studentAns: val, correctAns: q.correctAns, right: isCorrect });
+            
+            showBot(q.bot + " (Correct Answer: " + q.correctAns + ")");
         }
 
         function showBot(msg) {
-            document.getElementById('bot-msg').innerText = msg || "Keep going!";
+            document.getElementById('bot-msg').innerText = msg || "Excellent work! Ready for the next one?";
             document.getElementById('bot-response').classList.remove('hidden');
             document.getElementById('score-ring').innerText = Math.round((score/activeQuestions.length)*100) + "%";
         }
@@ -335,18 +392,72 @@
             else finish();
         }
 
-        function finish() {
-            const final = Math.round((score/activeQuestions.length)*100);
-            results.push({ date: new Date().toLocaleDateString(), name: user.name, group: user.group, score: final });
-            localStorage.setItem('h_supreme_r', JSON.stringify(results));
-            document.getElementById('quiz-screen').innerHTML = `<div class="text-center p-12 glass-card rounded-[3rem] shadow-2xl">
-                <h2 class="text-4xl font-black text-blue-900 mb-2">Done!</h2>
-                <div class="bg-blue-600 text-white py-10 px-16 rounded-[2.5rem] inline-block my-8">
-                    <p class="text-8xl font-black">${final}%</p>
-                </div>
-                <button onclick="location.reload()" class="w-full bg-slate-900 text-white font-black py-5 rounded-2xl">Close</button>
-            </div>`;
+        function startTimer() {
+            seconds = 0;
+            if(timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                seconds++;
+                let mins = Math.floor(seconds / 60);
+                let secs = seconds % 60;
+                document.getElementById('timer-display').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
         }
+
+        function finish() {
+            clearInterval(timerInterval);
+            const final = Math.round((score/activeQuestions.length)*100);
+            results.push({ name: user.name, level: user.level, subject: user.subject, score: final, date: new Date().toLocaleDateString() });
+            localStorage.setItem('h_supreme_r', JSON.stringify(results));
+            
+            // NEW FEATURE: Shoot confetti!
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+            // NEW FEATURE: Build the Review Panel string
+            let reviewHTML = userAnswers.map((ans, i) => `
+                <div class="text-left p-4 bg-white rounded-xl mb-2 border-l-4 ${ans.right ? 'border-green-500' : 'border-red-500'}">
+                    <p class="font-bold text-slate-700 text-sm mb-1">${i+1}. ${ans.question}</p>
+                    <p class="text-xs text-slate-500">Your Answer: <span class="${ans.right ? 'text-green-600 font-bold' : 'text-red-500 line-through'}">${ans.studentAns || 'Skipped/Empty'}</span></p>
+                    ${!ans.right ? `<p class="text-xs font-bold text-green-600 mt-1">Correct Answer: ${ans.correctAns}</p>` : ''}
+                </div>
+            `).join('');
+
+            document.getElementById('quiz-screen').innerHTML = `
+                <div class="text-center p-8 md:p-12 glass-card rounded-[3rem] shadow-2xl animate-pop">
+                    <h2 class="text-4xl font-black text-blue-900 mb-2">Subject Mastery!</h2>
+                    <p class="text-slate-500 font-bold mb-6">${user.subject} Session Completed</p>
+                    <div class="bg-blue-600 text-white py-10 px-16 rounded-[2.5rem] inline-block mb-4 shadow-lg">
+                        <p class="text-8xl font-black">${final}%</p>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-6 font-bold"><i class="fas fa-clock text-yellow-500"></i> Completed in ${document.getElementById('timer-display').innerText}</p>
+                    
+                    <button onclick="document.getElementById('review-panel').classList.toggle('hidden')" class="bg-slate-100 text-slate-700 font-bold py-3 px-6 rounded-xl mb-6 hover:bg-slate-200 transition">
+                        Review Your Answers <i class="fas fa-search ml-1"></i>
+                    </button>
+                    
+                    <div id="review-panel" class="hidden mb-6 max-h-64 overflow-y-auto rounded-xl bg-slate-50 p-2 shadow-inner border border-slate-200">
+                        ${reviewHTML}
+                    </div>
+
+                    <button onclick="location.reload()" class="w-full heddy-gradient text-white font-black py-5 rounded-2xl shadow-xl hover:scale-[1.02] transition-transform">Return to Home Dashboard</button>
+                </div>
+            `;
+        }
+
+        function renderResults() {
+            document.getElementById('results-body').innerHTML = results.map(r => `
+                <tr class="border-b"><td class="p-4 font-bold text-slate-800">${r.name}</td><td class="font-bold text-slate-400">${r.level}</td><td class="text-blue-600 font-bold">${r.subject}</td><td class="font-black text-blue-900">${r.score}%</td></tr>
+            `).reverse().join('');
+        }
+
+        function tab(t) {
+            document.getElementById('tab-add').classList.toggle('hidden', t !== 'add');
+            document.getElementById('tab-view').classList.toggle('hidden', t !== 'view');
+            const ab = document.getElementById('tab-add-btn'), vb = document.getElementById('tab-view-btn');
+            if(t==='add'){ ab.classList.add('border-blue-900'); ab.classList.remove('text-slate-400'); vb.classList.add('text-slate-400'); vb.classList.remove('border-blue-900'); }
+            else{ vb.classList.add('border-blue-900'); vb.classList.remove('text-slate-400'); ab.classList.add('text-slate-400'); ab.classList.remove('border-blue-900'); }
+        }
+
+        function clearQ() { if(confirm("Are you sure you want to delete all student records and questions?")) {localStorage.clear(); location.reload();}}
     </script>
 </body>
 </html>
