@@ -144,6 +144,19 @@
     .badge-silver { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%); }
     .badge-bronze { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
     .badge-blue { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
+    
+    .weakness-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin: 0.25rem;
+    }
+    
+    .weakness-critical { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+    .weakness-moderate { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+    .weakness-minor { background: #dbeafe; color: #1e40af; border: 1px solid #3b82f6; }
   </style>
 </head>
 <body class="min-h-screen">
@@ -348,7 +361,7 @@
             <i class="fas fa-edit mr-2"></i>Manage Questions
           </button>
           <button onclick="switchAdminTab('submissions')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300 whitespace-nowrap">
-            <i class="fas fa-inbox mr-2"></i>Submissions
+            <i class="fas fa-inbox mr-2"></i>Submissions & Weakness
           </button>
           <button onclick="switchAdminTab('analytics')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300 whitespace-nowrap">
             <i class="fas fa-chart-bar mr-2"></i>Analytics
@@ -420,14 +433,14 @@
           </div>
         </div>
 
-        <!-- SUBMISSIONS TAB -->
+        <!-- SUBMISSIONS & WEAKNESS TAB -->
         <div id="admin-tab-submissions" class="admin-tab-content hidden">
-          <div class="space-y-4">
-            <div class="flex gap-2 mb-4">
-              <input type="text" id="submission-filter" placeholder="Search student name..." class="flex-1 p-2 border rounded-lg font-bold text-sm">
-              <button onclick="filterSubmissions()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-black text-sm">Search</button>
+          <div class="space-y-6">
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
+              <p class="text-sm font-black text-blue-900">📊 STUDENT EFFORT & WEAKNESS ANALYSIS</p>
+              <p class="text-xs text-blue-700 mt-1">All submissions displayed below with automatic weakness detection</p>
             </div>
-            <div id="submissions-list" class="space-y-4 max-h-[700px] overflow-y-auto"></div>
+            <div id="submissions-list" class="space-y-6 max-h-[900px] overflow-y-auto"></div>
           </div>
         </div>
 
@@ -520,6 +533,42 @@
       renderSubmissionsList();
       renderAnalytics();
     };
+
+    // ANALYZE WEAKNESS
+    function analyzeWeakness(studentAnswer, expectedAnswer, questionText) {
+      const weaknesses = [];
+      const studentLower = studentAnswer.toLowerCase();
+      const expectedLower = expectedAnswer.toLowerCase();
+      
+      // Check length of answer
+      if(studentAnswer.length < expectedAnswer.length * 0.5) {
+        weaknesses.push({ type: 'INCOMPLETE', severity: 'critical', msg: 'Answer too brief - lacks detail' });
+      }
+      
+      // Check for key terms
+      const keyTerms = expectedLower.split(' ').filter(w => w.length > 3);
+      const matchedTerms = keyTerms.filter(term => studentLower.includes(term));
+      if(matchedTerms.length < keyTerms.length * 0.5) {
+        weaknesses.push({ type: 'MISSING_CONCEPTS', severity: 'critical', msg: 'Missing key concepts/terms' });
+      }
+      
+      // Check for spelling/typos
+      if(!studentLower.includes(keyTerms[0])) {
+        weaknesses.push({ type: 'SPELLING', severity: 'moderate', msg: 'Possible spelling errors' });
+      }
+      
+      // Check for understanding
+      if(studentAnswer.includes('?') || studentAnswer.includes('not sure')) {
+        weaknesses.push({ type: 'UNCERTAIN', severity: 'moderate', msg: 'Shows uncertainty in understanding' });
+      }
+      
+      // Generic response
+      if(studentAnswer.length < 20) {
+        weaknesses.push({ type: 'VAGUE', severity: 'moderate', msg: 'Response is too vague' });
+      }
+      
+      return weaknesses.length > 0 ? weaknesses : [{ type: 'GOOD', severity: 'none', msg: 'Good attempt' }];
+    }
 
     // STUDENT LOGIC
     function validateStudent() {
@@ -616,6 +665,8 @@
       if(!typed) return alert("Please type your response.");
       inp.disabled = true;
       
+      const weaknesses = analyzeWeakness(typed, q.correctAns, q.text);
+      
       const submission = {
         id: Date.now(),
         student: user.name,
@@ -624,6 +675,7 @@
         question: q.text,
         studentAnswer: typed,
         expectedAnswer: q.correctAns,
+        weaknesses: weaknesses,
         timestamp: new Date().toLocaleString(),
         questionType: q.type
       };
@@ -692,7 +744,6 @@
       document.getElementById('average-score').innerText = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b) / scores.length) + '%' : '0%';
       document.getElementById('best-score').innerText = scores.length > 0 ? Math.max(...scores) + '%' : '0%';
       
-      // Badges
       let badges = 0;
       if(scores.length > 0) {
         if(Math.max(...scores) >= 90) badges++;
@@ -701,7 +752,6 @@
       }
       document.getElementById('total-badges').innerText = badges;
       
-      // Achievements
       const achievementsHTML = [];
       if(Math.max(...scores) >= 90) achievementsHTML.push('<div class="badge-achievement badge-gold">🌟<br>Perfect<br>Score</div>');
       if(scores.length >= 3) achievementsHTML.push('<div class="badge-achievement badge-blue">🎯<br>Consistent<br>Learner</div>');
@@ -710,7 +760,6 @@
       
       document.getElementById('achievements-container').innerHTML = achievementsHTML.length > 0 ? achievementsHTML.join('') : '<p class="text-slate-400">Complete more assessments to earn badges!</p>';
       
-      // Records
       const recordsList = document.getElementById('records-list');
       if(studentAssessments.length === 0) {
         recordsList.innerHTML = '<p class="text-slate-400 font-bold py-4 text-center">No assessment records yet.</p>';
@@ -808,6 +857,7 @@
       });
       event.target.closest('.admin-tab-btn').classList.add('border-blue-600');
       document.getElementById('admin-tab-' + tab).classList.remove('hidden');
+      if(tab === 'submissions') renderSubmissionsList();
       if(tab === 'analytics') renderAnalytics();
     }
 
@@ -888,56 +938,56 @@
       const list = document.getElementById('submissions-list');
       if(!list) return;
       
-      list.innerHTML = submissions.map((s) => `
-        <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-blue-500 shadow-sm">
-          <div class="flex justify-between items-start mb-3">
-            <div>
-              <p class="text-[10px] font-black uppercase text-blue-500">${s.student} • ${s.level}</p>
-              <p class="text-xs font-bold text-slate-700 mt-1">${s.subject}</p>
+      if(submissions.length === 0) {
+        list.innerHTML = '<p class="text-slate-400 font-bold py-6 text-center italic">No submissions yet. Students will submit their responses here.</p>';
+        return;
+      }
+      
+      list.innerHTML = submissions.map((s) => {
+        const weaknessHTML = (s.weaknesses || []).map(w => {
+          const severityClass = w.severity === 'critical' ? 'weakness-critical' : w.severity === 'moderate' ? 'weakness-moderate' : 'weakness-minor';
+          return `<span class="weakness-badge ${severityClass}">⚠️ ${w.type}: ${w.msg}</span>`;
+        }).join('');
+        
+        return `
+          <div class="bg-white rounded-2xl p-6 border-l-8 border-blue-500 shadow-md">
+            <!-- HEADER -->
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <p class="text-sm font-black text-blue-900">${s.student}</p>
+                <p class="text-[10px] font-bold text-slate-500 uppercase">${s.level} • ${s.subject}</p>
+              </div>
+              <p class="text-[9px] text-slate-400 font-mono">${s.timestamp}</p>
             </div>
-            <p class="text-[9px] text-slate-500">${s.timestamp}</p>
+            
+            <!-- QUESTION -->
+            <div class="bg-slate-50 p-4 rounded-xl mb-4 border-l-4 border-slate-300">
+              <p class="text-[10px] font-black text-slate-600 uppercase mb-1">Question</p>
+              <p class="text-sm font-bold text-slate-800">${s.question}</p>
+            </div>
+            
+            <!-- EFFORT & ANSWER -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
+                <p class="text-[10px] font-black text-blue-900 uppercase mb-2">📝 Student's Effort</p>
+                <p class="text-sm font-bold text-blue-800 italic">"${s.studentAnswer}"</p>
+              </div>
+              <div class="bg-green-50 p-4 rounded-xl border border-green-200">
+                <p class="text-[10px] font-black text-green-900 uppercase mb-2">✓ Expected Answer</p>
+                <p class="text-sm font-bold text-green-800 italic">"${s.expectedAnswer}"</p>
+              </div>
+            </div>
+            
+            <!-- WEAKNESS ANALYSIS -->
+            <div class="bg-red-50 p-4 rounded-xl border border-red-200">
+              <p class="text-[10px] font-black text-red-900 uppercase mb-3">🔍 Weakness Analysis</p>
+              <div class="flex flex-wrap gap-2">
+                ${weaknessHTML || '<span class="text-[10px] text-red-700 font-bold">Good attempt - minimal weaknesses detected</span>'}
+              </div>
+            </div>
           </div>
-          <p class="text-xs font-bold mb-3 text-slate-800">Q: ${s.question}</p>
-          <div class="grid grid-cols-2 gap-3 text-[10px]">
-            <div class="bg-red-50 p-3 rounded border border-red-200">
-              <p class="font-black text-red-700 mb-1">STUDENT ANSWER:</p>
-              <p class="text-red-600">${s.studentAnswer}</p>
-            </div>
-            <div class="bg-green-50 p-3 rounded border border-green-200">
-              <p class="font-black text-green-700 mb-1">EXPECTED ANSWER:</p>
-              <p class="text-green-600">${s.expectedAnswer}</p>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function filterSubmissions() {
-      const filter = document.getElementById('submission-filter').value.toLowerCase();
-      const filtered = submissions.filter(s => s.student.toLowerCase().includes(filter));
-      const list = document.getElementById('submissions-list');
-      list.innerHTML = filtered.map((s) => `
-        <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-blue-500 shadow-sm">
-          <div class="flex justify-between items-start mb-3">
-            <div>
-              <p class="text-[10px] font-black uppercase text-blue-500">${s.student} • ${s.level}</p>
-              <p class="text-xs font-bold text-slate-700 mt-1">${s.subject}</p>
-            </div>
-            <p class="text-[9px] text-slate-500">${s.timestamp}</p>
-          </div>
-          <p class="text-xs font-bold mb-3 text-slate-800">Q: ${s.question}</p>
-          <div class="grid grid-cols-2 gap-3 text-[10px]">
-            <div class="bg-red-50 p-3 rounded border border-red-200">
-              <p class="font-black text-red-700 mb-1">STUDENT:</p>
-              <p class="text-red-600">${s.studentAnswer}</p>
-            </div>
-            <div class="bg-green-50 p-3 rounded border border-green-200">
-              <p class="font-black text-green-700 mb-1">EXPECTED:</p>
-              <p class="text-green-600">${s.expectedAnswer}</p>
-            </div>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderAnalytics() {
