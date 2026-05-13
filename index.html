@@ -125,22 +125,25 @@
       letter-spacing: 0.05em;
     }
     
-    .rank-badge {
+    .badge-achievement {
       display: inline-flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       font-weight: 700;
       color: white;
-      margin-right: 1rem;
+      margin: 0.5rem;
+      text-align: center;
+      font-size: 0.75rem;
     }
     
-    .rank-1 { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
-    .rank-2 { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%); }
-    .rank-3 { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
-    .rank-other { background: #3b82f6; }
+    .badge-gold { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
+    .badge-silver { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%); }
+    .badge-bronze { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
+    .badge-blue { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
   </style>
 </head>
 <body class="min-h-screen">
@@ -252,41 +255,55 @@
 
     <!-- MY RECORDS VIEW -->
     <section id="records-screen" class="hidden">
-      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl max-w-4xl mx-auto">
-        <div class="flex justify-between items-center mb-8">
-          <h2 class="text-3xl font-black text-slate-800">My Assessment Records</h2>
-          <button onclick="backToLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-black uppercase">Back</button>
+      <div class="space-y-8">
+        <!-- HEADER -->
+        <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
+          <div class="flex justify-between items-center mb-8">
+            <div>
+              <h2 class="text-3xl font-black text-slate-800">My Performance Dashboard</h2>
+              <p id="record-student-name" class="text-lg font-bold text-blue-600 mt-2"></p>
+            </div>
+            <button onclick="backToLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-black uppercase">Back</button>
+          </div>
+
+          <!-- STATS GRID -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="stat-card">
+              <div class="stat-value" id="total-assessments">0</div>
+              <div class="stat-label">Assessments</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="average-score">0%</div>
+              <div class="stat-label">Average Score</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="best-score">0%</div>
+              <div class="stat-label">Best Score</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="total-badges">0</div>
+              <div class="stat-label">Badges Earned</div>
+            </div>
+          </div>
         </div>
 
-        <div id="student-info" class="bg-blue-50 p-6 rounded-2xl mb-8 border-l-4 border-blue-500">
-          <p class="text-sm font-bold text-slate-700"><span id="record-student-name"></span> | <span id="record-student-level"></span></p>
+        <!-- ACHIEVEMENTS -->
+        <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
+          <h3 class="text-2xl font-black text-slate-800 mb-6">🏅 Achievements</h3>
+          <div id="achievements-container" class="flex flex-wrap justify-center gap-4"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div class="stat-card">
-            <div class="stat-value" id="total-assessments">0</div>
-            <div class="stat-label">Total Assessments</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="average-score">0%</div>
-            <div class="stat-label">Average Score</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="best-score">0%</div>
-            <div class="stat-label">Best Score</div>
-          </div>
-        </div>
-
-        <div class="space-y-4">
-          <h3 class="text-xl font-black text-slate-800 mb-4">Assessment History</h3>
-          <div id="records-list" class="space-y-3 max-h-[500px] overflow-y-auto"></div>
+        <!-- DETAILED RECORDS -->
+        <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
+          <h3 class="text-2xl font-black text-slate-800 mb-6">Assessment History</h3>
+          <div id="records-list" class="space-y-3 max-h-[600px] overflow-y-auto"></div>
         </div>
       </div>
     </section>
 
     <!-- LEADERBOARD VIEW -->
     <section id="leaderboard-screen" class="hidden">
-      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl max-w-4xl mx-auto">
+      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
         <div class="flex justify-between items-center mb-8">
           <h2 class="text-3xl font-black text-slate-800">🏆 Global Leaderboard</h2>
           <button onclick="backToLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-black uppercase">Back</button>
@@ -323,15 +340,18 @@
         </div>
 
         <!-- TABS -->
-        <div class="mb-6 flex gap-2 border-b">
-          <button onclick="switchAdminTab('add')" class="admin-tab-btn active px-6 py-3 font-black text-sm border-b-4 border-blue-600">
+        <div class="mb-6 flex gap-2 border-b overflow-x-auto">
+          <button onclick="switchAdminTab('add')" class="admin-tab-btn active px-6 py-3 font-black text-sm border-b-4 border-blue-600 whitespace-nowrap">
             <i class="fas fa-plus mr-2"></i>Add Question
           </button>
-          <button onclick="switchAdminTab('manage')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300">
+          <button onclick="switchAdminTab('manage')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300 whitespace-nowrap">
             <i class="fas fa-edit mr-2"></i>Manage Questions
           </button>
-          <button onclick="switchAdminTab('submissions')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300">
+          <button onclick="switchAdminTab('submissions')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300 whitespace-nowrap">
             <i class="fas fa-inbox mr-2"></i>Submissions
+          </button>
+          <button onclick="switchAdminTab('analytics')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300 whitespace-nowrap">
+            <i class="fas fa-chart-bar mr-2"></i>Analytics
           </button>
         </div>
 
@@ -402,7 +422,27 @@
 
         <!-- SUBMISSIONS TAB -->
         <div id="admin-tab-submissions" class="admin-tab-content hidden">
-          <div id="submissions-list" class="space-y-4 max-h-[700px] overflow-y-auto"></div>
+          <div class="space-y-4">
+            <div class="flex gap-2 mb-4">
+              <input type="text" id="submission-filter" placeholder="Search student name..." class="flex-1 p-2 border rounded-lg font-bold text-sm">
+              <button onclick="filterSubmissions()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-black text-sm">Search</button>
+            </div>
+            <div id="submissions-list" class="space-y-4 max-h-[700px] overflow-y-auto"></div>
+          </div>
+        </div>
+
+        <!-- ANALYTICS TAB -->
+        <div id="admin-tab-analytics" class="admin-tab-content hidden">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-50 p-6 rounded-2xl">
+              <h4 class="font-black text-slate-800 mb-4">Class Performance</h4>
+              <div id="analytics-stats" class="space-y-3"></div>
+            </div>
+            <div class="bg-slate-50 p-6 rounded-2xl">
+              <h4 class="font-black text-slate-800 mb-4">Subject Breakdown</h4>
+              <div id="analytics-subjects" class="space-y-3"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -422,444 +462,54 @@
       { name: "BRAHANNAH BOATENG", level: "Basic 8", code: "14396" }
     ];
 
-    // PRE-LOADED QUESTIONS - BASIC 6-7 (15 Questions)
+    // PRE-LOADED QUESTIONS
     let PRELOADED_QUESTIONS = [
-      // BASIC 6-7 ENGLISH (5 Questions)
-      {
-        id: "b67_eng_1",
-        level: "Basic 6-7",
-        subject: "ENGLISH",
-        type: "mcq",
-        text: "What is a noun?",
-        options: [
-          "A word that describes an action",
-          "A word that names a person, place, or thing",
-          "A word that describes a quality",
-          "A word that connects sentences"
-        ],
-        correctIdx: 1,
-        bot: "A noun is a word used to name a person, place, thing, or idea. Examples: teacher, school, book, happiness."
-      },
-      {
-        id: "b67_eng_2",
-        level: "Basic 6-7",
-        subject: "ENGLISH",
-        type: "mcq",
-        text: "Which sentence is grammatically correct?",
-        options: [
-          "She go to school every day",
-          "She goes to school every day",
-          "She going to school every day",
-          "She gone to school every day"
-        ],
-        correctIdx: 1,
-        bot: "The correct form uses 'goes' because the subject 'she' is third person singular, which requires the -s ending on the verb."
-      },
-      {
-        id: "b67_eng_3",
-        level: "Basic 6-7",
-        subject: "ENGLISH",
-        type: "mcq",
-        text: "What does the word 'benevolent' mean?",
-        options: [
-          "Angry and hostile",
-          "Kind and generous",
-          "Confused and lost",
-          "Tired and weak"
-        ],
-        correctIdx: 1,
-        bot: "Benevolent means kind, generous, and showing goodwill toward others. It comes from Latin roots meaning 'well' and 'wish'."
-      },
-      {
-        id: "b67_eng_4",
-        level: "Basic 6-7",
-        subject: "ENGLISH",
-        type: "mcq",
-        text: "Identify the adjective in this sentence: 'The beautiful garden has colorful flowers.'",
-        options: [
-          "garden and flowers",
-          "beautiful and colorful",
-          "has",
-          "the"
-        ],
-        correctIdx: 1,
-        bot: "Adjectives are words that describe nouns. 'Beautiful' describes 'garden' and 'colorful' describes 'flowers'."
-      },
-      {
-        id: "b67_eng_5",
-        level: "Basic 6-7",
-        subject: "ENGLISH",
-        type: "mcq",
-        text: "What is the past tense of 'run'?",
-        options: [
-          "runned",
-          "runs",
-          "ran",
-          "running"
-        ],
-        correctIdx: 2,
-        bot: "'Ran' is the past tense of 'run'. It's an irregular verb, so it doesn't follow the standard -ed pattern."
-      },
-
-      // BASIC 6-7 MATHEMATICS - Word Problems with Algebraic Expressions (5 Questions)
-      {
-        id: "b67_math_1",
-        level: "Basic 6-7",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "If x = 5, what is the value of 2x + 3?",
-        options: [
-          "8",
-          "10",
-          "13",
-          "15"
-        ],
-        correctIdx: 2,
-        bot: "Substitute x = 5 into the expression: 2(5) + 3 = 10 + 3 = 13"
-      },
-      {
-        id: "b67_math_2",
-        level: "Basic 6-7",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "A book costs $x and a pen costs $3. If you buy 2 books and 4 pens, what is the total cost?",
-        options: [
-          "2x + 12",
-          "2x + 7",
-          "x + 12",
-          "5x + 3"
-        ],
-        correctIdx: 0,
-        bot: "2 books cost 2x, and 4 pens cost 4 × 3 = 12. Total = 2x + 12"
-      },
-      {
-        id: "b67_math_3",
-        level: "Basic 6-7",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "Solve for x: x + 7 = 15",
-        options: [
-          "x = 8",
-          "x = 22",
-          "x = 2",
-          "x = 10"
-        ],
-        correctIdx: 0,
-        bot: "Subtract 7 from both sides: x + 7 - 7 = 15 - 7, so x = 8"
-      },
-      {
-        id: "b67_math_4",
-        level: "Basic 6-7",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "Maria has m marbles. Her friend gives her 12 more marbles. Now she has 35 marbles. Write an equation.",
-        options: [
-          "m - 12 = 35",
-          "m + 12 = 35",
-          "12m = 35",
-          "m = 35 + 12"
-        ],
-        correctIdx: 1,
-        bot: "Maria started with m marbles and received 12 more, giving her m + 12 = 35"
-      },
-      {
-        id: "b67_math_5",
-        level: "Basic 6-7",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "Simplify: 3x + 2x - 5",
-        options: [
-          "5x - 5",
-          "6x - 5",
-          "x - 5",
-          "3x - 5"
-        ],
-        correctIdx: 0,
-        bot: "Combine like terms: 3x + 2x = 5x, so the simplified expression is 5x - 5"
-      },
-
-      // BASIC 6-7 SOCIAL STUDIES - Cosmopolitan Topics (5 Questions)
-      {
-        id: "b67_social_1",
-        level: "Basic 6-7",
-        subject: "SOCIAL STUDIES",
-        type: "mcq",
-        text: "What does 'cosmopolitan' mean?",
-        options: [
-          "Related to one country only",
-          "Familiar with many different countries and cultures",
-          "Living in the countryside",
-          "Speaking only one language"
-        ],
-        correctIdx: 1,
-        bot: "Cosmopolitan refers to people or places that are familiar with and influenced by many different countries and cultures."
-      },
-      {
-        id: "b67_social_2",
-        level: "Basic 6-7",
-        subject: "SOCIAL STUDIES",
-        type: "mcq",
-        text: "Which city is known as a cosmopolitan hub?",
-        options: [
-          "A small rural village",
-          "New York City",
-          "An isolated mountain town",
-          "A single-industry factory town"
-        ],
-        correctIdx: 1,
-        bot: "New York City is a cosmopolitan hub with people from diverse backgrounds, cultures, and nations living together."
-      },
-      {
-        id: "b67_social_3",
-        level: "Basic 6-7",
-        subject: "SOCIAL STUDIES",
-        type: "mcq",
-        text: "What is cultural diversity?",
-        options: [
-          "Having only one culture",
-          "The variety of different cultures, traditions, and beliefs in a society",
-          "Rejecting all foreign influences",
-          "Speaking the same language everywhere"
-        ],
-        correctIdx: 1,
-        bot: "Cultural diversity refers to the presence of different cultures, traditions, languages, and beliefs within a society or community."
-      },
-      {
-        id: "b67_social_4",
-        level: "Basic 6-7",
-        subject: "SOCIAL STUDIES",
-        type: "mcq",
-        text: "How does globalization promote cosmopolitanism?",
-        options: [
-          "By isolating countries from each other",
-          "By connecting people across borders through trade, technology, and communication",
-          "By eliminating all differences",
-          "By preventing cultural exchange"
-        ],
-        correctIdx: 1,
-        bot: "Globalization connects people worldwide through trade, technology, and communication, promoting cosmopolitan values and cultural exchange."
-      },
-      {
-        id: "b67_social_5",
-        level: "Basic 6-7",
-        subject: "SOCIAL STUDIES",
-        type: "mcq",
-        text: "What is an example of cosmopolitan values?",
-        options: [
-          "Rejecting all outsiders",
-          "Respecting and appreciating different cultures and perspectives",
-          "Speaking only your native language",
-          "Staying in one place forever"
-        ],
-        correctIdx: 1,
-        bot: "Cosmopolitan values include respect for diversity, appreciation of different cultures, and openness to different perspectives."
-      },
-
-      // BASIC 8 ENGLISH - Advanced Topics (5 Questions)
-      {
-        id: "b8_eng_1",
-        level: "Basic 8",
-        subject: "ENGLISH",
-        type: "mcq",
-        text: "Which literary device is used in: 'The world is a stage'?",
-        options: [
-          "Simile",
-          "Metaphor",
-          "Personification",
-          "Alliteration"
-        ],
-        correctIdx: 1,
-        bot: "This is a metaphor because the world is directly compared to a stage without using 'like' or 'as'."
-      },
-      {
-        id: "b8_eng_2",
-        level: "Basic 8",
-        subject: "ENGLISH",
-        type: "mcq",
-        text: "What is the main purpose of a thesis statement?",
-        options: [
-          "To introduce the author",
-          "To present the main argument of an essay",
-          "To conclude the essay",
-          "To define difficult words"
-        ],
-        correctIdx: 1,
-        bot: "A thesis statement presents the main argument or central idea that the entire essay will support and develop."
-      },
-      {
-        id: "b8_eng_3",
-        level: "Basic 8",
-        subject: "ENGLISH",
-        type: "mcq",
-        text: "Identify the tone in: 'The politician's promises were as empty as his pockets.'",
-        options: [
-          "Respectful",
-          "Sarcastic and critical",
-          "Neutral",
-          "Cheerful"
-        ],
-        correctIdx: 1,
-        bot: "The tone is sarcastic and critical, using humor to mock the politician's credibility and sincerity."
-      },
-      {
-        id: "b8_eng_4",
-        level: "Basic 8",
-        subject: "ENGLISH",
-        type: "mcq",
-        text: "What does 'ambiguous' mean in literature?",
-        options: [
-          "Clearly stated",
-          "Having more than one possible meaning",
-          "Completely false",
-          "Very long and detailed"
-        ],
-        correctIdx: 1,
-        bot: "Ambiguous means having more than one possible interpretation or meaning, often used intentionally for literary effect."
-      },
-      {
-        id: "b8_eng_5",
-        level: "Basic 8",
-        subject: "ENGLISH",
-        type: "mcq",
-        text: "Which is an example of foreshadowing?",
-        options: [
-          "Describing the weather",
-          "Hinting at future events in the story",
-          "Explaining the setting",
-          "Introducing a character"
-        ],
-        correctIdx: 1,
-        bot: "Foreshadowing is a literary technique that hints at or suggests future events in a story, building suspense."
-      },
-
-      // BASIC 8 MATHEMATICS - Advanced Algebraic Word Problems (5 Questions)
-      {
-        id: "b8_math_1",
-        level: "Basic 8",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "If 3(x - 2) = 15, what is the value of x?",
-        options: [
-          "x = 5",
-          "x = 7",
-          "x = 9",
-          "x = 11"
-        ],
-        correctIdx: 1,
-        bot: "Divide both sides by 3: x - 2 = 5. Add 2 to both sides: x = 7"
-      },
-      {
-        id: "b8_math_2",
-        level: "Basic 8",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "Solve: 2x + 5 = 3x - 2",
-        options: [
-          "x = 3",
-          "x = 5",
-          "x = 7",
-          "x = 9"
-        ],
-        correctIdx: 2,
-        bot: "Subtract 2x from both sides: 5 = x - 2. Add 2 to both sides: 7 = x. So x = 7."
-      },
-      {
-        id: "b8_math_3",
-        level: "Basic 8",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "A rectangle has length (2x + 3) and width (x - 1). If perimeter is 26, find x.",
-        options: [
-          "x = 2",
-          "x = 3",
-          "x = 4",
-          "x = 5"
-        ],
-        correctIdx: 2,
-        bot: "Perimeter = 2(length + width) = 2(2x + 3 + x - 1) = 2(3x + 2) = 6x + 4 = 26. So 6x = 22, x ≈ 3.67. Closest is x = 4."
-      },
-      {
-        id: "b8_math_4",
-        level: "Basic 8",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "Two numbers sum to 20. One is 3 more than twice the other. Find the numbers.",
-        options: [
-          "5 and 15",
-          "6 and 14",
-          "7 and 13",
-          "8 and 12"
-        ],
-        correctIdx: 0,
-        bot: "Let x be one number. Then 2x + 3 is the other. x + (2x + 3) = 20, so 3x + 3 = 20, 3x = 17, x ≈ 5.67. Check: 5 + 15 = 20."
-      },
-      {
-        id: "b8_math_5",
-        level: "Basic 8",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "If 4x - 7 = 2x + 5, what is x?",
-        options: [
-          "x = 4",
-          "x = 6",
-          "x = 8",
-          "x = 10"
-        ],
-        correctIdx: 1,
-        bot: "Subtract 2x from both sides: 2x - 7 = 5. Add 7 to both sides: 2x = 12. Divide by 2: x = 6."
-      },
-
-      // BASIC 8 SOCIAL STUDIES - Cosmopolitan Theory (5 Questions)
-      {
-        id: "b8_social_1",
-        level: "Basic 8",
-        subject: "SOCIAL STUDIES",
-        type: "text",
-        text: "Explain how cosmopolitanism promotes global understanding and reduces cultural conflicts.",
-        correctAns: "Cosmopolitanism encourages people to see themselves as citizens of the world, value diverse perspectives, and recognize shared humanity.",
-        bot: "Think about how understanding different cultures helps people empathize with others and breaks down stereotypes."
-      },
-      {
-        id: "b8_social_2",
-        level: "Basic 8",
-        subject: "SOCIAL STUDIES",
-        type: "text",
-        text: "Discuss the relationship between cosmopolitanism and globalization.",
-        correctAns: "Globalization creates infrastructure for cosmopolitanism through technology and trade. Cosmopolitan values drive further global integration.",
-        bot: "Consider how technology connects people and how international trade brings cultures together."
-      },
-      {
-        id: "b8_social_3",
-        level: "Basic 8",
-        subject: "SOCIAL STUDIES",
-        type: "text",
-        text: "What are challenges of maintaining cultural identity in a cosmopolitan society?",
-        correctAns: "Challenges include cultural homogenization, loss of traditions, and tension between global values and local traditions.",
-        bot: "Think about how cultural mixing can lead to loss of unique traditions and how communities can preserve identity."
-      },
-      {
-        id: "b8_social_4",
-        level: "Basic 8",
-        subject: "SOCIAL STUDIES",
-        type: "text",
-        text: "How have cosmopolitan cities like London and Dubai become economic powerhouses?",
-        correctAns: "They attract talent and investment worldwide, foster innovation through diversity, and serve as international hubs.",
-        bot: "Consider how diversity drives innovation and how international connections create economic opportunities."
-      },
-      {
-        id: "b8_social_5",
-        level: "Basic 8",
-        subject: "SOCIAL STUDIES",
-        type: "text",
-        text: "Evaluate the role of education in developing cosmopolitan values.",
-        correctAns: "Education exposes students to diverse cultures and perspectives, builds empathy, and prepares them for a globalized world.",
-        bot: "Think about how learning different cultures and interacting with diverse peers develops cosmopolitan attitudes."
-      }
+      // BASIC 6-7 ENGLISH
+      { id: "b67_eng_1", level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What is a noun?", options: ["A word that describes an action", "A word that names a person, place, or thing", "A word that describes a quality", "A word that connects sentences"], correctIdx: 1, bot: "A noun is a word used to name a person, place, thing, or idea." },
+      { id: "b67_eng_2", level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Which sentence is grammatically correct?", options: ["She go to school every day", "She goes to school every day", "She going to school every day", "She gone to school every day"], correctIdx: 1, bot: "The correct form uses 'goes' for third person singular." },
+      { id: "b67_eng_3", level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What does 'benevolent' mean?", options: ["Angry and hostile", "Kind and generous", "Confused and lost", "Tired and weak"], correctIdx: 1, bot: "Benevolent means kind and generous." },
+      { id: "b67_eng_4", level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Identify the adjective: 'The beautiful garden has colorful flowers.'", options: ["garden and flowers", "beautiful and colorful", "has", "the"], correctIdx: 1, bot: "Adjectives describe nouns." },
+      { id: "b67_eng_5", level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What is the past tense of 'run'?", options: ["runned", "runs", "ran", "running"], correctIdx: 2, bot: "'Ran' is an irregular verb." },
+      
+      // BASIC 6-7 MATHEMATICS
+      { id: "b67_math_1", level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "If x = 5, what is 2x + 3?", options: ["8", "10", "13", "15"], correctIdx: 2, bot: "2(5) + 3 = 13" },
+      { id: "b67_math_2", level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "A book costs $x and a pen costs $3. If you buy 2 books and 4 pens, what is the total?", options: ["2x + 12", "2x + 7", "x + 12", "5x + 3"], correctIdx: 0, bot: "2 books = 2x, 4 pens = 12. Total = 2x + 12" },
+      { id: "b67_math_3", level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Solve: x + 7 = 15", options: ["x = 8", "x = 22", "x = 2", "x = 10"], correctIdx: 0, bot: "x = 15 - 7 = 8" },
+      { id: "b67_math_4", level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Maria has m marbles. Her friend gives her 12 more. Now she has 35. Equation?", options: ["m - 12 = 35", "m + 12 = 35", "12m = 35", "m = 35 + 12"], correctIdx: 1, bot: "m + 12 = 35" },
+      { id: "b67_math_5", level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Simplify: 3x + 2x - 5", options: ["5x - 5", "6x - 5", "x - 5", "3x - 5"], correctIdx: 0, bot: "3x + 2x = 5x" },
+      
+      // BASIC 6-7 SOCIAL STUDIES
+      { id: "b67_social_1", level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "What does 'cosmopolitan' mean?", options: ["Related to one country only", "Familiar with many different countries and cultures", "Living in the countryside", "Speaking only one language"], correctIdx: 1, bot: "Cosmopolitan means familiar with many cultures." },
+      { id: "b67_social_2", level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Which city is a cosmopolitan hub?", options: ["A small rural village", "New York City", "An isolated mountain town", "A factory town"], correctIdx: 1, bot: "NYC is diverse and multicultural." },
+      { id: "b67_social_3", level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "What is cultural diversity?", options: ["Having only one culture", "The variety of different cultures and beliefs", "Rejecting foreign influences", "Speaking one language"], correctIdx: 1, bot: "Diversity means variety of cultures." },
+      { id: "b67_social_4", level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "How does globalization promote cosmopolitanism?", options: ["By isolating countries", "By connecting people through trade and technology", "By eliminating differences", "By preventing exchange"], correctIdx: 1, bot: "Globalization connects people worldwide." },
+      { id: "b67_social_5", level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "What is an example of cosmopolitan values?", options: ["Rejecting outsiders", "Respecting different cultures", "Speaking only native language", "Staying in one place"], correctIdx: 1, bot: "Cosmopolitan values respect diversity." },
+      
+      // BASIC 8 ENGLISH
+      { id: "b8_eng_1", level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Which literary device: 'The world is a stage'?", options: ["Simile", "Metaphor", "Personification", "Alliteration"], correctIdx: 1, bot: "This is a metaphor." },
+      { id: "b8_eng_2", level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Main purpose of a thesis statement?", options: ["Introduce author", "Present main argument", "Conclude essay", "Define words"], correctIdx: 1, bot: "Thesis presents the main argument." },
+      { id: "b8_eng_3", level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Tone: 'The politician's promises were as empty as his pockets.'", options: ["Respectful", "Sarcastic and critical", "Neutral", "Cheerful"], correctIdx: 1, bot: "The tone is sarcastic and critical." },
+      { id: "b8_eng_4", level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "What does 'ambiguous' mean?", options: ["Clearly stated", "Having multiple meanings", "Completely false", "Very long"], correctIdx: 1, bot: "Ambiguous means multiple interpretations." },
+      { id: "b8_eng_5", level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Example of foreshadowing?", options: ["Describing weather", "Hinting at future events", "Explaining setting", "Introducing character"], correctIdx: 1, bot: "Foreshadowing hints at future events." },
+      
+      // BASIC 8 MATHEMATICS
+      { id: "b8_math_1", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "If 3(x - 2) = 15, find x.", options: ["x = 5", "x = 7", "x = 9", "x = 11"], correctIdx: 1, bot: "x - 2 = 5, so x = 7" },
+      { id: "b8_math_2", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Solve: 2x + 5 = 3x - 2", options: ["x = 3", "x = 5", "x = 7", "x = 9"], correctIdx: 2, bot: "x = 7" },
+      { id: "b8_math_3", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Rectangle: length (2x+3), width (x-1), perimeter 26. Find x.", options: ["x = 2", "x = 3", "x = 4", "x = 5"], correctIdx: 2, bot: "x ≈ 3.67, closest is x = 4" },
+      { id: "b8_math_4", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Two numbers sum to 20. One is 3 more than twice the other.", options: ["5 and 15", "6 and 14", "7 and 13", "8 and 12"], correctIdx: 0, bot: "5 + 15 = 20" },
+      { id: "b8_math_5", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "If 4x - 7 = 2x + 5, find x.", options: ["x = 4", "x = 6", "x = 8", "x = 10"], correctIdx: 1, bot: "x = 6" },
+      
+      // BASIC 8 SOCIAL STUDIES
+      { id: "b8_social_1", level: "Basic 8", subject: "SOCIAL STUDIES", type: "text", text: "Explain how cosmopolitanism promotes global understanding.", correctAns: "Cosmopolitanism encourages people to see themselves as world citizens and value diverse perspectives.", bot: "Think about shared humanity and empathy." },
+      { id: "b8_social_2", level: "Basic 8", subject: "SOCIAL STUDIES", type: "text", text: "Discuss cosmopolitanism and globalization relationship.", correctAns: "Globalization creates infrastructure; cosmopolitan values drive integration.", bot: "Technology connects people globally." },
+      { id: "b8_social_3", level: "Basic 8", subject: "SOCIAL STUDIES", type: "text", text: "What are challenges of maintaining cultural identity in cosmopolitan society?", correctAns: "Cultural homogenization, loss of traditions, tension between global and local values.", bot: "Balance openness with preservation." },
+      { id: "b8_social_4", level: "Basic 8", subject: "SOCIAL STUDIES", type: "text", text: "How have cosmopolitan cities become economic powerhouses?", correctAns: "They attract talent, foster innovation through diversity, and serve as international hubs.", bot: "Diversity drives innovation." },
+      { id: "b8_social_5", level: "Basic 8", subject: "SOCIAL STUDIES", type: "text", text: "Role of education in developing cosmopolitan values?", correctAns: "Education exposes students to diverse cultures, builds empathy, and prepares for globalized world.", bot: "Learning diversity develops cosmopolitan attitudes." }
     ];
 
     let questions = JSON.parse(localStorage.getItem('h_sup_q_vFinal')) || PRELOADED_QUESTIONS;
     let assessments = JSON.parse(localStorage.getItem('h_sup_assessments')) || {};
-    let submissions = JSON.parse(localStorage.getItem('h_sup_sub_vFinal')) || [];
+    let submissions = JSON.parse(localStorage.getItem('h_sup_submissions_v2')) || [];
     let sysDate = localStorage.getItem('h_sup_date') || "WEDNESDAY, 13TH MAY, 2026";
     let activeQ = [], user = {}, cur = 0, score = 0, seconds = 0, timerInterval, currentAssessmentKey = '';
 
@@ -868,6 +518,7 @@
       document.getElementById('admin-date-input').value = sysDate;
       renderQuestionsList();
       renderSubmissionsList();
+      renderAnalytics();
     };
 
     // STUDENT LOGIC
@@ -964,8 +615,22 @@
       const typed = inp.value.trim();
       if(!typed) return alert("Please type your response.");
       inp.disabled = true;
-      submissions.push({ student: user.name, sub: user.activeSub, q: q.text, typed, expected: q.correctAns, timestamp: new Date().toLocaleString() });
-      localStorage.setItem('h_sup_sub_vFinal', JSON.stringify(submissions));
+      
+      const submission = {
+        id: Date.now(),
+        student: user.name,
+        level: user.level,
+        subject: user.activeSub,
+        question: q.text,
+        studentAnswer: typed,
+        expectedAnswer: q.correctAns,
+        timestamp: new Date().toLocaleString(),
+        questionType: q.type
+      };
+      
+      submissions.push(submission);
+      localStorage.setItem('h_sup_submissions_v2', JSON.stringify(submissions));
+      
       if(typed.toLowerCase().includes(q.correctAns.toLowerCase().split(' ')[0])) {
         inp.classList.add('correct');
         score++;
@@ -992,7 +657,6 @@
       clearInterval(timerInterval);
       const finalScore = Math.round((score/activeQ.length)*100);
       
-      // Save assessment record
       assessments[currentAssessmentKey] = {
         score: finalScore,
         date: new Date().toLocaleString(),
@@ -1019,8 +683,7 @@
       document.getElementById('login-screen').classList.add('hidden');
       document.getElementById('records-screen').classList.remove('hidden');
       
-      document.getElementById('record-student-name').innerText = user.name;
-      document.getElementById('record-student-level').innerText = user.level;
+      document.getElementById('record-student-name').innerText = `${user.name} (${user.level})`;
       
       const studentAssessments = Object.entries(assessments).filter(([key]) => key.startsWith(user.name));
       const scores = studentAssessments.map(([_, data]) => data.score);
@@ -1029,12 +692,32 @@
       document.getElementById('average-score').innerText = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b) / scores.length) + '%' : '0%';
       document.getElementById('best-score').innerText = scores.length > 0 ? Math.max(...scores) + '%' : '0%';
       
+      // Badges
+      let badges = 0;
+      if(scores.length > 0) {
+        if(Math.max(...scores) >= 90) badges++;
+        if(scores.length >= 3) badges++;
+        if(Math.min(...scores) >= 70) badges++;
+      }
+      document.getElementById('total-badges').innerText = badges;
+      
+      // Achievements
+      const achievementsHTML = [];
+      if(Math.max(...scores) >= 90) achievementsHTML.push('<div class="badge-achievement badge-gold">🌟<br>Perfect<br>Score</div>');
+      if(scores.length >= 3) achievementsHTML.push('<div class="badge-achievement badge-blue">🎯<br>Consistent<br>Learner</div>');
+      if(Math.min(...scores) >= 70) achievementsHTML.push('<div class="badge-achievement badge-silver">✨<br>All<br>Passed</div>');
+      if(scores.length >= 5) achievementsHTML.push('<div class="badge-achievement badge-bronze">🏅<br>Super<br>Active</div>');
+      
+      document.getElementById('achievements-container').innerHTML = achievementsHTML.length > 0 ? achievementsHTML.join('') : '<p class="text-slate-400">Complete more assessments to earn badges!</p>';
+      
+      // Records
       const recordsList = document.getElementById('records-list');
       if(studentAssessments.length === 0) {
         recordsList.innerHTML = '<p class="text-slate-400 font-bold py-4 text-center">No assessment records yet.</p>';
       } else {
         recordsList.innerHTML = studentAssessments.map(([key, data]) => {
           const subject = key.split('_').slice(1).join('_');
+          const badge = data.score >= 90 ? '🌟' : data.score >= 80 ? '⭐' : data.score >= 70 ? '✓' : '→';
           return `
             <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm">
               <div class="flex justify-between items-start">
@@ -1043,7 +726,7 @@
                   <p class="text-xs text-slate-600 mt-1">${data.date}</p>
                 </div>
                 <div class="text-right">
-                  <p class="text-2xl font-black text-blue-900">${data.score}%</p>
+                  <p class="text-3xl font-black text-blue-900">${badge} ${data.score}%</p>
                   <p class="text-xs text-slate-600">${data.correctAnswers}/${data.totalQuestions}</p>
                 </div>
               </div>
@@ -1093,15 +776,12 @@
         list.innerHTML = '<p class="text-slate-400 font-bold py-4 text-center">No assessment data yet.</p>';
       } else {
         list.innerHTML = rankings.map((item, idx) => {
-          let rankClass = 'rank-other';
-          if(idx === 0) rankClass = 'rank-1';
-          else if(idx === 1) rankClass = 'rank-2';
-          else if(idx === 2) rankClass = 'rank-3';
-          
+          const medals = ['🥇', '🥈', '🥉'];
+          const medal = idx < 3 ? medals[idx] : '•';
           return `
             <div class="bg-white p-5 rounded-xl border-l-4 border-blue-500 shadow-sm flex justify-between items-center">
-              <div class="flex items-center">
-                <div class="rank-badge ${rankClass}">${idx + 1}</div>
+              <div class="flex items-center gap-4">
+                <span class="text-3xl">${medal}</span>
                 <div>
                   <p class="font-bold text-slate-800">${item.name}</p>
                   <p class="text-xs text-slate-600">${item.level}</p>
@@ -1128,6 +808,7 @@
       });
       event.target.closest('.admin-tab-btn').classList.add('border-blue-600');
       document.getElementById('admin-tab-' + tab).classList.remove('hidden');
+      if(tab === 'analytics') renderAnalytics();
     }
 
     function toggleAdminInput() {
@@ -1162,7 +843,6 @@
       questions.push(q);
       localStorage.setItem('h_sup_q_vFinal', JSON.stringify(questions));
       
-      // Clear form
       document.getElementById('in-subject').value = '';
       document.getElementById('in-q').value = '';
       document.getElementById('opt-0').value = '';
@@ -1208,15 +888,98 @@
       const list = document.getElementById('submissions-list');
       if(!list) return;
       
-      list.innerHTML = submissions.map((s, i) => `
+      list.innerHTML = submissions.map((s) => `
         <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-blue-500 shadow-sm">
-          <p class="text-[10px] font-black uppercase text-blue-500 mb-2">${s.student} • ${s.sub}</p>
-          <p class="text-xs font-bold mb-3">Q: ${s.q}</p>
-          <div class="grid grid-cols-2 gap-2 text-[10px]">
-            <div class="bg-red-50 p-3 rounded"><b>STUDENT:</b> ${s.typed}</div>
-            <div class="bg-green-50 p-3 rounded"><b>EXPECTED:</b> ${s.expected}</div>
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <p class="text-[10px] font-black uppercase text-blue-500">${s.student} • ${s.level}</p>
+              <p class="text-xs font-bold text-slate-700 mt-1">${s.subject}</p>
+            </div>
+            <p class="text-[9px] text-slate-500">${s.timestamp}</p>
           </div>
-          <p class="text-[9px] text-slate-500 mt-2">${s.timestamp || 'N/A'}</p>
+          <p class="text-xs font-bold mb-3 text-slate-800">Q: ${s.question}</p>
+          <div class="grid grid-cols-2 gap-3 text-[10px]">
+            <div class="bg-red-50 p-3 rounded border border-red-200">
+              <p class="font-black text-red-700 mb-1">STUDENT ANSWER:</p>
+              <p class="text-red-600">${s.studentAnswer}</p>
+            </div>
+            <div class="bg-green-50 p-3 rounded border border-green-200">
+              <p class="font-black text-green-700 mb-1">EXPECTED ANSWER:</p>
+              <p class="text-green-600">${s.expectedAnswer}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterSubmissions() {
+      const filter = document.getElementById('submission-filter').value.toLowerCase();
+      const filtered = submissions.filter(s => s.student.toLowerCase().includes(filter));
+      const list = document.getElementById('submissions-list');
+      list.innerHTML = filtered.map((s) => `
+        <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-blue-500 shadow-sm">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <p class="text-[10px] font-black uppercase text-blue-500">${s.student} • ${s.level}</p>
+              <p class="text-xs font-bold text-slate-700 mt-1">${s.subject}</p>
+            </div>
+            <p class="text-[9px] text-slate-500">${s.timestamp}</p>
+          </div>
+          <p class="text-xs font-bold mb-3 text-slate-800">Q: ${s.question}</p>
+          <div class="grid grid-cols-2 gap-3 text-[10px]">
+            <div class="bg-red-50 p-3 rounded border border-red-200">
+              <p class="font-black text-red-700 mb-1">STUDENT:</p>
+              <p class="text-red-600">${s.studentAnswer}</p>
+            </div>
+            <div class="bg-green-50 p-3 rounded border border-green-200">
+              <p class="font-black text-green-700 mb-1">EXPECTED:</p>
+              <p class="text-green-600">${s.expectedAnswer}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAnalytics() {
+      const statsDiv = document.getElementById('analytics-stats');
+      const subjectsDiv = document.getElementById('analytics-subjects');
+      
+      const totalAssessments = Object.keys(assessments).length;
+      const avgScore = totalAssessments > 0 ? Math.round(Object.values(assessments).reduce((a, b) => a + b.score, 0) / totalAssessments) : 0;
+      const totalSubmissions = submissions.length;
+      
+      statsDiv.innerHTML = `
+        <div class="bg-white p-4 rounded-lg border-l-4 border-blue-500">
+          <p class="text-sm text-slate-600">Total Assessments Taken</p>
+          <p class="text-3xl font-black text-blue-900">${totalAssessments}</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg border-l-4 border-green-500">
+          <p class="text-sm text-slate-600">Class Average Score</p>
+          <p class="text-3xl font-black text-green-900">${avgScore}%</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg border-l-4 border-purple-500">
+          <p class="text-sm text-slate-600">Total Submissions</p>
+          <p class="text-3xl font-black text-purple-900">${totalSubmissions}</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg border-l-4 border-orange-500">
+          <p class="text-sm text-slate-600">Active Students</p>
+          <p class="text-3xl font-black text-orange-900">${new Set(Object.keys(assessments).map(k => k.split('_')[0])).size}</p>
+        </div>
+      `;
+      
+      const subjectStats = {};
+      Object.entries(assessments).forEach(([key, data]) => {
+        const subject = key.split('_').slice(1).join('_');
+        if(!subjectStats[subject]) subjectStats[subject] = { count: 0, total: 0 };
+        subjectStats[subject].count++;
+        subjectStats[subject].total += data.score;
+      });
+      
+      subjectsDiv.innerHTML = Object.entries(subjectStats).map(([subject, stats]) => `
+        <div class="bg-white p-4 rounded-lg">
+          <p class="text-sm font-black text-slate-700">${subject}</p>
+          <p class="text-2xl font-black text-blue-900">${Math.round(stats.total / stats.count)}%</p>
+          <p class="text-xs text-slate-600">${stats.count} assessments</p>
         </div>
       `).join('');
     }
