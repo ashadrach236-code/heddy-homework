@@ -11,10 +11,17 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap');
     
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
       font-family: 'Outfit', sans-serif;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       color: #1e293b;
+      min-height: 100vh;
     }
     
     .heddy-gradient {
@@ -31,12 +38,14 @@
       background: #dcfce7 !important;
       border-color: #22c55e !important;
       color: #166534 !important;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.3) !important;
     }
     
     .wrong {
       background: #fee2e2 !important;
       border-color: #ef4444 !important;
       color: #991b1b !important;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.3) !important;
     }
     
     .hidden {
@@ -44,7 +53,7 @@
     }
     
     .option-btn {
-      transition: 0.2s;
+      transition: all 0.3s ease;
       border: 2px solid #e2e8f0;
       text-align: left;
       padding: 1.25rem;
@@ -53,15 +62,39 @@
       width: 100%;
       background: white;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
     }
     
     .option-btn:hover:not(:disabled) {
       border-color: #3b82f6;
       background: #eff6ff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
     }
     
     .option-btn:disabled {
       opacity: 0.7;
+    }
+    
+    .option-btn.correct::after {
+      content: '✓';
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    .option-btn.wrong::after {
+      content: '✗';
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      font-weight: bold;
     }
     
     .badge {
@@ -72,19 +105,28 @@
       font-size: 0.75rem;
     }
     
-    .badge-success {
-      background: #d1fae5;
+    .badge-excellent {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
       color: #065f46;
+      font-weight: 700;
     }
     
-    .badge-warning {
-      background: #fef3c7;
+    .badge-good {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
       color: #92400e;
+      font-weight: 700;
     }
     
-    .badge-info {
-      background: #dbeafe;
+    .badge-average {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
       color: #1e40af;
+      font-weight: 700;
+    }
+    
+    .badge-poor {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      color: #991b1b;
+      font-weight: 700;
     }
     
     .chart-container {
@@ -99,10 +141,16 @@
       padding: 1.5rem;
       border-left: 4px solid #3b82f6;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
     }
     
     .stat-value {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: 800;
       color: #1e3a8a;
     }
@@ -139,6 +187,171 @@
       background: #f3f4f6;
       color: #4b5563;
     }
+    
+    .feedback-message {
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin: 1rem 0;
+      font-weight: 600;
+      animation: slideIn 0.4s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .feedback-excellent {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 4px solid #10b981;
+    }
+    
+    .feedback-good {
+      background: #fef3c7;
+      color: #92400e;
+      border-left: 4px solid #f59e0b;
+    }
+    
+    .feedback-average {
+      background: #dbeafe;
+      color: #1e40af;
+      border-left: 4px solid #3b82f6;
+    }
+    
+    .feedback-poor {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+    
+    .answer-reveal {
+      background: #f0f9ff;
+      border: 2px dashed #0284c7;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin: 1rem 0;
+      animation: slideIn 0.4s ease;
+    }
+    
+    .answer-reveal strong {
+      color: #0c4a6e;
+    }
+    
+    .medal {
+      font-size: 3rem;
+      animation: bounce 0.6s ease;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .achievement-badge {
+      display: inline-block;
+      padding: 1rem;
+      border-radius: 1rem;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: white;
+      font-weight: 700;
+      text-align: center;
+      margin: 0.5rem;
+    }
+    
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      border-radius: 0.75rem;
+      margin: 0.5rem 0;
+      border-left: 4px solid #3b82f6;
+    }
+    
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      font-weight: 700;
+      color: white;
+      margin-right: 1rem;
+    }
+    
+    .rank-1 { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
+    .rank-2 { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%); }
+    .rank-3 { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
+    .rank-other { background: #3b82f6; }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
+      transition: width 0.4s ease;
+    }
+    
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: white;
+      border-radius: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      animation: slideIn 0.4s ease;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      animation: slideIn 0.4s ease;
+      z-index: 999;
+    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -157,6 +370,9 @@
       <div class="flex gap-3">
         <button onclick="showStudentRecords()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
           <i class="fas fa-chart-line mr-2"></i>My Records
+        </button>
+        <button onclick="showLeaderboard()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
+          <i class="fas fa-trophy mr-2"></i>Leaderboard
         </button>
         <button onclick="adminLogin()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
           Admin Access
@@ -219,10 +435,24 @@
         <div class="flex gap-4 items-center">
           <div class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-mono" id="timer-display">00:00</div>
           <div id="score-ring" class="text-2xl font-black text-yellow-400">0%</div>
+          <div id="streak-display" class="streak-badge hidden">
+            <i class="fas fa-fire"></i>
+            <span id="streak-count">0</span>
+          </div>
         </div>
       </div>
 
       <div class="glass-card rounded-[3rem] p-8 md:p-14 shadow-2xl border-b-[12px] border-blue-900">
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-slate-600">Question <span id="q-progress">1</span> of <span id="q-total">0</span></span>
+            <span id="difficulty-badge" class="badge badge-average">Medium</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+          </div>
+        </div>
+
         <div id="q-image-container" class="hidden mb-10 rounded-3xl overflow-hidden border-4 border-slate-50 shadow-inner">
           <img id="qi-image" src="" alt="Question" class="w-full h-auto max-h-96 object-contain">
         </div>
@@ -236,15 +466,20 @@
           <button onclick="checkTextAns()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black uppercase">Submit Response</button>
         </div>
 
+        <div id="feedback-section" class="hidden mt-8">
+          <div id="feedback-message" class="feedback-message"></div>
+          <div id="answer-reveal" class="answer-reveal hidden"></div>
+        </div>
+
         <div id="bot-response" class="hidden mt-10 p-8 bg-slate-900 rounded-[2.5rem] text-white">
-          <div class="flex gap-6">
+          <div class="flex gap-6 mb-6">
             <div class="text-4xl">🤖</div>
             <div class="flex-1">
               <p class="text-yellow-400 font-black text-[10px] mb-2 uppercase tracking-widest">Heddy Bot Analysis</p>
               <p id="bot-msg" class="text-slate-200 font-bold text-lg italic leading-relaxed"></p>
             </div>
           </div>
-          <button onclick="next()" class="w-full mt-8 bg-white text-blue-900 font-black py-5 rounded-2xl hover:bg-yellow-400 transition-colors uppercase">
+          <button onclick="next()" class="w-full bg-white text-blue-900 font-black py-5 rounded-2xl hover:bg-yellow-400 transition-colors uppercase">
             Next Question <i class="fas fa-arrow-right ml-2"></i>
           </button>
         </div>
@@ -260,12 +495,17 @@
       </div>
 
       <div class="glass-card rounded-3xl p-8 shadow-2xl">
-        <h2 class="text-3xl font-black text-slate-900 mb-2">
-          <span id="rec-student-name"></span>
-        </h2>
-        <p class="text-slate-600 font-bold uppercase text-sm mb-8">
-          Level: <span id="rec-student-level"></span>
-        </p>
+        <div class="flex justify-between items-start mb-8">
+          <div>
+            <h2 class="text-3xl font-black text-slate-900 mb-2">
+              <span id="rec-student-name"></span>
+            </h2>
+            <p class="text-slate-600 font-bold uppercase text-sm">
+              Level: <span id="rec-student-level"></span>
+            </p>
+          </div>
+          <div id="achievements-display" class="flex gap-2 flex-wrap justify-end"></div>
+        </div>
 
         <!-- Overall Stats -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -285,6 +525,12 @@
             <div class="stat-value" id="rec-subjects-count">0</div>
             <div class="stat-label">Subjects Covered</div>
           </div>
+        </div>
+
+        <!-- Achievements Section -->
+        <div id="achievements-section" class="mb-8 hidden">
+          <h3 class="text-xl font-black text-slate-900 mb-4">🏆 Achievements Unlocked</h3>
+          <div id="achievements-list" class="flex flex-wrap gap-2"></div>
         </div>
 
         <!-- Year-based Growth Chart -->
@@ -309,6 +555,32 @@
       </div>
     </section>
 
+    <!-- LEADERBOARD -->
+    <section id="leaderboard-screen" class="hidden">
+      <div class="mb-8">
+        <button onclick="setScreen('login')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm">
+          <i class="fas fa-arrow-left mr-2"></i>Back
+        </button>
+      </div>
+
+      <div class="glass-card rounded-3xl p-8 shadow-2xl">
+        <h2 class="text-3xl font-black text-slate-900 mb-8">
+          <i class="fas fa-trophy text-yellow-400 mr-3"></i>Class Leaderboard
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="text-xl font-black text-slate-900 mb-4">By Average Score</h3>
+            <div id="leaderboard-avg" class="space-y-2"></div>
+          </div>
+          <div>
+            <h3 class="text-xl font-black text-slate-900 mb-4">By Total Attempts</h3>
+            <div id="leaderboard-attempts" class="space-y-2"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ADMIN PANEL -->
     <section id="admin-screen" class="hidden">
       <div class="mb-8 flex justify-between items-center">
@@ -329,6 +601,15 @@
               <select id="in-level" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs focus:border-blue-500 focus:outline-none">
                 <option>Basic 6-7</option>
                 <option>Basic 8</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Difficulty</label>
+              <select id="in-difficulty" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs focus:border-blue-500 focus:outline-none">
+                <option value="Easy">Easy</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Hard">Hard</option>
               </select>
             </div>
 
@@ -404,10 +685,11 @@
 
           <!-- Assessment Feed -->
           <div class="glass-card rounded-3xl p-6 shadow-2xl">
-            <div class="flex gap-2 mb-6">
+            <div class="flex gap-2 mb-6 flex-wrap">
               <button onclick="renderAdminViews('questions')" class="bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold">QUESTIONS</button>
               <button onclick="renderAdminViews('reviews')" class="bg-slate-300 text-slate-900 px-3 py-1 rounded text-xs font-bold">SUBMISSIONS</button>
               <button onclick="renderAdminViews('analytics')" class="bg-slate-300 text-slate-900 px-3 py-1 rounded text-xs font-bold">ANALYTICS</button>
+              <button onclick="renderAdminViews('performance')" class="bg-slate-300 text-slate-900 px-3 py-1 rounded text-xs font-bold">PERFORMANCE</button>
             </div>
             <div id="admin-feed" class="space-y-4 max-h-[600px] overflow-y-auto pr-2"></div>
           </div>
@@ -430,6 +712,38 @@
       { name: "BRAHANNAH BOATENG", level: "Basic 8", code: "14396" }
     ];
 
+    // FEEDBACK MESSAGES
+    const FEEDBACK = {
+      excellent: [
+        "🌟 Outstanding! Perfect score!",
+        "🎯 Absolutely brilliant answer!",
+        "⭐ Exceptional work!",
+        "🏆 You're a star!",
+        "💯 Flawless performance!"
+      ],
+      good: [
+        "✅ Great job! Well done!",
+        "👍 Good work! Keep it up!",
+        "🎉 Nice effort!",
+        "💪 Solid answer!",
+        "🌟 Very good!"
+      ],
+      average: [
+        "📚 Good attempt! Study more on this topic.",
+        "💭 Close! Review this concept.",
+        "🔍 Not bad, but needs improvement.",
+        "📖 Keep practicing!",
+        "🎯 You're getting there!"
+      ],
+      poor: [
+        "❌ Not quite right. Let's review this.",
+        "📚 This needs more study.",
+        "🔄 Try again with more focus.",
+        "💡 Let's work on this together.",
+        "📝 Review the material and try again."
+      ]
+    };
+
     let questions = JSON.parse(localStorage.getItem('h_sup_q_vFinal')) || [];
     let submissions = JSON.parse(localStorage.getItem('h_sup_sub_vFinal')) || [];
     let studentRecords = JSON.parse(localStorage.getItem('h_sup_records')) || {};
@@ -438,6 +752,7 @@
     let activeQ = [], user = {}, cur = 0, score = 0, seconds = 0, timerInterval;
     let currentScreen = 'login';
     let growthChart = null;
+    let streak = 0;
 
     window.onload = () => {
       document.getElementById('display-date').innerText = sysDate;
@@ -453,7 +768,8 @@
             name: s.name,
             level: s.level,
             attempts: [],
-            yearData: {}
+            yearData: {},
+            achievements: []
           };
         }
       });
@@ -465,6 +781,28 @@
       document.getElementById('quiz-screen').classList.toggle('hidden', screen !== 'quiz');
       document.getElementById('admin-screen').classList.toggle('hidden', screen !== 'admin');
       document.getElementById('records-screen').classList.toggle('hidden', screen !== 'records');
+      document.getElementById('leaderboard-screen').classList.toggle('hidden', screen !== 'leaderboard');
+    }
+
+    function getRandomFeedback(category) {
+      return FEEDBACK[category][Math.floor(Math.random() * FEEDBACK[category].length)];
+    }
+
+    function getFeedbackCategory(score) {
+      if (score >= 90) return 'excellent';
+      if (score >= 70) return 'good';
+      if (score >= 50) return 'average';
+      return 'poor';
+    }
+
+    function showFeedback(isCorrect, score) {
+      const feedbackEl = document.getElementById('feedback-message');
+      const category = isCorrect ? 'excellent' : getFeedbackCategory(score);
+      const message = getRandomFeedback(category);
+      
+      feedbackEl.textContent = message;
+      feedbackEl.className = `feedback-message feedback-${category === 'excellent' ? 'excellent' : category === 'good' ? 'good' : category === 'average' ? 'average' : 'poor'}`;
+      document.getElementById('feedback-section').classList.remove('hidden');
     }
 
     // STUDENT LOGIC
@@ -507,6 +845,7 @@
       cur = 0;
       score = 0;
       seconds = 0;
+      streak = 0;
       setScreen('quiz');
       startTimer();
       load();
@@ -516,7 +855,16 @@
       const q = activeQ[cur];
       document.getElementById('h-subject-badge').innerText = user.activeSub;
       document.getElementById('q-text').innerText = q.text;
+      document.getElementById('q-progress').innerText = cur + 1;
+      document.getElementById('q-total').innerText = activeQ.length;
+      document.getElementById('difficulty-badge').innerText = q.difficulty || 'Medium';
+      document.getElementById('difficulty-badge').className = `badge ${q.difficulty === 'Easy' ? 'badge-good' : q.difficulty === 'Hard' ? 'badge-poor' : 'badge-average'}`;
+      
+      const progress = ((cur + 1) / activeQ.length) * 100;
+      document.getElementById('progress-fill').style.width = progress + '%';
+      
       document.getElementById('bot-response').classList.add('hidden');
+      document.getElementById('feedback-section').classList.add('hidden');
       
       const imgBox = document.getElementById('q-image-container');
       if (q.img) {
@@ -541,12 +889,25 @@
           b.innerText = optText;
           b.onclick = () => {
             document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
-            if (i == q.correctIdx) {
+            const isCorrect = i == q.correctIdx;
+            
+            if (isCorrect) {
               b.classList.add('correct');
               score++;
+              streak++;
+              showFeedback(true, 100);
+              document.getElementById('answer-reveal').classList.add('hidden');
             } else {
               b.classList.add('wrong');
+              streak = 0;
+              const percentage = Math.round((score / (cur + 1)) * 100);
+              showFeedback(false, percentage);
+              document.getElementById('answer-reveal').innerHTML = `<strong>Correct Answer:</strong> ${q.options[q.correctIdx]}`;
+              document.getElementById('answer-reveal').classList.remove('hidden');
             }
+            
+            document.getElementById('streak-display').classList.toggle('hidden', streak === 0);
+            document.getElementById('streak-count').innerText = streak;
             showBot(q.bot);
           };
           mcq.appendChild(b);
@@ -570,14 +931,26 @@
       submissions.push({ student: user.name, sub: user.activeSub, q: q.text, typed, expected: q.correctAns });
       localStorage.setItem('h_sup_sub_vFinal', JSON.stringify(submissions));
       
-      if (typed.toLowerCase() === q.correctAns.toLowerCase()) {
+      const isCorrect = typed.toLowerCase() === q.correctAns.toLowerCase();
+      
+      if (isCorrect) {
         inp.classList.add('correct');
         score++;
-        showBot(q.bot);
+        streak++;
+        showFeedback(true, 100);
+        document.getElementById('answer-reveal').classList.add('hidden');
       } else {
         inp.classList.add('wrong');
-        showBot("Your typing work has been logged for Sir Heddy to mark manually.");
+        streak = 0;
+        const percentage = Math.round((score / (cur + 1)) * 100);
+        showFeedback(false, percentage);
+        document.getElementById('answer-reveal').innerHTML = `<strong>Correct Answer:</strong> ${q.correctAns}`;
+        document.getElementById('answer-reveal').classList.remove('hidden');
       }
+      
+      document.getElementById('streak-display').classList.toggle('hidden', streak === 0);
+      document.getElementById('streak-count').innerText = streak;
+      showBot(q.bot);
     }
 
     function showBot(msg) {
@@ -603,9 +976,8 @@
       const percentage = Math.round((score / activeQ.length) * 100);
       const year = new Date().getFullYear().toString();
       
-      // Save to student records
       if (!studentRecords[user.name]) {
-        studentRecords[user.name] = { name: user.name, level: user.level, attempts: [], yearData: {} };
+        studentRecords[user.name] = { name: user.name, level: user.level, attempts: [], yearData: {}, achievements: [] };
       }
       
       const attempt = {
@@ -613,7 +985,8 @@
         subject: user.activeSub,
         score: percentage,
         totalQuestions: activeQ.length,
-        correctAnswers: score
+        correctAnswers: score,
+        time: seconds
       };
       
       studentRecords[user.name].attempts.push(attempt);
@@ -623,18 +996,51 @@
       }
       studentRecords[user.name].yearData[year].push(percentage);
       
+      // Check achievements
+      checkAchievements(user.name, percentage);
+      
       localStorage.setItem('h_sup_records', JSON.stringify(studentRecords));
+      
+      const medal = percentage >= 90 ? '🥇' : percentage >= 75 ? '🥈' : percentage >= 60 ? '🥉' : '📜';
       
       document.getElementById('quiz-screen').innerHTML = `
         <div class="text-center p-12 glass-card rounded-[3rem] shadow-2xl max-w-2xl mx-auto">
+          <div class="medal">${medal}</div>
           <h2 class="text-6xl font-black mb-4 text-blue-900">${percentage}%</h2>
-          <p class="font-bold text-slate-400 mb-10 uppercase tracking-widest">Assessment Complete</p>
-          <p class="text-slate-600 mb-8">You answered <strong>${score}</strong> out of <strong>${activeQ.length}</strong> questions correctly.</p>
+          <p class="font-bold text-slate-400 mb-2 uppercase tracking-widest">Assessment Complete</p>
+          <p class="text-slate-600 mb-8">You answered <strong>${score}</strong> out of <strong>${activeQ.length}</strong> questions correctly in ${Math.floor(seconds / 60)}m ${seconds % 60}s.</p>
+          
+          <div class="mb-8 p-4 rounded-xl ${percentage >= 90 ? 'bg-green-100' : percentage >= 70 ? 'bg-blue-100' : percentage >= 50 ? 'bg-yellow-100' : 'bg-red-100'}">
+            <p class="font-bold ${percentage >= 90 ? 'text-green-900' : percentage >= 70 ? 'text-blue-900' : percentage >= 50 ? 'text-yellow-900' : 'text-red-900'}">
+              ${percentage >= 90 ? '🌟 Excellent! Outstanding performance!' : percentage >= 70 ? '✅ Great! Keep up the good work!' : percentage >= 50 ? '📚 Good effort! Review weak areas.' : '💪 Keep practicing! You\'ll improve!'}
+            </p>
+          </div>
+          
           <button onclick="location.reload()" class="w-full heddy-gradient text-white py-6 rounded-2xl font-black uppercase">
             Return Home
           </button>
         </div>
       `;
+    }
+
+    function checkAchievements(studentName, score) {
+      const record = studentRecords[studentName];
+      const achievements = record.achievements || [];
+      
+      if (score === 100 && !achievements.includes('perfect')) {
+        achievements.push('perfect');
+      }
+      if (record.attempts.length === 5 && !achievements.includes('five-attempts')) {
+        achievements.push('five-attempts');
+      }
+      if (record.attempts.length === 10 && !achievements.includes('ten-attempts')) {
+        achievements.push('ten-attempts');
+      }
+      if (score >= 90 && !achievements.includes('ninety-plus')) {
+        achievements.push('ninety-plus');
+      }
+      
+      record.achievements = achievements;
     }
 
     function startTimer() {
@@ -666,6 +1072,21 @@
       document.getElementById('rec-avg-score').innerText = avgScore + '%';
       document.getElementById('rec-best-score').innerText = bestScore + '%';
       document.getElementById('rec-subjects-count').innerText = subjects;
+      
+      // Achievements
+      const achievementMap = {
+        'perfect': { icon: '💯', label: 'Perfect Score' },
+        'five-attempts': { icon: '5️⃣', label: '5 Attempts' },
+        'ten-attempts': { icon: '🔟', label: '10 Attempts' },
+        'ninety-plus': { icon: '⭐', label: '90%+ Score' }
+      };
+      
+      if (record.achievements && record.achievements.length > 0) {
+        document.getElementById('achievements-section').classList.remove('hidden');
+        document.getElementById('achievements-list').innerHTML = record.achievements.map(a => 
+          `<div class="achievement-badge">${achievementMap[a].icon} ${achievementMap[a].label}</div>`
+        ).join('');
+      }
       
       // Growth chart
       renderGrowthChart(record);
@@ -704,10 +1125,10 @@
         <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
           <div class="flex justify-between items-start mb-2">
             <p class="font-bold text-slate-900">${a.subject}</p>
-            <span class="badge ${a.score >= 70 ? 'badge-success' : a.score >= 50 ? 'badge-warning' : 'badge-info'}">${a.score}%</span>
+            <span class="badge ${a.score >= 90 ? 'badge-excellent' : a.score >= 70 ? 'badge-good' : a.score >= 50 ? 'badge-average' : 'badge-poor'}">${a.score}%</span>
           </div>
           <p class="text-xs text-slate-600">${a.date}</p>
-          <p class="text-xs text-slate-600">${a.correctAnswers}/${a.totalQuestions} correct</p>
+          <p class="text-xs text-slate-600">${a.correctAnswers}/${a.totalQuestions} correct • ${Math.floor(a.time / 60)}m ${a.time % 60}s</p>
         </div>
       `).join('');
       
@@ -755,6 +1176,54 @@
       });
     }
 
+    // LEADERBOARD
+    function showLeaderboard() {
+      const stats = {};
+      Object.entries(studentRecords).forEach(([name, record]) => {
+        if (record.attempts.length > 0) {
+          const avg = Math.round(record.attempts.reduce((a, b) => a + b.score, 0) / record.attempts.length);
+          stats[name] = { avg, attempts: record.attempts.length };
+        }
+      });
+      
+      const byAvg = Object.entries(stats).sort((a, b) => b[1].avg - a[1].avg);
+      const byAttempts = Object.entries(stats).sort((a, b) => b[1].attempts - a[1].attempts);
+      
+      document.getElementById('leaderboard-avg').innerHTML = byAvg.map(([name, data], idx) => {
+        const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
+        return `
+          <div class="leaderboard-item">
+            <div class="flex items-center">
+              <div class="rank-badge ${rankClass}">${idx + 1}</div>
+              <div>
+                <p class="font-bold text-slate-900">${name}</p>
+                <p class="text-xs text-slate-600">${data.attempts} attempts</p>
+              </div>
+            </div>
+            <p class="text-2xl font-black text-blue-900">${data.avg}%</p>
+          </div>
+        `;
+      }).join('');
+      
+      document.getElementById('leaderboard-attempts').innerHTML = byAttempts.map(([name, data], idx) => {
+        const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
+        return `
+          <div class="leaderboard-item">
+            <div class="flex items-center">
+              <div class="rank-badge ${rankClass}">${idx + 1}</div>
+              <div>
+                <p class="font-bold text-slate-900">${name}</p>
+                <p class="text-xs text-slate-600">${data.avg}% average</p>
+              </div>
+            </div>
+            <p class="text-2xl font-black text-blue-900">${data.attempts}</p>
+          </div>
+        `;
+      }).join('');
+      
+      setScreen('leaderboard');
+    }
+
     // ADMIN FUNCTIONS
     function save() {
       const sub = document.getElementById('in-subject').value.trim().toUpperCase();
@@ -766,6 +1235,7 @@
         id: Math.random().toString(),
         level: document.getElementById('in-level').value,
         subject: sub,
+        difficulty: document.getElementById('in-difficulty').value,
         type: document.getElementById('in-type').value,
         text: txt,
         img: document.getElementById('in-img').value,
@@ -808,6 +1278,7 @@
                 <span class="font-bold text-blue-600">[${q.level}]</span>
                 <span class="font-bold text-slate-900"> ${q.subject}:</span>
                 <span class="text-slate-600"> ${q.text.substring(0, 40)}...</span>
+                <span class="badge badge-average ml-2">${q.difficulty || 'Medium'}</span>
               </div>
               <button onclick="deleteQ(${i})" class="text-red-400 hover:text-red-600 text-xs">
                 <i class="fas fa-trash"></i>
@@ -835,8 +1306,6 @@
           `;
         });
       } else if (type === 'analytics') {
-        feed.innerHTML = '<div class="text-center py-8"><p class="text-slate-600 font-bold">Class Analytics</p></div>';
-        
         const studentStats = {};
         submissions.forEach(s => {
           if (!studentStats[s.student]) {
@@ -852,6 +1321,31 @@
               <p class="font-bold text-slate-900">${name}</p>
               <p class="text-xs text-slate-600">${stats.submissions} submissions</p>
               <p class="text-lg font-black text-blue-900 mt-2">${percentage}%</p>
+            </div>
+          `;
+        });
+      } else if (type === 'performance') {
+        const perfData = {};
+        Object.entries(studentRecords).forEach(([name, record]) => {
+          if (record.attempts.length > 0) {
+            const avg = Math.round(record.attempts.reduce((a, b) => a + b.score, 0) / record.attempts.length);
+            perfData[name] = { avg, attempts: record.attempts.length, best: Math.max(...record.attempts.map(a => a.score)) };
+          }
+        });
+        
+        Object.entries(perfData).sort((a, b) => b[1].avg - a[1].avg).forEach(([name, data], idx) => {
+          feed.innerHTML += `
+            <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="font-bold text-slate-900">${idx + 1}. ${name}</p>
+                  <p class="text-xs text-slate-600">${data.attempts} attempts</p>
+                </div>
+                <div class="text-right">
+                  <p class="text-lg font-black text-blue-900">${data.avg}%</p>
+                  <p class="text-xs text-slate-600">Best: ${data.best}%</p>
+                </div>
+              </div>
             </div>
           `;
         });
