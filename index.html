@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEDDY SUPREME - STRICT VERSION</title>
+    <title>HEDDY SUPREME - SECURE VERSION</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -23,48 +23,55 @@
 </head>
 <body>
 
+    <!-- NAVIGATION -->
     <nav class="heddy-gradient text-white py-4 px-6 sticky top-0 z-50 shadow-xl">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="bg-yellow-400 p-2 rounded-xl text-blue-900 shadow-lg">
-                    <i class="fas fa-lock text-xl"></i>
+                    <i class="fas fa-user-shield text-xl"></i>
                 </div>
-                <h1 class="text-2xl font-extrabold tracking-tight">HEDDY <span class="text-yellow-400 italic">SECURE</span></h1>
+                <h1 class="text-2xl font-extrabold tracking-tight">HEDDY <span class="text-yellow-400 italic">SUPREME</span></h1>
             </div>
             <button onclick="adminLogin()" class="bg-white/10 border border-white/20 hover:bg-yellow-400 hover:text-blue-900 px-5 py-2 rounded-full text-xs font-bold transition-all">
-                ADMIN
+                TEACHER ADMIN
             </button>
         </div>
     </nav>
 
     <main class="max-w-6xl mx-auto p-4 md:p-8">
 
-        <!-- 1. STRICT LOGIN SECTION -->
+        <!-- 1. STUDENT LOGIN SECTION -->
         <section id="login-screen" class="mt-8 animate-pop">
             <div class="glass-card rounded-[3rem] p-10 shadow-2xl border border-white text-center max-w-lg mx-auto">
-                <div class="text-6xl mb-4">🔐</div>
-                <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Secure Portal</h2>
-                <p class="text-slate-500 text-sm font-bold mb-6">Enter your credentials to access tasks</p>
+                <div class="text-6xl mb-4">👑</div>
+                <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Student Portal</h2>
+                <p class="text-slate-500 text-sm font-bold mb-6">Enter your details to begin your session</p>
                 
                 <div id="login-form" class="space-y-4 text-left">
-                    <input type="text" id="s-name" placeholder="Full Name (AS REGISTERED)" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 transition uppercase font-bold text-sm">
-                    <input type="password" id="s-code" placeholder="Your Access Code" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 transition font-bold text-sm">
+                    <input type="text" id="s-name" placeholder="FULL NAME" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 transition uppercase font-bold">
+                    <input type="password" id="s-code" placeholder="ACCESS CODE" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 transition font-bold">
+                    <select id="s-group" class="w-full p-4 bg-white border-2 border-slate-100 rounded-2xl font-bold">
+                        <option value="">-- SELECT YOUR CLASS --</option>
+                        <option value="Basic 3-5">Basic 3 - 5</option>
+                        <option value="Basic 6-7">Basic 6 - 7</option>
+                        <option value="Basic 8">Basic 8</option>
+                    </select>
                     
                     <button onclick="validateStudent()" class="w-full heddy-gradient text-white font-black py-5 rounded-2xl shadow-xl hover:scale-[1.02] transition-transform">
-                        VERIFY IDENTITY <i class="fas fa-fingerprint ml-2"></i>
+                        LOGIN TO PORTAL <i class="fas fa-right-to-bracket ml-2"></i>
                     </button>
                 </div>
 
                 <div id="subject-selection" class="hidden mt-6 space-y-3">
-                    <div id="welcome-msg" class="mb-4 p-3 bg-blue-50 rounded-xl text-blue-700 font-bold text-sm"></div>
-                    <p class="text-slate-500 font-bold mb-4">Select an available subject:</p>
+                    <div id="welcome-msg" class="mb-4 p-4 bg-blue-50 rounded-2xl text-blue-700 font-bold"></div>
+                    <p class="text-slate-500 font-bold mb-4">Select Today's Subject:</p>
                     <div id="subject-buttons" class="grid grid-cols-1 gap-3"></div>
-                    <button onclick="location.reload()" class="text-xs text-slate-400 font-bold mt-6 underline">Logout</button>
+                    <button onclick="location.reload()" class="text-xs text-slate-400 font-bold mt-6 underline">Not you? Log out</button>
                 </div>
             </div>
         </section>
 
-        <!-- 2. QUIZ INTERFACE -->
+        <!-- 2. QUIZ INTERFACE (RESTORED TYPING & IMAGES) -->
         <section id="quiz-screen" class="hidden max-w-4xl mx-auto">
             <div class="flex justify-between items-center mb-4">
                 <div class="flex gap-2">
@@ -73,54 +80,98 @@
                 </div>
                 <div id="score-ring" class="text-2xl font-black text-blue-900">0%</div>
             </div>
+
             <div class="w-full bg-slate-200 h-2 rounded-full mb-6 overflow-hidden">
                 <div id="progress-fill" class="h-full bg-yellow-400 w-0 transition-all duration-500"></div>
             </div>
+
             <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl border-b-[12px] border-yellow-400">
+                <!-- IMAGE FEATURE RESTORED -->
                 <div id="q-image-container" class="hidden mb-6 rounded-2xl overflow-hidden shadow-md">
                     <img id="q-image" src="" class="w-full h-auto max-h-64 object-contain bg-slate-100">
                 </div>
+
                 <p id="q-count" class="text-blue-500 font-bold uppercase text-xs tracking-widest mb-2"></p>
                 <h3 id="q-text" class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-8 leading-tight"></h3>
+
+                <!-- MCQ OPTIONS -->
                 <div id="mcq-options" class="grid gap-3"></div>
+
+                <!-- THEORY TYPING FEATURE RESTORED -->
                 <div id="text-entry" class="hidden">
-                    <input type="text" id="text-answer" placeholder="Type answer..." class="w-full p-5 border-4 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-xl font-bold">
-                    <button onclick="checkTextAns()" class="w-full mt-4 bg-slate-800 text-white py-4 rounded-2xl font-bold">Submit</button>
+                    <input type="text" id="text-answer" placeholder="Type your answer here..." class="w-full p-5 border-4 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-xl font-bold">
+                    <button onclick="checkTextAns()" class="w-full mt-4 bg-slate-800 text-white py-5 rounded-2xl font-bold hover:bg-slate-700 transition">SUBMIT ANSWER</button>
                 </div>
+
+                <!-- HEDDY BOT ANALYSIS RESTORED -->
                 <div id="bot-response" class="hidden mt-8 p-6 bg-blue-900 rounded-[2rem] text-white animate-pop">
                     <div class="flex gap-4">
                         <div class="text-3xl">🤖</div>
-                        <div class="flex-1"><p id="bot-msg" class="text-slate-200 font-medium italic"></p></div>
+                        <div class="flex-1">
+                            <p class="text-yellow-400 font-black text-xs uppercase mb-1">Heddy Bot Analysis</p>
+                            <p id="bot-msg" class="text-slate-200 font-medium italic"></p>
+                        </div>
                     </div>
-                    <button onclick="next()" class="w-full mt-6 bg-white text-blue-900 font-black py-4 rounded-xl">Next <i class="fas fa-arrow-right ml-2"></i></button>
+                    <button onclick="next()" class="w-full mt-6 bg-white text-blue-900 font-black py-4 rounded-xl hover:bg-yellow-400 transition">NEXT TASK <i class="fas fa-arrow-right ml-2"></i></button>
                 </div>
             </div>
         </section>
 
-        <!-- 3. DASHBOARD -->
-        <section id="admin-screen" class="hidden">
-            <div class="bg-white rounded-3xl p-8 shadow-xl">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-black">Teacher Dashboard</h2>
-                    <button onclick="location.reload()" class="bg-slate-100 px-4 py-2 rounded-lg font-bold text-xs">Exit</button>
+        <!-- 3. TEACHER DASHBOARD (WITH EXPORT FEATURE) -->
+        <section id="admin-screen" class="hidden animate-pop">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 glass-card rounded-[2rem] p-6 shadow-xl h-[80vh] flex flex-col">
+                    <h2 class="font-black text-blue-900 uppercase text-sm mb-4">Task List</h2>
+                    <div id="portal-list" class="flex-1 overflow-y-auto space-y-2 pr-2"></div>
+                    <button onclick="clearAll()" class="mt-4 text-red-500 text-[10px] font-bold border border-red-100 py-2 rounded-lg">WIPE DATABASE</button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="p-6 border rounded-2xl">
-                        <h3 class="font-bold mb-4">Add New Question</h3>
-                        <div class="space-y-3">
-                            <select id="in-level" class="w-full p-2 border rounded-lg text-sm"><option>Basic 3-5</option><option>Basic 6</option><option>Basic 7</option><option>Basic 8</option></select>
-                            <select id="in-subject" class="w-full p-2 border rounded-lg text-sm"><option>Mathematics</option><option>Science</option><option>Social Studies</option><option>English</option><option>ICT</option><option>RME</option></select>
-                            <textarea id="in-q" placeholder="Question text" class="w-full p-2 border rounded-lg h-20 text-sm"></textarea>
-                            <input type="text" id="opt-0" placeholder="Option A (Correct)" class="w-full p-2 border rounded-lg text-sm bg-green-50">
-                            <input type="text" id="opt-1" placeholder="Option B" class="w-full p-2 border rounded-lg text-sm">
-                            <input type="text" id="opt-2" placeholder="Option C" class="w-full p-2 border rounded-lg text-sm">
-                            <input type="text" id="opt-3" placeholder="Option D" class="w-full p-2 border rounded-lg text-sm">
-                            <button onclick="save()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Publish Question</button>
+
+                <div class="lg:col-span-2 bg-white rounded-[2rem] p-8 shadow-2xl">
+                    <div class="flex justify-between mb-8 border-b pb-4">
+                        <div class="flex gap-6">
+                            <button onclick="tab('add')" id="tab-add-btn" class="font-black text-blue-900 border-b-4 border-blue-900 pb-2">CREATE TASK</button>
+                            <button onclick="tab('view')" id="tab-view-btn" class="font-bold text-slate-400 pb-2">VIEW RESULTS</button>
                         </div>
+                        <button onclick="exportResults()" class="text-[10px] font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full">DOWNLOAD CSV</button>
                     </div>
-                    <div class="p-6 border rounded-2xl overflow-y-auto max-h-[500px]">
-                        <h3 class="font-bold mb-4">Class Performance</h3>
-                        <div id="results-body" class="space-y-2"></div>
+
+                    <div id="tab-add" class="space-y-4">
+                        <div class="grid grid-cols-3 gap-3">
+                            <select id="in-level" class="p-3 bg-blue-50 rounded-xl border font-bold text-xs">
+                                <option value="Basic 3-5">Basic 3-5</option>
+                                <option value="Basic 6-7">Basic 6-7</option>
+                                <option value="Basic 8">Basic 8</option>
+                            </select>
+                            <select id="in-subject" class="p-3 bg-yellow-50 rounded-xl border font-bold text-xs">
+                                <option>Mathematics</option><option>Science</option><option>Social Studies</option>
+                                <option>English</option><option>ICT</option><option>RME</option>
+                            </select>
+                            <select id="in-type" onchange="toggleAdminInput()" class="p-3 bg-slate-50 rounded-xl border font-bold text-xs">
+                                <option value="mcq">Multiple Choice</option>
+                                <option value="text">Theory (Typing)</option>
+                            </select>
+                        </div>
+                        <input type="text" id="in-img" placeholder="Paste Image Link (Optional)" class="w-full p-3 bg-slate-50 rounded-xl border text-xs">
+                        <textarea id="in-q" placeholder="Enter Question Text..." class="w-full p-4 border-2 rounded-xl h-24 font-bold"></textarea>
+                        
+                        <div id="admin-mcq" class="grid grid-cols-2 gap-3">
+                            <input type="text" id="opt-0" placeholder="Correct Answer" class="p-3 border rounded-xl bg-green-50 text-xs">
+                            <input type="text" id="opt-1" placeholder="Wrong Option" class="p-3 border rounded-xl text-xs">
+                            <input type="text" id="opt-2" placeholder="Wrong Option" class="p-3 border rounded-xl text-xs">
+                            <input type="text" id="opt-3" placeholder="Wrong Option" class="p-3 border rounded-xl text-xs">
+                        </div>
+                        <div id="admin-text" class="hidden">
+                            <input type="text" id="in-ans" placeholder="Exact Correct Answer" class="w-full p-4 bg-green-50 rounded-xl border font-bold">
+                        </div>
+                        <textarea id="in-bot" placeholder="Bot explanation for this question..." class="w-full p-3 border rounded-xl h-16 text-xs italic"></textarea>
+                        <button onclick="save()" class="w-full heddy-gradient text-white py-5 rounded-2xl font-black">PUBLISH TASK</button>
+                    </div>
+
+                    <div id="tab-view" class="hidden overflow-y-auto max-h-[500px]">
+                        <table class="w-full text-xs text-left">
+                            <thead class="bg-slate-50"><tr><th class="p-4">Student</th><th>Level</th><th>Subject</th><th>Score</th></tr></thead>
+                            <tbody id="results-body"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -128,74 +179,76 @@
     </main>
 
     <script>
-        // STRICT STUDENT DATABASE
-        const STUDENT_DB = [
-            { name: "KENNETH ANTWI", level: "Basic 7", code: "3478" },
+        // STUDENT PASSCODE DATABASE
+        const STUDENTS = [
+            { name: "KENNETH ANTWI", level: "Basic 6-7", code: "3478" },
             { name: "PRINCE VICTOR SUNDAY", level: "Basic 8", code: "zxcbnabc" },
             { name: "ROLAND AGBOZO", level: "Basic 8", code: "MIDNIGHTCALLERS" },
-            { name: "PEACE OF GOD VICTOR", level: "Basic 6", code: "P24" },
-            { name: "EMMANUEL GADZIE", level: "Basic 6", code: "44" },
+            { name: "PEACE OF GOD VICTOR", level: "Basic 6-7", code: "P24" },
+            { name: "EMMANUEL GADZIE", level: "Basic 6-7", code: "44" },
             { name: "EMMANUELLA GYAMFI", level: "Basic 8", code: "4952" },
             { name: "PATIENCE AMOAKOWAA", level: "Basic 8", code: "9876" },
             { name: "BLESSING GADZE", level: "Basic 8", code: "080852" },
             { name: "BRAHANNAH BOATENG", level: "Basic 8", code: "14396" }
         ];
 
-        let questions = JSON.parse(localStorage.getItem('h_strict_q')) || [];
-        let results = JSON.parse(localStorage.getItem('h_strict_r')) || [];
+        let questions = JSON.parse(localStorage.getItem('h_sup_q')) || [];
+        let results = JSON.parse(localStorage.getItem('h_sup_r')) || [];
         let activeQuestions = [], user = {}, cur = 0, score = 0, seconds = 0, timerInterval;
 
+        window.onload = () => updatePortal();
+
+        // 1. VALIDATION & LOGIN
         function validateStudent() {
-            const nameInput = document.getElementById('s-name').value.trim().toUpperCase();
-            const codeInput = document.getElementById('s-code').value.trim();
-            
-            // Check Basic 3-5 (Legacy support)
-            if(nameInput && codeInput === "3535") { // Placeholder code for 3-5
-                loginSuccess({ name: nameInput, level: "Basic 3-5" });
+            const n = document.getElementById('s-name').value.trim().toUpperCase();
+            const c = document.getElementById('s-code').value.trim();
+            const g = document.getElementById('s-group').value;
+
+            if(!n || !c || !g) return alert("Please fill all fields");
+
+            // Allow Basic 3-5 students without checking the database until you update them
+            if(g === "Basic 3-5") {
+                user = { name: n, level: g };
+                loginSuccess();
                 return;
             }
 
-            const found = STUDENT_DB.find(s => s.name === nameInput && s.code === codeInput);
-            if(found) loginSuccess(found);
-            else alert("Invalid Name or Access Code. Please check and try again.");
+            const found = STUDENTS.find(s => s.name === n && s.code === c && s.level === g);
+            if(found) { user = found; loginSuccess(); }
+            else alert("Authentication Failed. Check your name, code, or class level.");
         }
 
-        function loginSuccess(student) {
-            user = student;
+        function loginSuccess() {
             document.getElementById('login-form').classList.add('hidden');
             document.getElementById('subject-selection').classList.remove('hidden');
-            document.getElementById('welcome-msg').innerText = `Welcome, ${user.name} (${user.level})`;
+            document.getElementById('welcome-msg').innerText = `Hello, ${user.name}!`;
             renderSubjectButtons();
         }
 
         function renderSubjectButtons() {
             const btnBox = document.getElementById('subject-buttons');
-            // Get subjects available for this student's level
-            const availableSubjects = [...new Set(questions.filter(q => q.level === user.level).map(q => q.subject))];
+            const subjects = [...new Set(questions.filter(q => q.level === user.level).map(q => q.subject))];
             
-            if(availableSubjects.length === 0) {
-                btnBox.innerHTML = `<p class="text-xs text-red-500 font-bold">No tasks assigned to your level yet.</p>`;
+            if(subjects.length === 0) {
+                btnBox.innerHTML = `<p class="text-xs font-bold text-red-400">No tasks currently assigned to ${user.level}.</p>`;
                 return;
             }
 
-            btnBox.innerHTML = availableSubjects.map(sub => {
-                // NEW: Strict Check - Has the student already done this?
-                const alreadyDone = results.some(r => r.name === user.name && r.subject === sub);
-                
-                if(alreadyDone) {
-                    return `
-                        <div class="w-full bg-slate-100 border-2 border-slate-200 p-5 rounded-2xl font-bold text-slate-400 flex justify-between items-center opacity-70">
-                            ${sub} <span class="text-[10px] bg-green-100 text-green-600 px-2 py-1 rounded">COMPLETED ✅</span>
-                        </div>`;
+            btnBox.innerHTML = subjects.map(sub => {
+                const done = results.some(r => r.name === user.name && r.subject === sub);
+                if(done) {
+                    return `<div class="w-full bg-slate-100 p-5 rounded-2xl border-2 font-bold text-slate-400 flex justify-between">
+                        ${sub} <span class="text-[10px] bg-green-100 text-green-600 px-2 rounded">DONE ✅</span>
+                    </div>`;
                 } else {
-                    return `
-                        <button onclick="begin('${sub}')" class="w-full bg-white border-2 border-slate-100 p-5 rounded-2xl font-black text-blue-900 hover:border-blue-500 hover:bg-blue-50 transition flex justify-between items-center">
-                            ${sub} <i class="fas fa-play text-blue-400 text-xs"></i>
-                        </button>`;
+                    return `<button onclick="begin('${sub}')" class="w-full bg-white border-2 p-5 rounded-2xl font-black text-blue-900 hover:border-blue-500 flex justify-between">
+                        ${sub} <i class="fas fa-chevron-right text-blue-300"></i>
+                    </button>`;
                 }
             }).join('');
         }
 
+        // 2. QUIZ LOGIC
         function begin(subject) {
             user.subject = subject;
             activeQuestions = questions.filter(q => q.level === user.level && q.subject === subject);
@@ -209,32 +262,52 @@
         function load() {
             const q = activeQuestions[cur];
             document.getElementById('h-subject-badge').innerText = user.subject;
-            document.getElementById('q-count').innerText = `Question ${cur + 1} of ${activeQuestions.length}`;
+            document.getElementById('q-count').innerText = `Task ${cur + 1} of ${activeQuestions.length}`;
             document.getElementById('q-text').innerText = q.text;
             document.getElementById('bot-response').classList.add('hidden');
             document.getElementById('progress-fill').style.width = ((cur / activeQuestions.length) * 100) + "%";
             
-            const mcqBox = document.getElementById('mcq-options');
-            mcqBox.innerHTML = '';
-            // Randomize options for strictness
-            let opts = [...q.options].sort(() => Math.random() - 0.5);
-            opts.forEach(opt => {
-                if(!opt) return;
-                const btn = document.createElement('button');
-                btn.className = 'option-btn w-full p-4 rounded-xl font-bold text-left bg-white text-sm';
-                btn.innerText = opt;
-                btn.onclick = () => {
-                    document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-                    if(opt === q.options[0]) { btn.classList.add('correct'); score++; }
-                    else { btn.classList.add('wrong'); }
-                    showBot(q.bot || "Analysis complete. Move to the next question.");
-                };
-                mcqBox.appendChild(btn);
-            });
+            // Image Support
+            const imgC = document.getElementById('q-image-container');
+            if(q.img) { document.getElementById('q-image').src = q.img; imgC.classList.remove('hidden'); }
+            else { imgC.classList.add('hidden'); }
+
+            const mcq = document.getElementById('mcq-options'), txt = document.getElementById('text-entry');
+            if(q.type === 'mcq') {
+                mcq.classList.remove('hidden'); txt.classList.add('hidden');
+                mcq.innerHTML = '';
+                // The correct answer is always at index 0 in the database
+                let choices = [...q.options].sort(() => Math.random() - 0.5);
+                choices.forEach(choice => {
+                    const b = document.createElement('button');
+                    b.className = 'option-btn w-full p-5 rounded-2xl font-bold text-left bg-white text-sm';
+                    b.innerText = choice;
+                    b.onclick = () => {
+                        document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+                        if(choice === q.options[0]) { b.classList.add('correct'); score++; }
+                        else { b.classList.add('wrong'); }
+                        showBot(q.bot);
+                    };
+                    mcq.appendChild(b);
+                });
+            } else {
+                mcq.classList.add('hidden'); txt.classList.remove('hidden');
+                document.getElementById('text-answer').value = '';
+                document.getElementById('text-answer').disabled = false;
+            }
+        }
+
+        function checkTextAns() {
+            const q = activeQuestions[cur], inp = document.getElementById('text-answer');
+            const val = inp.value.trim().toLowerCase();
+            inp.disabled = true;
+            if(val === q.correctAns.toLowerCase()) { inp.classList.add('correct'); score++; }
+            else { inp.classList.add('wrong'); }
+            showBot(q.bot + " (Correct: " + q.correctAns + ")");
         }
 
         function showBot(msg) {
-            document.getElementById('bot-msg').innerText = msg;
+            document.getElementById('bot-msg').innerText = msg || "Keep moving forward!";
             document.getElementById('bot-response').classList.remove('hidden');
             document.getElementById('score-ring').innerText = Math.round((score/activeQuestions.length)*100) + "%";
         }
@@ -249,40 +322,59 @@
             seconds = 0;
             timerInterval = setInterval(() => {
                 seconds++;
-                let mins = Math.floor(seconds/60), secs = seconds%60;
-                document.getElementById('timer-display').innerText = `${mins}:${secs < 10 ? '0'+secs : secs}`;
+                let m = Math.floor(seconds/60), s = seconds%60;
+                document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0'+s : s}`;
             }, 1000);
         }
 
         function finish() {
             clearInterval(timerInterval);
-            const final = Math.round((score/activeQuestions.length)*100);
-            results.push({ name: user.name, level: user.level, subject: user.subject, score: final, date: new Date().toLocaleDateString() });
-            localStorage.setItem('h_strict_r', JSON.stringify(results));
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            const f = Math.round((score/activeQuestions.length)*100);
+            results.push({ name: user.name, level: user.level, subject: user.subject, score: f, date: new Date().toLocaleDateString() });
+            localStorage.setItem('h_sup_r', JSON.stringify(results));
+            confetti({ particleCount: 150, spread: 60 });
             
             document.getElementById('quiz-screen').innerHTML = `
-                <div class="text-center p-12 glass-card rounded-[3rem] shadow-2xl">
-                    <h2 class="text-3xl font-black mb-2">Well Done, ${user.name}!</h2>
-                    <p class="text-slate-500 mb-6">Subject: ${user.subject}</p>
-                    <div class="text-7xl font-black text-blue-600 mb-6">${final}%</div>
-                    <button onclick="location.reload()" class="w-full heddy-gradient text-white py-4 rounded-xl font-bold">Back to Portal</button>
+                <div class="text-center p-12 glass-card rounded-[3rem] shadow-2xl animate-pop">
+                    <h2 class="text-4xl font-black text-blue-900 mb-2">Excellent!</h2>
+                    <p class="text-slate-500 font-bold mb-8">Subject: ${user.subject}</p>
+                    <div class="text-8xl font-black text-blue-600 mb-8">${f}%</div>
+                    <button onclick="location.reload()" class="w-full heddy-gradient text-white py-5 rounded-2xl font-black">FINISH SESSION</button>
                 </div>`;
+        }
+
+        // 3. ADMIN TOOLS
+        function toggleAdminInput() {
+            const isText = document.getElementById('in-type').value === 'text';
+            document.getElementById('admin-mcq').classList.toggle('hidden', isText);
+            document.getElementById('admin-text').classList.toggle('hidden', !isText);
         }
 
         function save() {
             const q = {
                 level: document.getElementById('in-level').value,
                 subject: document.getElementById('in-subject').value,
+                type: document.getElementById('in-type').value,
+                img: document.getElementById('in-img').value,
                 text: document.getElementById('in-q').value,
                 options: [document.getElementById('opt-0').value, document.getElementById('opt-1').value, document.getElementById('opt-2').value, document.getElementById('opt-3').value],
-                bot: "Keep practicing to master " + document.getElementById('in-subject').value
+                correctAns: document.getElementById('in-ans').value,
+                bot: document.getElementById('in-bot').value
             };
-            if(!q.text || !q.options[0]) return alert("Fill in the question and correct answer!");
+            if(!q.text) return alert("Enter a question!");
             questions.push(q);
-            localStorage.setItem('h_strict_q', JSON.stringify(questions));
+            localStorage.setItem('h_sup_q', JSON.stringify(questions));
+            updatePortal();
             alert("Published!");
             document.getElementById('in-q').value = "";
+        }
+
+        function updatePortal() {
+            document.getElementById('portal-list').innerHTML = questions.map((q, i) => `
+                <div class="bg-white p-3 rounded-xl border flex justify-between items-center text-[10px]">
+                    <div class="truncate"><b>${q.level}</b> | ${q.text}</div>
+                    <button onclick="questions.splice(${i},1);localStorage.setItem('h_sup_q',JSON.stringify(questions));updatePortal();" class="text-red-400">X</button>
+                </div>`).reverse().join('');
         }
 
         function adminLogin() {
@@ -290,11 +382,31 @@
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('admin-screen').classList.remove('hidden');
                 document.getElementById('results-body').innerHTML = results.map(r => `
-                    <div class="p-3 bg-slate-50 rounded-xl border flex justify-between text-xs">
-                        <b>${r.name}</b> <span>${r.subject}: ${r.score}%</span>
-                    </div>`).reverse().join('');
+                    <tr class="border-b"><td class="p-4 font-bold">${r.name}</td><td>${r.level}</td><td>${r.subject}</td><td class="font-black">${r.score}%</td></tr>
+                `).reverse().join('');
             }
         }
+
+        function tab(t) {
+            document.getElementById('tab-add').classList.toggle('hidden', t !== 'add');
+            document.getElementById('tab-view').classList.toggle('hidden', t !== 'view');
+        }
+
+        function exportResults() {
+            let csv = "Student,Level,Subject,Score,Date\n";
+            results.forEach(r => csv += `${r.name},${r.level},${r.subject},${r.score}%,${r.date}\n`);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'heddy_results.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function clearAll() { if(confirm("Clear ALL data?")) { localStorage.clear(); location.reload(); }}
     </script>
 </body>
 </html>
