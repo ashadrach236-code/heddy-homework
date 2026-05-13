@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEDDY SUPREME - ULTIMATE EDITION</title>
+    <title>HEDDY SUPREME - PROFESSIONAL EDITION</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #f1f5f9; color: #0f172a; }
+        body { font-family: 'Outfit', sans-serif; background: #f8fafc; color: #0f172a; }
         .heddy-gradient { background: linear-gradient(135deg, #1e40af 0%, #1e1b4b 100%); }
         .glass-card { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); }
-        .option-btn { transition: 0.2s; border: 2px solid #e2e8f0; position: relative; }
-        .option-btn:hover:not(:disabled) { border-color: #3b82f6; transform: translateY(-2px); }
+        .option-btn { transition: 0.2s; border: 2px solid #e2e8f0; }
+        .option-btn:hover:not(:disabled) { border-color: #3b82f6; background: #eff6ff; }
         .correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #166534; }
         .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
         .hidden { display: none; }
@@ -21,39 +21,37 @@
 </head>
 <body>
 
-    <!-- NAV BAR -->
+    <!-- NAVIGATION -->
     <nav class="heddy-gradient text-white py-4 px-6 sticky top-0 z-50 shadow-2xl">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <div class="bg-yellow-400 p-2.5 rounded-2xl text-blue-900 shadow-lg">
-                    <i class="fas fa-bolt-lightning text-xl"></i>
+                    <i class="fas fa-microchip text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-extrabold tracking-tighter">HEDDY <span class="text-yellow-400">SUPREME</span></h1>
+                    <h1 class="text-xl font-extrabold tracking-tighter uppercase">Heddy <span class="text-yellow-400">Supreme</span></h1>
                     <p id="display-date" class="text-[10px] font-black text-blue-200 uppercase tracking-widest"></p>
                 </div>
             </div>
             <button onclick="adminLogin()" class="bg-white/10 hover:bg-yellow-400 hover:text-blue-900 px-5 py-2 rounded-xl text-[10px] font-black transition-all">
-                TEACHER DASHBOARD
+                TEACHER ADMIN
             </button>
         </div>
     </nav>
 
     <main class="max-w-6xl mx-auto p-4 md:p-8">
 
-        <!-- STUDENT LOGIN -->
-        <section id="login-screen" class="mt-4 animate-pop">
-            <div class="glass-card rounded-[3.5rem] p-10 shadow-2xl border border-white text-center max-w-lg mx-auto">
-                <div class="inline-block p-6 bg-blue-50 rounded-full mb-6">
-                    <i class="fas fa-user-check text-5xl text-blue-600"></i>
-                </div>
-                <h2 class="text-3xl font-black text-slate-800 mb-8 uppercase">Student Portal</h2>
+        <!-- STUDENT PORTAL -->
+        <section id="login-screen" class="mt-4">
+            <div class="glass-card rounded-[3.5rem] p-10 shadow-2xl text-center max-w-lg mx-auto border border-white">
+                <div class="text-6xl mb-6">🎓</div>
+                <h2 class="text-3xl font-black text-slate-800 mb-8">STUDENT LOGIN</h2>
                 
                 <div class="space-y-5 text-left">
                     <div>
-                        <label class="text-[10px] font-black text-slate-400 uppercase ml-2">Identify Yourself</label>
+                        <label class="text-[10px] font-black text-slate-400 uppercase ml-2">Your Name</label>
                         <select id="s-name-dropdown" class="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-3xl font-bold outline-none focus:border-blue-500 appearance-none">
-                            <option value="">-- SELECT YOUR NAME --</option>
+                            <option value="">-- CHOOSE FROM LIST --</option>
                             <optgroup label="BASIC 6 - 7">
                                 <option value="KENNETH ANTWI">KENNETH ANTWI</option>
                                 <option value="PEACE OF GOD VICTOR">PEACE OF GOD VICTOR</option>
@@ -71,135 +69,130 @@
                     </div>
 
                     <div>
-                        <label class="text-[10px] font-black text-slate-400 uppercase ml-2">Personal Passcode</label>
+                        <label class="text-[10px] font-black text-slate-400 uppercase ml-2">Security Code</label>
                         <input type="password" id="s-code" placeholder="ENTER CODE" class="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-3xl font-bold outline-none focus:border-blue-500">
                     </div>
                     
-                    <button onclick="validateStudent()" class="w-full heddy-gradient text-white font-black py-6 rounded-3xl shadow-xl hover:scale-[1.01] active:scale-95 transition-all uppercase tracking-widest">
-                        Verify & Enter <i class="fas fa-chevron-right ml-2"></i>
+                    <button onclick="validateStudent()" class="w-full heddy-gradient text-white font-black py-6 rounded-3xl shadow-xl hover:scale-[1.01] transition-all uppercase tracking-widest">
+                        LOGIN TO CLASS <i class="fas fa-right-to-bracket ml-2"></i>
                     </button>
                 </div>
 
                 <div id="subject-selection" class="hidden mt-10 space-y-4">
-                    <div id="welcome-msg" class="p-6 bg-yellow-50 rounded-3xl text-blue-900 font-black border-2 border-yellow-200 text-lg"></div>
+                    <div id="welcome-msg" class="p-6 bg-blue-50 rounded-3xl text-blue-900 font-black border-2 border-blue-100"></div>
                     <div id="subject-buttons" class="grid grid-cols-1 gap-4"></div>
                 </div>
             </div>
         </section>
 
-        <!-- QUIZ VIEW -->
+        <!-- QUIZ VIEW (SUPPORTS IMAGES & THEORY) -->
         <section id="quiz-screen" class="hidden max-w-4xl mx-auto">
             <div class="flex justify-between items-center mb-6">
                 <div class="flex gap-3">
                     <div id="h-subject-badge" class="bg-blue-600 text-white px-6 py-2 rounded-2xl text-xs font-black shadow-lg"></div>
-                    <div class="bg-slate-800 text-white px-6 py-2 rounded-2xl text-xs font-bold"><i class="far fa-clock mr-2 text-yellow-400"></i><span id="timer-display">00:00</span></div>
+                    <div class="bg-slate-800 text-white px-6 py-2 rounded-2xl text-xs font-bold"><span id="timer-display">00:00</span></div>
                 </div>
                 <div id="score-ring" class="text-4xl font-black text-blue-900">0%</div>
             </div>
 
             <div class="glass-card rounded-[3rem] p-8 md:p-14 shadow-2xl border-b-[15px] border-blue-900">
-                <div id="q-image-container" class="hidden mb-10 rounded-[2rem] overflow-hidden border-8 border-slate-50 shadow-inner">
-                    <img id="q-image" src="" class="w-full h-auto max-h-96 object-contain bg-white">
+                <div id="q-image-container" class="hidden mb-10 rounded-[2rem] overflow-hidden border-8 border-slate-50">
+                    <img id="q-image" src="" class="w-full h-auto max-h-96 object-contain">
                 </div>
 
-                <p id="q-progress-text" class="text-blue-500 font-black text-[10px] uppercase mb-2 tracking-widest"></p>
                 <h3 id="q-text" class="text-2xl md:text-4xl font-black text-slate-800 mb-12 leading-tight"></h3>
 
                 <!-- MCQ -->
                 <div id="mcq-options" class="grid gap-5"></div>
 
-                <!-- THEORY -->
+                <!-- THEORY (THE TYPING PART) -->
                 <div id="text-entry" class="hidden">
-                    <input type="text" id="text-answer" placeholder="TYPE YOUR FULL ANSWER HERE..." class="w-full p-7 border-4 border-slate-100 rounded-[2rem] outline-none focus:border-blue-500 text-2xl font-black uppercase shadow-inner">
-                    <button onclick="checkTextAns()" class="w-full mt-6 bg-blue-900 text-white py-6 rounded-[2rem] font-black text-lg shadow-lg">CONFIRM ANSWER</button>
+                    <input type="text" id="text-answer" placeholder="TYPE YOUR ANSWER CAREFULLY..." class="w-full p-7 border-4 border-slate-100 rounded-[2rem] outline-none focus:border-blue-500 text-2xl font-black uppercase shadow-inner">
+                    <button onclick="checkTextAns()" class="w-full mt-6 bg-blue-900 text-white py-6 rounded-[2rem] font-black text-lg">SUBMIT THEORY ANSWER</button>
                 </div>
 
-                <!-- HEDDY BOT -->
-                <div id="bot-response" class="hidden mt-12 p-10 bg-slate-900 rounded-[3rem] text-white border-t-8 border-yellow-400">
+                <!-- HEDDY BOT ANALYSIS -->
+                <div id="bot-response" class="hidden mt-12 p-10 bg-slate-900 rounded-[3rem] text-white">
                     <div class="flex gap-6">
                         <div class="text-5xl">🤖</div>
                         <div class="flex-1">
-                            <p class="text-yellow-400 font-black text-xs mb-3 tracking-[0.2em]">HEDDY BOT FEEDBACK</p>
+                            <p class="text-yellow-400 font-black text-xs mb-3">HEDDY BOT ANALYSIS</p>
                             <p id="bot-msg" class="text-slate-200 font-bold italic text-xl leading-relaxed"></p>
                         </div>
                     </div>
-                    <button onclick="next()" class="w-full mt-10 bg-white text-blue-900 font-black py-6 rounded-2xl hover:bg-yellow-400 transition-colors uppercase tracking-widest shadow-xl">Next Challenge <i class="fas fa-arrow-right ml-2"></i></button>
+                    <button onclick="next()" class="w-full mt-10 bg-white text-blue-900 font-black py-6 rounded-2xl hover:bg-yellow-400 transition-colors uppercase">CONTINUE <i class="fas fa-arrow-right ml-2"></i></button>
                 </div>
             </div>
         </section>
 
-        <!-- ADMIN DASHBOARD -->
-        <section id="admin-screen" class="hidden animate-pop">
-            <div class="bg-white rounded-[3.5rem] p-10 shadow-2xl border-4 border-slate-100">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-                    <div>
-                        <h2 class="text-4xl font-black text-blue-950">Management Hub</h2>
-                        <p class="text-slate-400 font-bold">Configure your exam platform</p>
-                    </div>
-                    <!-- ADMIN DATE CONTROL -->
-                    <div class="bg-blue-50 p-6 rounded-3xl border-2 border-blue-100">
-                        <label class="block text-[10px] font-black text-blue-400 mb-2">SET SYSTEM DATE</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="admin-date-input" placeholder="e.g. 15th May, 2026" class="p-3 rounded-xl border-2 font-bold text-xs">
-                            <button onclick="updateSystemDate()" class="bg-blue-600 text-white px-4 rounded-xl text-[10px] font-black">UPDATE</button>
-                        </div>
+        <!-- ADMIN DASHBOARD (MANUAL THEORY MARKING) -->
+        <section id="admin-screen" class="hidden">
+            <div class="bg-white rounded-[3rem] p-8 shadow-2xl">
+                <div class="flex flex-col md:flex-row justify-between mb-10 gap-6">
+                    <h2 class="text-3xl font-black text-blue-950 uppercase"><i class="fas fa-toolbox mr-2"></i>Teacher Control</h2>
+                    
+                    <div class="bg-slate-50 p-4 rounded-2xl border flex gap-3 items-center">
+                        <label class="text-[10px] font-black">SYSTEM DATE:</label>
+                        <input type="text" id="admin-date-input" class="p-2 border rounded-xl font-bold text-xs">
+                        <button onclick="updateSystemDate()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-black">SET</button>
                     </div>
                 </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <!-- QUESTION CREATOR -->
-                    <div class="space-y-5 p-10 bg-slate-50 rounded-[3rem] border shadow-sm">
-                        <h3 class="font-black text-blue-900 flex items-center gap-2"><i class="fas fa-plus-circle"></i> Create Task</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <select id="in-level" class="p-5 rounded-2xl border-2 font-black text-sm">
-                                <option value="Basic 3-5">Basic 3-5</option>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <!-- LEFT: CREATE TASKS -->
+                    <div class="bg-slate-50 p-8 rounded-[2.5rem] border space-y-4">
+                        <h3 class="font-black text-blue-900 uppercase text-xs mb-4">Add New Question</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <select id="in-level" class="p-4 rounded-2xl border font-black text-sm">
                                 <option value="Basic 6-7">Basic 6-7</option>
                                 <option value="Basic 8">Basic 8</option>
+                                <option value="Basic 3-5">Basic 3-5</option>
                             </select>
-                            <select id="in-type" onchange="toggleAdminInput()" class="p-5 rounded-2xl border-2 font-black text-sm">
-                                <option value="mcq">Multiple Choice</option>
+                            <select id="in-type" onchange="toggleAdminInput()" class="p-4 rounded-2xl border font-black text-sm">
+                                <option value="mcq">MCQ</option>
                                 <option value="text">Theory (Typing)</option>
                             </select>
                         </div>
-                        <input type="text" id="in-subject" placeholder="Subject Name" class="w-full p-5 rounded-2xl border-2 font-bold">
-                        <input type="text" id="in-img" placeholder="Image URL (Optional)" class="w-full p-5 rounded-2xl border-2 font-bold">
-                        <textarea id="in-q" placeholder="Enter Question..." class="w-full p-5 rounded-2xl border-2 font-bold h-32"></textarea>
+                        <input type="text" id="in-subject" placeholder="Subject Name" class="w-full p-4 border rounded-2xl font-bold">
+                        <input type="text" id="in-img" placeholder="Image URL (Optional)" class="w-full p-4 border rounded-2xl font-bold text-xs">
+                        <textarea id="in-q" placeholder="Enter Question..." class="w-full p-4 border rounded-2xl font-bold h-24"></textarea>
                         
-                        <!-- UPDATED MCQ INPUT WITH RADIO SELECTOR -->
-                        <div id="admin-mcq" class="space-y-3">
-                            <p class="text-[10px] font-black text-slate-400 px-2">ENTER OPTIONS & MARK THE CORRECT ONE</p>
-                            <div class="flex items-center gap-3">
-                                <input type="radio" name="correct-radio" value="0" checked class="w-5 h-5">
-                                <input type="text" id="opt-0" placeholder="Option 1" class="flex-1 p-4 rounded-xl border font-bold">
+                        <div id="admin-mcq" class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <input type="radio" name="correct-idx" value="0" checked>
+                                <input type="text" id="opt-0" placeholder="Option A" class="w-full p-3 border rounded-xl text-sm font-bold">
                             </div>
-                            <div class="flex items-center gap-3">
-                                <input type="radio" name="correct-radio" value="1" class="w-5 h-5">
-                                <input type="text" id="opt-1" placeholder="Option 2" class="flex-1 p-4 rounded-xl border font-bold">
+                            <div class="flex items-center gap-2">
+                                <input type="radio" name="correct-idx" value="1">
+                                <input type="text" id="opt-1" placeholder="Option B" class="w-full p-3 border rounded-xl text-sm font-bold">
                             </div>
-                            <div class="flex items-center gap-3">
-                                <input type="radio" name="correct-radio" value="2" class="w-5 h-5">
-                                <input type="text" id="opt-2" placeholder="Option 3" class="flex-1 p-4 rounded-xl border font-bold">
+                            <div class="flex items-center gap-2">
+                                <input type="radio" name="correct-idx" value="2">
+                                <input type="text" id="opt-2" placeholder="Option C" class="w-full p-3 border rounded-xl text-sm font-bold">
                             </div>
-                            <div class="flex items-center gap-3">
-                                <input type="radio" name="correct-radio" value="3" class="w-5 h-5">
-                                <input type="text" id="opt-3" placeholder="Option 4" class="flex-1 p-4 rounded-xl border font-bold">
+                            <div class="flex items-center gap-2">
+                                <input type="radio" name="correct-idx" value="3">
+                                <input type="text" id="opt-3" placeholder="Option D" class="w-full p-3 border rounded-xl text-sm font-bold">
                             </div>
                         </div>
 
                         <div id="admin-text" class="hidden">
-                            <input type="text" id="in-ans" placeholder="Type Exact Answer" class="w-full p-5 rounded-xl border-2 bg-green-50 font-black">
+                            <input type="text" id="in-ans" placeholder="Expected Keyword/Answer" class="w-full p-5 rounded-2xl border bg-green-50 font-black">
                         </div>
-                        <textarea id="in-bot" placeholder="Heddy Bot analysis text..." class="w-full p-5 rounded-xl border-2 font-bold italic h-24 bg-blue-50"></textarea>
-                        <button onclick="save()" class="w-full heddy-gradient text-white py-6 rounded-3xl font-black shadow-2xl tracking-widest hover:brightness-110">PUBLISH TO PORTAL</button>
+                        
+                        <textarea id="in-bot" placeholder="Heddy Bot explanation..." class="w-full p-4 border rounded-2xl font-bold h-20 text-xs italic"></textarea>
+                        <button onclick="save()" class="w-full heddy-gradient text-white py-5 rounded-2xl font-black shadow-lg">PUBLISH TASK</button>
                     </div>
 
-                    <!-- RESULTS LOG -->
-                    <div class="flex flex-col h-full">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-black text-slate-800 uppercase tracking-tighter">Live Scoreboard</h3>
-                            <button onclick="clearLogs()" class="text-[10px] text-red-500 font-black underline">Wipe History</button>
+                    <!-- RIGHT: MANUAL MARKING INBOX -->
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center border-b pb-4">
+                            <h3 class="font-black text-slate-800 uppercase text-xs">Theory Review Inbox</h3>
+                            <span id="review-count" class="bg-red-500 text-white text-[10px] px-2 py-1 rounded-full font-black">0 PENDING</span>
                         </div>
-                        <div id="results-list" class="space-y-4 overflow-y-auto max-h-[700px] pr-2"></div>
+                        <div id="review-list" class="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                            <!-- Theory answers requiring manual sense check will appear here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -220,29 +213,20 @@
         ];
 
         let questions = JSON.parse(localStorage.getItem('h_sup_q')) || [];
-        let results = JSON.parse(localStorage.getItem('h_sup_r')) || [];
-        let sysDate = localStorage.getItem('h_sys_date') || new Date().toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        let theorySubmissions = JSON.parse(localStorage.getItem('h_sup_theory')) || [];
+        let sysDate = localStorage.getItem('h_sys_date') || "Wednesday, 13th May, 2026";
         
         let activeQuestions = [], user = {}, cur = 0, score = 0, seconds = 0, timerInterval;
 
         window.onload = () => {
             document.getElementById('display-date').innerText = sysDate;
             document.getElementById('admin-date-input').value = sysDate;
+            renderReviewInbox();
         };
-
-        function updateSystemDate() {
-            const val = document.getElementById('admin-date-input').value;
-            localStorage.setItem('h_sys_date', val);
-            sysDate = val;
-            document.getElementById('display-date').innerText = val;
-            alert("System Date Updated!");
-        }
 
         function validateStudent() {
             const name = document.getElementById('s-name-dropdown').value;
             const code = document.getElementById('s-code').value.trim();
-            if(!name || !code) return alert("Select name and enter passcode!");
-
             const found = STUDENTS.find(s => s.name === name && s.code === code);
             if(found) {
                 user = found;
@@ -250,23 +234,15 @@
                 document.getElementById('subject-selection').classList.remove('hidden');
                 document.getElementById('welcome-msg').innerText = `ACCESS GRANTED: ${user.name}`;
                 renderSubjects();
-            } else alert("Invalid Credentials!");
+            } else alert("Access Denied!");
         }
 
         function renderSubjects() {
             const btnBox = document.getElementById('subject-buttons');
             const subjects = [...new Set(questions.filter(q => q.level === user.level).map(q => q.subject))];
-            
-            if(subjects.length === 0) {
-                btnBox.innerHTML = `<p class="text-[10px] font-black text-red-500 uppercase italic py-10">No active tasks for ${user.level}.</p>`;
-                return;
-            }
-
-            btnBox.innerHTML = subjects.map(sub => {
-                const done = results.some(r => r.name === user.name && r.subject === sub);
-                if(done) return `<div class="p-6 bg-slate-100 rounded-[2rem] border-2 font-black text-slate-400 flex justify-between items-center opacity-60">${sub} <i class="fas fa-check-double"></i></div>`;
-                return `<button onclick="begin('${sub}')" class="w-full bg-white border-2 p-6 rounded-[2rem] font-black text-blue-900 hover:border-blue-500 hover:bg-blue-50 transition-all flex justify-between items-center shadow-sm">${sub} <i class="fas fa-play text-blue-300"></i></button>`;
-            }).join('');
+            btnBox.innerHTML = subjects.map(sub => `
+                <button onclick="begin('${sub}')" class="w-full bg-white border-2 p-6 rounded-[2rem] font-black text-blue-900 hover:border-blue-500 flex justify-between items-center shadow-sm">${sub} <i class="fas fa-play text-blue-300"></i></button>
+            `).join('');
         }
 
         function begin(subject) {
@@ -282,7 +258,6 @@
         function load() {
             const q = activeQuestions[cur];
             document.getElementById('h-subject-badge').innerText = user.subject;
-            document.getElementById('q-progress-text').innerText = `CHALLENGE ${cur + 1} OF ${activeQuestions.length}`;
             document.getElementById('q-text').innerText = q.text;
             document.getElementById('bot-response').classList.add('hidden');
             
@@ -294,40 +269,54 @@
             if(q.type === 'mcq') {
                 mcq.classList.remove('hidden'); txt.classList.add('hidden');
                 mcq.innerHTML = '';
-                // Shuffle logic
-                let mapping = q.options.map((text, index) => ({ text, isCorrect: index === q.correctIdx }));
-                mapping.sort(() => Math.random() - 0.5);
-
+                let mapping = q.options.map((t, i) => ({ t, isC: i == q.correctIdx })).sort(() => Math.random() - 0.5);
                 mapping.forEach(opt => {
                     const b = document.createElement('button');
                     b.className = 'option-btn w-full p-6 rounded-3xl font-black text-left bg-white text-lg shadow-sm';
-                    b.innerText = opt.text;
+                    b.innerText = opt.t;
                     b.onclick = () => {
                         document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
-                        if(opt.isCorrect) { b.classList.add('correct'); score++; }
-                        else { b.classList.add('wrong'); }
+                        if(opt.isC) { b.classList.add('correct'); score++; } else b.classList.add('wrong');
                         showBot(q.bot);
                     };
                     mcq.appendChild(b);
                 });
             } else {
                 mcq.classList.add('hidden'); txt.classList.remove('hidden');
-                const inp = document.getElementById('text-answer');
-                inp.value = ''; inp.disabled = false; inp.className = inp.className.split(' ').filter(c => c!=='correct' && c!=='wrong').join(' ');
+                document.getElementById('text-answer').value = '';
+                document.getElementById('text-answer').disabled = false;
             }
         }
 
         function checkTextAns() {
             const q = activeQuestions[cur], inp = document.getElementById('text-answer');
-            const val = inp.value.trim().toLowerCase();
+            const typed = inp.value.trim();
             inp.disabled = true;
-            if(val === q.correctAns.toLowerCase()) { inp.classList.add('correct'); score++; }
-            else inp.classList.add('wrong');
-            showBot(q.bot + ` (Truth: ${q.correctAns})`);
+
+            // Log submission for manual teacher review
+            theorySubmissions.push({
+                student: user.name,
+                subject: user.subject,
+                question: q.text,
+                expected: q.correctAns,
+                provided: typed,
+                id: Date.now()
+            });
+            localStorage.setItem('h_sup_theory', JSON.stringify(theorySubmissions));
+
+            // Auto-mark logic for initial feedback
+            if(typed.toLowerCase() === q.correctAns.toLowerCase()) {
+                inp.classList.add('correct');
+                score++;
+                showBot(q.bot);
+            } else {
+                inp.classList.add('wrong');
+                showBot("Submission logged for teacher review. Don't worry about small spelling mistakes.");
+            }
         }
 
         function showBot(msg) {
-            document.getElementById('bot-msg').innerText = msg || "Excellent logic. Keep your focus high.";
+            document.getElementById('bot-msg').innerText = msg;
             document.getElementById('bot-response').classList.remove('hidden');
             document.getElementById('score-ring').innerText = Math.round((score/activeQuestions.length)*100) + "%";
         }
@@ -338,40 +327,64 @@
             else finish();
         }
 
-        function startTimer() {
-            seconds = 0;
-            timerInterval = setInterval(() => {
-                seconds++;
-                let m = Math.floor(seconds/60), s = seconds%60;
-                document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0'+s : s}`;
-            }, 1000);
-        }
-
         function finish() {
             clearInterval(timerInterval);
             const final = Math.round((score/activeQuestions.length)*100);
-            
-            let rank = "BEGINNER";
-            if(final === 100) rank = "HEDDY ELITE";
-            else if(final >= 80) rank = "MASTER";
-            else if(final >= 50) rank = "SCHOLAR";
-
-            results.push({ name: user.name, level: user.level, subject: user.subject, score: final, date: sysDate, rank: rank });
-            localStorage.setItem('h_sup_r', JSON.stringify(results));
             confetti({ particleCount: 200, spread: 80 });
-            
             document.getElementById('quiz-screen').innerHTML = `
                 <div class="text-center p-16 glass-card rounded-[4rem] shadow-2xl">
-                    <div class="text-xs font-black text-blue-500 uppercase tracking-[0.5em] mb-4">SESSION COMPLETE</div>
-                    <h2 class="text-5xl font-black text-blue-950 mb-4">${rank}</h2>
-                    <div class="text-9xl font-black text-blue-600 mb-10">${final}%</div>
-                    <p class="text-slate-400 font-bold mb-10">Results logged for ${sysDate}</p>
-                    <button onclick="location.reload()" class="w-full heddy-gradient text-white py-8 rounded-[2.5rem] font-black text-xl shadow-2xl">EXIT PORTAL</button>
+                    <h2 class="text-5xl font-black text-blue-950 mb-10">${final}%</h2>
+                    <p class="font-bold text-slate-400 mb-10">Task submitted successfully.</p>
+                    <button onclick="location.reload()" class="w-full heddy-gradient text-white py-8 rounded-[2.5rem] font-black text-xl shadow-2xl">EXIT CLASS</button>
                 </div>`;
         }
 
+        // ADMIN FUNCTIONS
+        function toggleAdminInput() {
+            const isText = document.getElementById('in-type').value === 'text';
+            document.getElementById('admin-mcq').classList.toggle('hidden', isText);
+            document.getElementById('admin-text').classList.toggle('hidden', !isText);
+        }
+
+        function updateSystemDate() {
+            sysDate = document.getElementById('admin-date-input').value;
+            localStorage.setItem('h_sys_date', sysDate);
+            document.getElementById('display-date').innerText = sysDate;
+            alert("System Date Saved.");
+        }
+
+        function renderReviewInbox() {
+            const inbox = document.getElementById('review-list');
+            document.getElementById('review-count').innerText = `${theorySubmissions.length} PENDING`;
+            inbox.innerHTML = theorySubmissions.map((sub, i) => `
+                <div class="bg-white p-6 rounded-3xl border-2 border-slate-100 shadow-sm space-y-4">
+                    <div class="flex justify-between items-start">
+                        <span class="text-[10px] font-black bg-blue-100 text-blue-600 px-2 rounded-full">${sub.student}</span>
+                        <button onclick="deleteTheory(${i})" class="text-slate-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                    </div>
+                    <p class="text-xs font-bold text-slate-800">Q: ${sub.question}</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-3 bg-red-50 rounded-xl border border-red-100">
+                            <label class="text-[8px] font-black text-red-400 block mb-1">STUDENT TYPED:</label>
+                            <p class="text-sm font-black text-red-700">${sub.provided || "[Empty]"}</p>
+                        </div>
+                        <div class="p-3 bg-green-50 rounded-xl border border-green-100">
+                            <label class="text-[8px] font-black text-green-400 block mb-1">EXPECTED ANSWER:</label>
+                            <p class="text-sm font-black text-green-700">${sub.expected}</p>
+                        </div>
+                    </div>
+                    <p class="text-[9px] italic text-slate-400">If this is "correct enough," mark it as correct in your offline records or give the student a bonus point.</p>
+                </div>
+            `).reverse().join('');
+        }
+
+        function deleteTheory(i) {
+            theorySubmissions.splice(i, 1);
+            localStorage.setItem('h_sup_theory', JSON.stringify(theorySubmissions));
+            renderReviewInbox();
+        }
+
         function save() {
-            const correctRadio = document.querySelector('input[name="correct-radio"]:checked');
             const q = {
                 level: document.getElementById('in-level').value,
                 subject: document.getElementById('in-subject').value,
@@ -379,46 +392,23 @@
                 img: document.getElementById('in-img').value,
                 text: document.getElementById('in-q').value,
                 options: [document.getElementById('opt-0').value, document.getElementById('opt-1').value, document.getElementById('opt-2').value, document.getElementById('opt-3').value],
-                correctIdx: parseInt(correctRadio.value),
+                correctIdx: document.querySelector('input[name="correct-idx"]:checked').value,
                 correctAns: document.getElementById('in-ans').value,
                 bot: document.getElementById('in-bot').value
             };
-            if(!q.text || !q.subject) return alert("Fill mandatory fields!");
             questions.push(q);
             localStorage.setItem('h_sup_q', JSON.stringify(questions));
             alert("TASK PUBLISHED!");
-            document.getElementById('in-q').value = "";
-        }
-
-        function toggleAdminInput() {
-            const isText = document.getElementById('in-type').value === 'text';
-            document.getElementById('admin-mcq').classList.toggle('hidden', isText);
-            document.getElementById('admin-text').classList.toggle('hidden', !isText);
         }
 
         function adminLogin() {
             if(prompt("System Key:") === "1234") {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('admin-screen').classList.remove('hidden');
-                renderAdminLogs();
             }
         }
 
-        function renderAdminLogs() {
-            document.getElementById('results-list').innerHTML = results.map((r, i) => `
-                <div class="bg-white p-6 rounded-[2rem] border-2 shadow-sm flex justify-between items-center group hover:border-blue-300 transition-all">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <p class="font-black text-blue-900">${r.name}</p>
-                            <span class="text-[8px] font-black bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full uppercase">${r.rank}</span>
-                        </div>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">${r.subject} • ${r.date}</p>
-                    </div>
-                    <div class="text-2xl font-black text-blue-600">${r.score}%</div>
-                </div>`).reverse().join('');
-        }
-
-        function clearLogs() { if(confirm("Permanently erase scoreboard?")) { localStorage.removeItem('h_sup_r'); renderAdminLogs(); }}
+        function startTimer() { seconds = 0; timerInterval = setInterval(() => { seconds++; let m = Math.floor(seconds/60), s = seconds%60; document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0'+s : s}`; }, 1000); }
     </script>
 </body>
 </html>
