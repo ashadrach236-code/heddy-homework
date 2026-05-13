@@ -163,31 +163,6 @@
       letter-spacing: 0.05em;
     }
     
-    .growth-indicator {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 0.5rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-    }
-    
-    .growth-up {
-      background: #d1fae5;
-      color: #065f46;
-    }
-    
-    .growth-down {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-    
-    .growth-neutral {
-      background: #f3f4f6;
-      color: #4b5563;
-    }
-    
     .feedback-message {
       padding: 1rem;
       border-radius: 0.75rem;
@@ -318,147 +293,6 @@
       border-radius: 0.5rem;
       font-weight: 700;
     }
-    
-    .admin-tab {
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      font-weight: 700;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-    }
-    
-    .admin-tab.active {
-      background: #3b82f6;
-      color: white;
-    }
-    
-    .admin-tab.inactive {
-      background: #e2e8f0;
-      color: #64748b;
-    }
-    
-    .admin-tab:hover {
-      transform: translateY(-2px);
-    }
-    
-    .input-group {
-      margin-bottom: 1rem;
-    }
-    
-    .input-label {
-      font-size: 0.75rem;
-      font-weight: 900;
-      color: #475569;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-    
-    .input-field {
-      width: 100%;
-      padding: 0.75rem;
-      border: 2px solid #e2e8f0;
-      border-radius: 0.75rem;
-      font-weight: 600;
-      font-size: 0.875rem;
-      transition: all 0.3s ease;
-    }
-    
-    .input-field:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-    
-    .btn-primary {
-      width: 100%;
-      padding: 0.875rem;
-      background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-      color: white;
-      border: none;
-      border-radius: 0.75rem;
-      font-weight: 700;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    }
-    
-    .btn-danger {
-      padding: 0.5rem 1rem;
-      background: #ef4444;
-      color: white;
-      border: none;
-      border-radius: 0.5rem;
-      font-weight: 700;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .btn-danger:hover {
-      background: #dc2626;
-    }
-    
-    .admin-card {
-      background: white;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      border-left: 4px solid #3b82f6;
-      margin-bottom: 1rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    .admin-header {
-      font-size: 0.875rem;
-      font-weight: 900;
-      color: #3b82f6;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
-    }
-    
-    .admin-title {
-      font-size: 1.125rem;
-      font-weight: 900;
-      color: #1e293b;
-      margin-bottom: 0.5rem;
-    }
-    
-    .admin-subtitle {
-      font-size: 0.75rem;
-      color: #64748b;
-      margin-bottom: 1rem;
-    }
-    
-    .quick-action {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #f0f9ff;
-      border: 2px solid #0284c7;
-      border-radius: 0.5rem;
-      color: #0c4a6e;
-      font-weight: 700;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-    }
-    
-    .quick-action:hover {
-      background: #0284c7;
-      color: white;
-    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -553,22 +387,16 @@
         <div class="mb-6">
           <div class="flex justify-between items-center mb-2">
             <span class="text-xs font-bold text-slate-600">Question <span id="q-progress">1</span> of <span id="q-total">0</span></span>
-            <span id="difficulty-badge" class="badge badge-average">Medium</span>
+            <span id="difficulty-badge" class="badge badge-average">Theory</span>
           </div>
           <div class="progress-bar">
             <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
           </div>
         </div>
 
-        <div id="q-image-container" class="hidden mb-10 rounded-3xl overflow-hidden border-4 border-slate-50 shadow-inner">
-          <img id="qi-image" src="" alt="Question" class="w-full h-auto max-h-96 object-contain">
-        </div>
-
         <h3 id="q-text" class="text-2xl md:text-3xl font-black text-slate-800 mb-10 leading-tight"></h3>
 
-        <div id="mcq-options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-
-        <div id="text-entry" class="hidden space-y-4">
+        <div id="text-entry" class="space-y-4">
           <textarea id="text-answer" placeholder="Type your answer here..." class="w-full p-6 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-lg font-bold h-40"></textarea>
           <button onclick="checkTextAns()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black uppercase">Submit Response</button>
         </div>
@@ -602,19 +430,13 @@
       </div>
 
       <div class="glass-card rounded-3xl p-8 shadow-2xl">
-        <div class="flex justify-between items-start mb-8 flex-wrap gap-4">
-          <div>
-            <h2 class="text-3xl font-black text-slate-900 mb-2">
-              <span id="rec-student-name"></span>
-            </h2>
-            <p class="text-slate-600 font-bold uppercase text-sm">
-              Level: <span id="rec-student-level"></span>
-            </p>
-          </div>
-          <div id="achievements-display" class="flex gap-2 flex-wrap justify-end"></div>
-        </div>
+        <h2 class="text-3xl font-black text-slate-900 mb-2">
+          <span id="rec-student-name"></span>
+        </h2>
+        <p class="text-slate-600 font-bold uppercase text-sm mb-8">
+          Level: <span id="rec-student-level"></span>
+        </p>
 
-        <!-- Overall Stats -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div class="stat-card">
             <div class="stat-value" id="rec-total-attempts">0</div>
@@ -634,31 +456,7 @@
           </div>
         </div>
 
-        <!-- Achievements Section -->
-        <div id="achievements-section" class="mb-8 hidden">
-          <h3 class="text-xl font-black text-slate-900 mb-4">🏆 Achievements Unlocked</h3>
-          <div id="achievements-list" class="flex flex-wrap gap-2"></div>
-        </div>
-
-        <!-- Year-based Growth Chart -->
-        <div class="mb-8">
-          <h3 class="text-xl font-black text-slate-900 mb-4">Performance Growth (Year-wise)</h3>
-          <div class="chart-container">
-            <canvas id="growthChart"></canvas>
-          </div>
-        </div>
-
-        <!-- Subject Performance -->
-        <div class="mb-8">
-          <h3 class="text-xl font-black text-slate-900 mb-4">Subject Performance</h3>
-          <div id="rec-subject-list" class="space-y-3"></div>
-        </div>
-
-        <!-- Detailed Records -->
-        <div>
-          <h3 class="text-xl font-black text-slate-900 mb-4">Assessment History</h3>
-          <div id="rec-history" class="space-y-3 max-h-96 overflow-y-auto"></div>
-        </div>
+        <div id="rec-history" class="space-y-3"></div>
       </div>
     </section>
 
@@ -675,20 +473,11 @@
           <i class="fas fa-trophy text-yellow-400 mr-3"></i>Class Leaderboard
         </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h3 class="text-xl font-black text-slate-900 mb-4">By Average Score</h3>
-            <div id="leaderboard-avg" class="space-y-2"></div>
-          </div>
-          <div>
-            <h3 class="text-xl font-black text-slate-900 mb-4">By Total Attempts</h3>
-            <div id="leaderboard-attempts" class="space-y-2"></div>
-          </div>
-        </div>
+        <div id="leaderboard-avg" class="space-y-2"></div>
       </div>
     </section>
 
-    <!-- ADMIN PANEL - COMPLETE & ENHANCED -->
+    <!-- ADMIN PANEL -->
     <section id="admin-screen" class="hidden">
       <div class="mb-8 flex justify-between items-center flex-wrap gap-4">
         <h2 class="text-3xl font-black text-white">Teacher <span class="text-yellow-400">Administration</span></h2>
@@ -697,171 +486,40 @@
         </button>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- LEFT SIDEBAR - QUICK STATS -->
-        <div class="lg:col-span-1">
-          <div class="glass-card rounded-2xl p-6 shadow-2xl sticky top-24">
-            <h3 class="admin-header mb-4">Quick Stats</h3>
-            <div class="space-y-4">
-              <div class="admin-card">
-                <div class="text-2xl font-black text-blue-600"id="admin-total-q">0</div>
-                <div class="text-xs text-slate-600 font-bold">Total Questions</div>
-              </div>
-              <div class="admin-card">
-                <div class="text-2xl font-black text-green-600" id="admin-total-sub">0</div>
-                <div class="text-xs text-slate-600 font-bold">Total Submissions</div>
-              </div>
-              <div class="admin-card">
-                <div class="text-2xl font-black text-yellow-600" id="admin-avg-class">0%</div>
-                <div class="text-xs text-slate-600 font-bold">Class Average</div>
-              </div>
-              <div class="admin-card">
-                <div class="text-2xl font-black text-purple-600" id="admin-active-students">0</div>
-                <div class="text-xs text-slate-600 font-bold">Active Students</div>
-              </div>
-            </div>
-
-            <div class="mt-6 pt-6 border-t">
-              <h3 class="admin-header mb-3">System Control</h3>
-              <div class="space-y-2">
-                <input type="text" id="admin-date-input" placeholder="Set Date" class="input-field text-xs">
-                <button onclick="updateSystemDate()" class="btn-primary text-xs">
-                  <i class="fas fa-calendar mr-2"></i>Update Date
-                </button>
-              </div>
-            </div>
+      <div class="glass-card rounded-3xl p-8 shadow-2xl">
+        <h3 class="text-xl font-black text-slate-900 mb-4">System Overview</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div class="stat-card">
+            <div class="stat-value" id="admin-total-q">0</div>
+            <div class="stat-label">Total Questions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="admin-total-sub">0</div>
+            <div class="stat-label">Total Submissions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="admin-avg-class">0%</div>
+            <div class="stat-label">Class Average</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="admin-active-students">0</div>
+            <div class="stat-label">Active Students</div>
           </div>
         </div>
 
-        <!-- MAIN CONTENT -->
-        <div class="lg:col-span-3">
-          <!-- TABS -->
-          <div class="flex gap-2 mb-6 flex-wrap">
-            <button onclick="renderAdminViews('create')" class="admin-tab active" id="tab-create">
-              <i class="fas fa-plus mr-2"></i>Create
-            </button>
-            <button onclick="renderAdminViews('questions')" class="admin-tab inactive" id="tab-questions">
-              <i class="fas fa-list mr-2"></i>Questions
-            </button>
-            <button onclick="renderAdminViews('submissions')" class="admin-tab inactive" id="tab-submissions">
-              <i class="fas fa-check-circle mr-2"></i>Submissions
-            </button>
-            <button onclick="renderAdminViews('analytics')" class="admin-tab inactive" id="tab-analytics">
-              <i class="fas fa-chart-bar mr-2"></i>Analytics
-            </button>
-            <button onclick="renderAdminViews('performance')" class="admin-tab inactive" id="tab-performance">
-              <i class="fas fa-star mr-2"></i>Performance
+        <div class="mt-8">
+          <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Update System Date</label>
+          <div class="flex gap-2">
+            <input type="text" id="admin-date-input" class="flex-1 p-3 border-2 border-slate-200 rounded-lg font-bold">
+            <button onclick="updateSystemDate()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-3 rounded-lg">
+              Update
             </button>
           </div>
+        </div>
 
-          <!-- CREATE ASSESSMENT PANEL -->
-          <div id="admin-create" class="glass-card rounded-2xl p-8 shadow-2xl">
-            <h3 class="admin-header mb-6">Add New Assessment</h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="input-group">
-                <label class="input-label">Student Level</label>
-                <select id="in-level" class="input-field">
-                  <option>Basic 6-7</option>
-                  <option>Basic 8</option>
-                </select>
-              </div>
-
-              <div class="input-group">
-                <label class="input-label">Difficulty Level</label>
-                <select id="in-difficulty" class="input-field">
-                  <option value="Easy">Easy</option>
-                  <option value="Medium" selected>Medium</option>
-                  <option value="Hard">Hard</option>
-                </select>
-              </div>
-
-              <div class="input-group">
-                <label class="input-label">Question Type</label>
-                <select id="in-type" onchange="toggleAdminInput()" class="input-field">
-                  <option value="mcq">Multiple Choice (MCQ)</option>
-                  <option value="text">Theory (Text Response)</option>
-                </select>
-              </div>
-
-              <div class="input-group">
-                <label class="input-label">Subject Name</label>
-                <input type="text" id="in-subject" placeholder="E.g., MATHEMATICS" class="input-field">
-              </div>
-            </div>
-
-            <div class="input-group">
-              <label class="input-label">Question Text</label>
-              <textarea id="in-q" placeholder="Enter the question here..." class="input-field h-24 resize-none"></textarea>
-            </div>
-
-            <div class="input-group">
-              <label class="input-label">Image URL (Optional)</label>
-              <input type="text" id="in-img" placeholder="https://example.com/image.jpg" class="input-field">
-            </div>
-
-            <!-- MCQ OPTIONS -->
-            <div id="admin-mcq" class="space-y-3 mb-6">
-              <label class="input-label">Answer Options (Select Correct Answer)</label>
-              <div class="space-y-3">
-                <div class="flex items-center gap-3">
-                  <input type="radio" name="c-idx" value="0" checked id="radio-0">
-                  <input type="text" id="opt-0" placeholder="Option A" class="input-field flex-1">
-                </div>
-                <div class="flex items-center gap-3">
-                  <input type="radio" name="c-idx" value="1" id="radio-1">
-                  <input type="text" id="opt-1" placeholder="Option B" class="input-field flex-1">
-                </div>
-                <div class="flex items-center gap-3">
-                  <input type="radio" name="c-idx" value="2" id="radio-2">
-                  <input type="text" id="opt-2" placeholder="Option C" class="input-field flex-1">
-                </div>
-                <div class="flex items-center gap-3">
-                  <input type="radio" name="c-idx" value="3" id="radio-3">
-                  <input type="text" id="opt-3" placeholder="Option D" class="input-field flex-1">
-                </div>
-              </div>
-            </div>
-
-            <!-- TEXT ANSWER -->
-            <div id="admin-text" class="hidden input-group">
-              <label class="input-label">Correct Answer (Keyword)</label>
-              <input type="text" id="in-ans" placeholder="Enter the correct answer" class="input-field bg-green-50 border-green-300">
-            </div>
-
-            <div class="input-group">
-              <label class="input-label">Heddy Bot Analysis & Feedback</label>
-              <textarea id="in-bot" placeholder="Enter analysis or explanation for students..." class="input-field h-20 resize-none italic"></textarea>
-            </div>
-
-            <button onclick="save()" class="btn-primary">
-              <i class="fas fa-rocket mr-2"></i>Publish Assessment
-            </button>
-          </div>
-
-          <!-- QUESTIONS LIST -->
-          <div id="admin-questions" class="hidden space-y-4">
-            <h3 class="admin-header mb-4">All Questions in System</h3>
-            <div id="admin-feed-questions" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
-          </div>
-
-          <!-- SUBMISSIONS VIEW -->
-          <div id="admin-submissions" class="hidden space-y-4">
-            <h3 class="admin-header mb-4">Student Submissions</h3>
-            <div id="admin-feed-submissions" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
-          </div>
-
-          <!-- ANALYTICS -->
-          <div id="admin-analytics" class="hidden space-y-4">
-            <h3 class="admin-header mb-4">System Analytics</h3>
-            <div id="admin-feed-analytics" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
-          </div>
-
-          <!-- PERFORMANCE -->
-          <div id="admin-performance" class="hidden space-y-4">
-            <h3 class="admin-header mb-4">Student Performance Rankings</h3>
-            <div id="admin-feed-performance" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
-          </div>
+        <div class="mt-8 pt-8 border-t">
+          <h3 class="text-xl font-black text-slate-900 mb-4">Questions Loaded</h3>
+          <div id="admin-questions-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
         </div>
       </div>
     </section>
@@ -884,8 +542,8 @@
     // FEEDBACK MESSAGES
     const FEEDBACK = {
       excellent: [
-        "🌟 Outstanding! Perfect score!",
-        "🎯 Absolutely brilliant answer!",
+        "🌟 Outstanding! Excellent answer!",
+        "🎯 Absolutely brilliant response!",
         "⭐ Exceptional work!",
         "🏆 You're a star!",
         "💯 Flawless performance!"
@@ -913,22 +571,160 @@
       ]
     };
 
-    let questions = JSON.parse(localStorage.getItem('h_sup_q_vFinal')) || [];
+    // PRE-LOADED BASIC 8 THEORY QUESTIONS
+    const PRELOADED_QUESTIONS = [
+      {
+        id: "b8_eng_1",
+        level: "Basic 8",
+        subject: "ENGLISH",
+        type: "text",
+        text: "What is the main purpose of a thesis statement in an essay?",
+        correctAns: "To present the main argument or central idea of the essay",
+        bot: "A thesis statement is crucial as it tells the reader what your essay will argue or prove. It serves as a roadmap for your entire essay."
+      },
+      {
+        id: "b8_eng_2",
+        level: "Basic 8",
+        subject: "ENGLISH",
+        type: "text",
+        text: "Explain the difference between a simile and a metaphor.",
+        correctAns: "A simile compares two things using 'like' or 'as', while a metaphor directly states that one thing is another without using comparison words",
+        bot: "Both are figures of speech used to create vivid descriptions. Similes use 'like' or 'as' (She is like a rose), while metaphors don't (She is a rose)."
+      },
+      {
+        id: "b8_eng_3",
+        level: "Basic 8",
+        subject: "ENGLISH",
+        type: "text",
+        text: "What does it mean for a character to have a dynamic character arc in a story?",
+        correctAns: "The character undergoes significant personal change or growth throughout the story",
+        bot: "A dynamic character changes their beliefs, personality, or perspective as a result of events in the story. This is different from a static character who remains unchanged."
+      },
+      {
+        id: "b8_math_1",
+        level: "Basic 8",
+        subject: "MATHEMATICS",
+        type: "text",
+        text: "Explain what a quadratic equation is and give one real-world example of where it might be used.",
+        correctAns: "A quadratic equation is a polynomial equation of degree 2, written as ax²+bx+c=0. Examples include calculating projectile motion, area problems, or profit optimization",
+        bot: "Quadratic equations are fundamental in algebra and appear frequently in physics, engineering, and economics. They can have 0, 1, or 2 real solutions."
+      },
+      {
+        id: "b8_math_2",
+        level: "Basic 8",
+        subject: "MATHEMATICS",
+        type: "text",
+        text: "What is the Pythagorean theorem and why is it important?",
+        correctAns: "In a right triangle, a²+b²=c² where c is the hypotenuse. It's important for calculating distances, construction, and understanding geometry",
+        bot: "The Pythagorean theorem is one of the most fundamental principles in mathematics. It applies to any right triangle and is used in navigation, architecture, and many other fields."
+      },
+      {
+        id: "b8_math_3",
+        level: "Basic 8",
+        subject: "MATHEMATICS",
+        type: "text",
+        text: "Define what a function is and explain how to determine if a relation is a function.",
+        correctAns: "A function is a relation where each input has exactly one output. Use the vertical line test: if a vertical line crosses the graph more than once, it's not a function",
+        bot: "Functions are central to algebra and calculus. The key requirement is that for every x-value, there must be exactly one y-value. This ensures predictability and consistency."
+      },
+      {
+        id: "b8_sci_1",
+        level: "Basic 8",
+        subject: "SCIENCE",
+        type: "text",
+        text: "Describe the process of photosynthesis and why it is vital for life on Earth.",
+        correctAns: "Photosynthesis is the process where plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It's vital because it produces oxygen for respiration and food for the food chain",
+        bot: "Photosynthesis occurs in two stages: light-dependent reactions in the thylakoids and light-independent reactions (Calvin cycle) in the stroma. Without it, most life on Earth couldn't exist."
+      },
+      {
+        id: "b8_sci_2",
+        level: "Basic 8",
+        subject: "SCIENCE",
+        type: "text",
+        text: "Explain the difference between mitosis and meiosis.",
+        correctAns: "Mitosis produces two identical daughter cells for growth and repair, while meiosis produces four genetically different sex cells with half the chromosomes",
+        bot: "Mitosis is used for body cell division and maintains the chromosome number. Meiosis is used for sexual reproduction and reduces chromosome number by half, creating genetic diversity."
+      },
+      {
+        id: "b8_sci_3",
+        level: "Basic 8",
+        subject: "SCIENCE",
+        type: "text",
+        text: "What is the water cycle and what are its main stages?",
+        correctAns: "The water cycle describes how water moves on Earth. Main stages are evaporation, condensation, precipitation, and collection",
+        bot: "The water cycle is continuous and essential for distributing water and regulating Earth's temperature. Evaporation turns water to vapor, condensation forms clouds, precipitation returns water to Earth, and collection gathers it in oceans and lakes."
+      },
+      {
+        id: "b8_hist_1",
+        level: "Basic 8",
+        subject: "HISTORY",
+        type: "text",
+        text: "What were the main causes of World War II?",
+        correctAns: "The Treaty of Versailles, economic depression, rise of fascism, aggressive expansion by Axis powers, and failure of the League of Nations",
+        bot: "These factors combined to create a volatile situation in Europe. The harsh terms of the Treaty of Versailles left Germany resentful, while the Great Depression created economic hardship that fascist leaders exploited."
+      },
+      {
+        id: "b8_hist_2",
+        level: "Basic 8",
+        subject: "HISTORY",
+        type: "text",
+        text: "Explain the significance of the Industrial Revolution.",
+        correctAns: "It transformed society from agrarian to industrial, leading to mass production, urbanization, technological advancement, and changed labor and social structures",
+        bot: "The Industrial Revolution (1760-1840) fundamentally changed how goods were produced and how people lived. It introduced factories, machines, and new economic systems that shaped the modern world."
+      },
+      {
+        id: "b8_hist_3",
+        level: "Basic 8",
+        subject: "HISTORY",
+        type: "text",
+        text: "What was the main purpose of the United Nations when it was founded?",
+        correctAns: "To maintain international peace and security, develop friendly relations between nations, and promote social and economic progress",
+        bot: "The UN was founded in 1945 after World War II to prevent future global conflicts. It serves as a forum for international cooperation and addresses global issues like poverty, disease, and environmental protection."
+      },
+      {
+        id: "b8_geo_1",
+        level: "Basic 8",
+        subject: "GEOGRAPHY",
+        type: "text",
+        text: "Explain the difference between weather and climate.",
+        correctAns: "Weather is short-term atmospheric conditions (hours to days), while climate is long-term average weather patterns (years to decades)",
+        bot: "Weather can change rapidly and unpredictably, while climate is consistent over long periods. Understanding this distinction is crucial for studying Earth's systems and predicting environmental changes."
+      },
+      {
+        id: "b8_geo_2",
+        level: "Basic 8",
+        subject: "GEOGRAPHY",
+        type: "text",
+        text: "What are the major factors that influence climate zones?",
+        correctAns: "Latitude, altitude, proximity to water bodies, ocean currents, wind patterns, and local geography",
+        bot: "These factors work together to create distinct climate zones around the world. For example, coastal areas have more moderate climates due to water's temperature-regulating properties, while high altitudes are cooler regardless of latitude."
+      },
+      {
+        id: "b8_geo_3",
+        level: "Basic 8",
+        subject: "GEOGRAPHY",
+        type: "text",
+        text: "Describe the characteristics of a tropical rainforest ecosystem.",
+        correctAns: "High rainfall, warm temperatures year-round, dense vegetation, high biodiversity, nutrient-poor soil, and complex food webs",
+        bot: "Tropical rainforests cover only about 6% of Earth's surface but contain over 50% of all species. They play a crucial role in regulating global climate and producing oxygen."
+      }
+    ];
+
+    let questions = PRELOADED_QUESTIONS;
     let submissions = JSON.parse(localStorage.getItem('h_sup_sub_vFinal')) || [];
     let studentRecords = JSON.parse(localStorage.getItem('h_sup_records')) || {};
     let sysDate = localStorage.getItem('h_sup_date') || "WEDNESDAY, 13TH MAY, 2026";
     
     let activeQ = [], user = {}, cur = 0, score = 0, seconds = 0, timerInterval;
     let currentScreen = 'login';
-    let growthChart = null;
     let streak = 0;
-    let currentAdminView = 'create';
 
     window.onload = () => {
       document.getElementById('display-date').innerText = sysDate;
       document.getElementById('admin-date-input').value = sysDate;
       initializeStudentRecords();
       updateAdminStats();
+      displayAdminQuestions();
     };
 
     function initializeStudentRecords() {
@@ -958,6 +754,21 @@
       const totalAttempts = Object.values(studentRecords).reduce((sum, rec) => sum + rec.attempts.length, 0);
       const classAvg = totalAttempts > 0 ? Math.round(totalScore / totalAttempts) : 0;
       document.getElementById('admin-avg-class').innerText = classAvg + '%';
+    }
+
+    function displayAdminQuestions() {
+      const list = document.getElementById('admin-questions-list');
+      list.innerHTML = '';
+      
+      questions.forEach((q, i) => {
+        list.innerHTML += `
+          <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
+            <p class="font-bold text-slate-900">${q.subject}</p>
+            <p class="text-sm text-slate-600 mt-1">${q.text.substring(0, 60)}...</p>
+            <p class="text-xs text-slate-500 mt-2"><strong>Answer:</strong> ${q.correctAns.substring(0, 50)}...</p>
+          </div>
+        `;
+      });
     }
 
     function setScreen(screen) {
@@ -1042,67 +853,14 @@
       document.getElementById('q-text').innerText = q.text;
       document.getElementById('q-progress').innerText = cur + 1;
       document.getElementById('q-total').innerText = activeQ.length;
-      document.getElementById('difficulty-badge').innerText = q.difficulty || 'Medium';
-      document.getElementById('difficulty-badge').className = `badge ${q.difficulty === 'Easy' ? 'badge-good' : q.difficulty === 'Hard' ? 'badge-poor' : 'badge-average'}`;
       
       const progress = ((cur + 1) / activeQ.length) * 100;
       document.getElementById('progress-fill').style.width = progress + '%';
       
       document.getElementById('bot-response').classList.add('hidden');
       document.getElementById('feedback-section').classList.add('hidden');
-      
-      const imgBox = document.getElementById('q-image-container');
-      if (q.img) {
-        document.getElementById('qi-image').src = q.img;
-        imgBox.classList.remove('hidden');
-      } else {
-        imgBox.classList.add('hidden');
-      }
-      
-      const mcq = document.getElementById('mcq-options');
-      const theory = document.getElementById('text-entry');
-      
-      if (q.type === 'mcq') {
-        mcq.classList.remove('hidden');
-        theory.classList.add('hidden');
-        mcq.innerHTML = '';
-        
-        q.options.forEach((optText, i) => {
-          if (!optText) return;
-          const b = document.createElement('button');
-          b.className = 'option-btn';
-          b.innerText = optText;
-          b.onclick = () => {
-            document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
-            const isCorrect = i == q.correctIdx;
-            
-            if (isCorrect) {
-              b.classList.add('correct');
-              score++;
-              streak++;
-              showFeedback(true, 100);
-              document.getElementById('answer-reveal').classList.add('hidden');
-            } else {
-              b.classList.add('wrong');
-              streak = 0;
-              const percentage = Math.round((score / (cur + 1)) * 100);
-              showFeedback(false, percentage);
-              document.getElementById('answer-reveal').innerHTML = `<strong>✓ Correct Answer:</strong> ${q.options[q.correctIdx]}`;
-              document.getElementById('answer-reveal').classList.remove('hidden');
-            }
-            
-            document.getElementById('streak-display').classList.toggle('hidden', streak === 0);
-            document.getElementById('streak-count').innerText = streak;
-            showBot(q.bot);
-          };
-          mcq.appendChild(b);
-        });
-      } else {
-        mcq.classList.add('hidden');
-        theory.classList.remove('hidden');
-        document.getElementById('text-answer').value = '';
-        document.getElementById('text-answer').disabled = false;
-      }
+      document.getElementById('text-answer').value = '';
+      document.getElementById('text-answer').disabled = false;
     }
 
     function checkTextAns() {
@@ -1116,7 +874,7 @@
       submissions.push({ student: user.name, sub: user.activeSub, q: q.text, typed, expected: q.correctAns });
       localStorage.setItem('h_sup_sub_vFinal', JSON.stringify(submissions));
       
-      const isCorrect = typed.toLowerCase() === q.correctAns.toLowerCase();
+      const isCorrect = typed.toLowerCase().includes(q.correctAns.toLowerCase().split(' ')[0]);
       
       if (isCorrect) {
         inp.classList.add('correct');
@@ -1129,7 +887,7 @@
         streak = 0;
         const percentage = Math.round((score / (cur + 1)) * 100);
         showFeedback(false, percentage);
-        document.getElementById('answer-reveal').innerHTML = `<strong>✓ Correct Answer:</strong> ${q.correctAns}`;
+        document.getElementById('answer-reveal').innerHTML = `<strong>✓ Expected Answer:</strong> ${q.correctAns}`;
         document.getElementById('answer-reveal').classList.remove('hidden');
       }
       
@@ -1181,8 +939,6 @@
       }
       studentRecords[user.name].yearData[year].push(percentage);
       
-      checkAchievements(user.name, percentage);
-      
       localStorage.setItem('h_sup_records', JSON.stringify(studentRecords));
       updateAdminStats();
       
@@ -1206,26 +962,6 @@
           </button>
         </div>
       `;
-    }
-
-    function checkAchievements(studentName, score) {
-      const record = studentRecords[studentName];
-      const achievements = record.achievements || [];
-      
-      if (score === 100 && !achievements.includes('perfect')) {
-        achievements.push('perfect');
-      }
-      if (record.attempts.length === 5 && !achievements.includes('five-attempts')) {
-        achievements.push('five-attempts');
-      }
-      if (record.attempts.length === 10 && !achievements.includes('ten-attempts')) {
-        achievements.push('ten-attempts');
-      }
-      if (score >= 90 && !achievements.includes('ninety-plus')) {
-        achievements.push('ninety-plus');
-      }
-      
-      record.achievements = achievements;
     }
 
     function startTimer() {
@@ -1258,50 +994,6 @@
       document.getElementById('rec-best-score').innerText = bestScore + '%';
       document.getElementById('rec-subjects-count').innerText = subjects;
       
-      const achievementMap = {
-        'perfect': { icon: '💯', label: 'Perfect Score' },
-        'five-attempts': { icon: '5️⃣', label: '5 Attempts' },
-        'ten-attempts': { icon: '🔟', label: '10 Attempts' },
-        'ninety-plus': { icon: '⭐', label: '90%+ Score' }
-      };
-      
-      if (record.achievements && record.achievements.length > 0) {
-        document.getElementById('achievements-section').classList.remove('hidden');
-        document.getElementById('achievements-list').innerHTML = record.achievements.map(a => 
-          `<div class="achievement-badge">${achievementMap[a].icon} ${achievementMap[a].label}</div>`
-        ).join('');
-      }
-      
-      renderGrowthChart(record);
-      
-      const subjectPerf = {};
-      record.attempts.forEach(a => {
-        if (!subjectPerf[a.subject]) subjectPerf[a.subject] = [];
-        subjectPerf[a.subject].push(a.score);
-      });
-      
-      const subjectHtml = Object.entries(subjectPerf).map(([sub, scores]) => {
-        const avg = Math.round(scores.reduce((a, b) => a + b) / scores.length);
-        const trend = scores.length > 1 ? scores[scores.length - 1] - scores[0] : 0;
-        const trendClass = trend > 0 ? 'growth-up' : trend < 0 ? 'growth-down' : 'growth-neutral';
-        const trendIcon = trend > 0 ? '↑' : trend < 0 ? '↓' : '→';
-        
-        return `
-          <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500 flex justify-between items-center">
-            <div>
-              <p class="font-bold text-slate-900">${sub}</p>
-              <p class="text-sm text-slate-600">${scores.length} attempt(s)</p>
-            </div>
-            <div class="text-right">
-              <p class="text-2xl font-black text-blue-900">${avg}%</p>
-              <span class="growth-indicator ${trendClass}">${trendIcon} ${Math.abs(trend)}%</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-      
-      document.getElementById('rec-subject-list').innerHTML = subjectHtml;
-      
       const historyHtml = record.attempts.map((a, i) => `
         <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
           <div class="flex justify-between items-start mb-2">
@@ -1317,46 +1009,6 @@
       setScreen('records');
     }
 
-    function renderGrowthChart(record) {
-      const years = Object.keys(record.yearData).sort();
-      const datasets = [];
-      
-      years.forEach((year, idx) => {
-        const colors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6'];
-        const color = colors[idx % colors.length];
-        
-        datasets.push({
-          label: year,
-          data: record.yearData[year],
-          borderColor: color,
-          backgroundColor: color + '20',
-          tension: 0.4,
-          fill: true
-        });
-      });
-      
-      const ctx = document.getElementById('growthChart');
-      if (growthChart) growthChart.destroy();
-      
-      growthChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: Array.from({length: Math.max(...datasets.map(d => d.data.length))}, (_, i) => `Attempt ${i + 1}`),
-          datasets: datasets
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: true, position: 'top' }
-          },
-          scales: {
-            y: { beginAtZero: true, max: 100 }
-          }
-        }
-      });
-    }
-
     // LEADERBOARD
     function showLeaderboard() {
       const stats = {};
@@ -1368,7 +1020,6 @@
       });
       
       const byAvg = Object.entries(stats).sort((a, b) => b[1].avg - a[1].avg);
-      const byAttempts = Object.entries(stats).sort((a, b) => b[1].attempts - a[1].attempts);
       
       document.getElementById('leaderboard-avg').innerHTML = byAvg.map(([name, data], idx) => {
         const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
@@ -1386,230 +1037,7 @@
         `;
       }).join('');
       
-      document.getElementById('leaderboard-attempts').innerHTML = byAttempts.map(([name, data], idx) => {
-        const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
-        return `
-          <div class="leaderboard-item">
-            <div class="flex items-center">
-              <div class="rank-badge ${rankClass}">${idx + 1}</div>
-              <div>
-                <p class="font-bold text-slate-900">${name}</p>
-                <p class="text-xs text-slate-600">${data.avg}% average</p>
-              </div>
-            </div>
-            <p class="text-2xl font-black text-blue-900">${data.attempts}</p>
-          </div>
-        `;
-      }).join('');
-      
       setScreen('leaderboard');
-    }
-
-    // ADMIN FUNCTIONS
-    function save() {
-      const sub = document.getElementById('in-subject').value.trim().toUpperCase();
-      const txt = document.getElementById('in-q').value.trim();
-      
-      if (!sub || !txt) return alert("Missing Subject or Question!");
-      
-      const q = {
-        id: Math.random().toString(),
-        level: document.getElementById('in-level').value,
-        subject: sub,
-        difficulty: document.getElementById('in-difficulty').value,
-        type: document.getElementById('in-type').value,
-        text: txt,
-        img: document.getElementById('in-img').value,
-        options: [
-          document.getElementById('opt-0').value,
-          document.getElementById('opt-1').value,
-          document.getElementById('opt-2').value,
-          document.getElementById('opt-3').value
-        ],
-        correctIdx: parseInt(document.querySelector('input[name="c-idx"]:checked').value),
-        correctAns: document.getElementById('in-ans').value.trim(),
-        bot: document.getElementById('in-bot').value.trim() || "Analysis saved."
-      };
-      
-      questions.push(q);
-      localStorage.setItem('h_sup_q_vFinal', JSON.stringify(questions));
-      alert("✅ ASSESSMENT PUBLISHED SUCCESSFULLY!");
-      
-      document.getElementById('in-subject').value = '';
-      document.getElementById('in-q').value = '';
-      document.getElementById('in-img').value = '';
-      document.getElementById('in-bot').value = '';
-      document.getElementById('opt-0').value = '';
-      document.getElementById('opt-1').value = '';
-      document.getElementById('opt-2').value = '';
-      document.getElementById('opt-3').value = '';
-      
-      updateAdminStats();
-      renderAdminViews('questions');
-    }
-
-    function renderAdminViews(type) {
-      currentAdminView = type;
-      
-      // Update tab styles
-      document.querySelectorAll('.admin-tab').forEach(tab => {
-        tab.classList.remove('active');
-        tab.classList.add('inactive');
-      });
-      document.getElementById(`tab-${type}`).classList.add('active');
-      document.getElementById(`tab-${type}`).classList.remove('inactive');
-      
-      // Hide all sections
-      document.getElementById('admin-create').classList.add('hidden');
-      document.getElementById('admin-questions').classList.add('hidden');
-      document.getElementById('admin-submissions').classList.add('hidden');
-      document.getElementById('admin-analytics').classList.add('hidden');
-      document.getElementById('admin-performance').classList.add('hidden');
-      
-      if (type === 'create') {
-        document.getElementById('admin-create').classList.remove('hidden');
-      } else if (type === 'questions') {
-        document.getElementById('admin-questions').classList.remove('hidden');
-        renderQuestionsList();
-      } else if (type === 'submissions') {
-        document.getElementById('admin-submissions').classList.remove('hidden');
-        renderSubmissionsList();
-      } else if (type === 'analytics') {
-        document.getElementById('admin-analytics').classList.remove('hidden');
-        renderAnalytics();
-      } else if (type === 'performance') {
-        document.getElementById('admin-performance').classList.remove('hidden');
-        renderPerformanceList();
-      }
-    }
-
-    function renderQuestionsList() {
-      const feed = document.getElementById('admin-feed-questions');
-      feed.innerHTML = '';
-      
-      if (questions.length === 0) {
-        feed.innerHTML = '<p class="text-slate-400 italic text-center py-8">No questions created yet.</p>';
-        return;
-      }
-      
-      questions.forEach((q, i) => {
-        feed.innerHTML += `
-          <div class="admin-card">
-            <div class="flex justify-between items-start mb-2">
-              <div>
-                <span class="admin-header">[${q.level}] ${q.subject}</span>
-                <p class="text-slate-600 text-sm mt-1">${q.text.substring(0, 50)}...</p>
-              </div>
-              <button onclick="deleteQ(${i})" class="btn-danger">
-                <i class="fas fa-trash mr-1"></i>Delete
-              </button>
-            </div>
-            <div class="flex gap-2 mt-3">
-              <span class="badge ${q.difficulty === 'Easy' ? 'badge-good' : q.difficulty === 'Hard' ? 'badge-poor' : 'badge-average'}">${q.difficulty}</span>
-              <span class="badge badge-info">${q.type === 'mcq' ? 'Multiple Choice' : 'Theory'}</span>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function renderSubmissionsList() {
-      const feed = document.getElementById('admin-feed-submissions');
-      feed.innerHTML = '';
-      
-      if (submissions.length === 0) {
-        feed.innerHTML = '<p class="text-slate-400 italic text-center py-8">No submissions yet.</p>';
-        return;
-      }
-      
-      submissions.forEach((s, i) => {
-        feed.innerHTML += `
-          <div class="admin-card">
-            <p class="admin-header mb-2">${s.student} • ${s.sub}</p>
-            <p class="text-xs font-bold mb-3">Q: ${s.q}</p>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <div class="bg-red-50 p-2 rounded border border-red-200">
-                <b class="text-red-700">STUDENT:</b>
-                <p class="text-red-600 mt-1 font-bold">${s.typed}</p>
-              </div>
-              <div class="bg-green-50 p-2 rounded border border-green-200">
-                <b class="text-green-700">EXPECTED:</b>
-                <p class="text-green-600 mt-1 font-bold">${s.expected}</p>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function renderAnalytics() {
-      const feed = document.getElementById('admin-feed-analytics');
-      feed.innerHTML = '';
-      
-      const subjectStats = {};
-      questions.forEach(q => {
-        if (!subjectStats[q.subject]) {
-          subjectStats[q.subject] = { count: 0, levels: new Set() };
-        }
-        subjectStats[q.subject].count++;
-        subjectStats[q.subject].levels.add(q.level);
-      });
-      
-      Object.entries(subjectStats).forEach(([sub, stats]) => {
-        feed.innerHTML += `
-          <div class="admin-card">
-            <div class="flex justify-between items-center">
-              <div>
-                <p class="admin-title">${sub}</p>
-                <p class="text-xs text-slate-600">${Array.from(stats.levels).join(', ')}</p>
-              </div>
-              <div class="text-right">
-                <p class="text-2xl font-black text-blue-600">${stats.count}</p>
-                <p class="text-xs text-slate-600">Questions</p>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function renderPerformanceList() {
-      const feed = document.getElementById('admin-feed-performance');
-      feed.innerHTML = '';
-      
-      const perfData = {};
-      Object.entries(studentRecords).forEach(([name, record]) => {
-        if (record.attempts.length > 0) {
-          const avg = Math.round(record.attempts.reduce((a, b) => a + b.score, 0) / record.attempts.length);
-          perfData[name] = { avg, attempts: record.attempts.length, best: Math.max(...record.attempts.map(a => a.score)) };
-        }
-      });
-      
-      Object.entries(perfData).sort((a, b) => b[1].avg - a[1].avg).forEach(([name, data], idx) => {
-        feed.innerHTML += `
-          <div class="admin-card">
-            <div class="flex justify-between items-start">
-              <div>
-                <p class="admin-title">${idx + 1}. ${name}</p>
-                <p class="text-xs text-slate-600">${data.attempts} attempts</p>
-              </div>
-              <div class="text-right">
-                <p class="text-2xl font-black text-blue-900">${data.avg}%</p>
-                <p class="text-xs text-slate-600">Best: ${data.best}%</p>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function deleteQ(i) {
-      if (confirm('Delete this question?')) {
-        questions.splice(i, 1);
-        localStorage.setItem('h_sup_q_vFinal', JSON.stringify(questions));
-        updateAdminStats();
-        renderQuestionsList();
-      }
     }
 
     function updateSystemDate() {
@@ -1626,12 +1054,6 @@
       } else {
         alert("❌ Invalid key!");
       }
-    }
-
-    function toggleAdminInput() {
-      const isT = document.getElementById('in-type').value === 'text';
-      document.getElementById('admin-mcq').classList.toggle('hidden', isT);
-      document.getElementById('admin-text').classList.toggle('hidden', !isT);
     }
   </script>
 </body>
