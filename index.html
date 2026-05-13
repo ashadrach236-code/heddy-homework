@@ -319,38 +319,145 @@
       font-weight: 700;
     }
     
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
+    .admin-tab {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
     }
     
-    .modal-content {
-      background: white;
-      border-radius: 1.5rem;
-      padding: 2rem;
-      max-width: 500px;
-      width: 90%;
-      animation: slideIn 0.4s ease;
+    .admin-tab.active {
+      background: #3b82f6;
+      color: white;
     }
     
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: white;
-      padding: 1rem 1.5rem;
+    .admin-tab.inactive {
+      background: #e2e8f0;
+      color: #64748b;
+    }
+    
+    .admin-tab:hover {
+      transform: translateY(-2px);
+    }
+    
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    
+    .input-label {
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e2e8f0;
       border-radius: 0.75rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      animation: slideIn 0.4s ease;
-      z-index: 999;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .btn-primary {
+      width: 100%;
+      padding: 0.875rem;
+      background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-danger {
+      padding: 0.5rem 1rem;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+    
+    .admin-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border-left: 4px solid #3b82f6;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .admin-header {
+      font-size: 0.875rem;
+      font-weight: 900;
+      color: #3b82f6;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .admin-title {
+      font-size: 1.125rem;
+      font-weight: 900;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+    }
+    
+    .admin-subtitle {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-bottom: 1rem;
+    }
+    
+    .quick-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #f0f9ff;
+      border: 2px solid #0284c7;
+      border-radius: 0.5rem;
+      color: #0c4a6e;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+    }
+    
+    .quick-action:hover {
+      background: #0284c7;
+      color: white;
     }
   </style>
 </head>
@@ -367,7 +474,7 @@
           <p id="display-date" class="text-[10px] font-bold text-blue-200 uppercase tracking-widest"></p>
         </div>
       </div>
-      <div class="flex gap-3">
+      <div class="flex gap-3 flex-wrap">
         <button onclick="showStudentRecords()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
           <i class="fas fa-chart-line mr-2"></i>My Records
         </button>
@@ -375,7 +482,7 @@
           <i class="fas fa-trophy mr-2"></i>Leaderboard
         </button>
         <button onclick="adminLogin()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
-          Admin Access
+          <i class="fas fa-lock mr-2"></i>Admin
         </button>
       </div>
     </div>
@@ -430,9 +537,9 @@
 
     <!-- QUIZ VIEW -->
     <section id="quiz-screen" class="hidden max-w-4xl mx-auto">
-      <div class="flex justify-between items-center mb-6">
+      <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
         <div class="bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-black uppercase" id="h-subject-badge"></div>
-        <div class="flex gap-4 items-center">
+        <div class="flex gap-4 items-center flex-wrap">
           <div class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-mono" id="timer-display">00:00</div>
           <div id="score-ring" class="text-2xl font-black text-yellow-400">0%</div>
           <div id="streak-display" class="streak-badge hidden">
@@ -495,7 +602,7 @@
       </div>
 
       <div class="glass-card rounded-3xl p-8 shadow-2xl">
-        <div class="flex justify-between items-start mb-8">
+        <div class="flex justify-between items-start mb-8 flex-wrap gap-4">
           <div>
             <h2 class="text-3xl font-black text-slate-900 mb-2">
               <span id="rec-student-name"></span>
@@ -581,117 +688,179 @@
       </div>
     </section>
 
-    <!-- ADMIN PANEL -->
+    <!-- ADMIN PANEL - COMPLETE & ENHANCED -->
     <section id="admin-screen" class="hidden">
-      <div class="mb-8 flex justify-between items-center">
+      <div class="mb-8 flex justify-between items-center flex-wrap gap-4">
         <h2 class="text-3xl font-black text-white">Teacher <span class="text-yellow-400">Administration</span></h2>
         <button onclick="setScreen('login')" class="bg-red-500/20 hover:bg-red-500/30 text-white border border-red-400/50 px-4 py-2 rounded-lg font-bold text-sm">
           <i class="fas fa-sign-out-alt mr-2"></i>Logout
         </button>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- CREATE TASK -->
-        <div class="lg:col-span-1 glass-card rounded-3xl p-6 shadow-2xl">
-          <h3 class="font-black text-xs uppercase text-blue-600 mb-6 tracking-widest">Add New Assessment</h3>
-
-          <div class="space-y-4">
-            <div>
-              <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Level</label>
-              <select id="in-level" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs focus:border-blue-500 focus:outline-none">
-                <option>Basic 6-7</option>
-                <option>Basic 8</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Difficulty</label>
-              <select id="in-difficulty" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs focus:border-blue-500 focus:outline-none">
-                <option value="Easy">Easy</option>
-                <option value="Medium" selected>Medium</option>
-                <option value="Hard">Hard</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Type</label>
-              <select id="in-type" onchange="toggleAdminInput()" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs focus:border-blue-500 focus:outline-none">
-                <option value="mcq">Objectives (MCQ)</option>
-                <option value="text">Theory (Typing)</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Subject</label>
-              <input type="text" id="in-subject" placeholder="SUBJECT NAME" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs uppercase focus:border-blue-500 focus:outline-none">
-            </div>
-
-            <div>
-              <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Question</label>
-              <textarea id="in-q" placeholder="Enter Question text..." class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs h-24 focus:border-blue-500 focus:outline-none resize-none"></textarea>
-            </div>
-
-            <div id="admin-mcq" class="space-y-3">
-              <div class="flex items-center gap-2">
-                <input type="radio" name="c-idx" value="0" checked>
-                <input type="text" id="opt-0" placeholder="Option A" class="flex-1 p-2 rounded-lg border-2 border-slate-200 font-bold text-xs focus:border-blue-500 focus:outline-none">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- LEFT SIDEBAR - QUICK STATS -->
+        <div class="lg:col-span-1">
+          <div class="glass-card rounded-2xl p-6 shadow-2xl sticky top-24">
+            <h3 class="admin-header mb-4">Quick Stats</h3>
+            <div class="space-y-4">
+              <div class="admin-card">
+                <div class="text-2xl font-black text-blue-600"id="admin-total-q">0</div>
+                <div class="text-xs text-slate-600 font-bold">Total Questions</div>
               </div>
-              <div class="flex items-center gap-2">
-                <input type="radio" name="c-idx" value="1">
-                <input type="text" id="opt-1" placeholder="Option B" class="flex-1 p-2 rounded-lg border-2 border-slate-200 font-bold text-xs focus:border-blue-500 focus:outline-none">
+              <div class="admin-card">
+                <div class="text-2xl font-black text-green-600" id="admin-total-sub">0</div>
+                <div class="text-xs text-slate-600 font-bold">Total Submissions</div>
               </div>
-              <div class="flex items-center gap-2">
-                <input type="radio" name="c-idx" value="2">
-                <input type="text" id="opt-2" placeholder="Option C" class="flex-1 p-2 rounded-lg border-2 border-slate-200 font-bold text-xs focus:border-blue-500 focus:outline-none">
+              <div class="admin-card">
+                <div class="text-2xl font-black text-yellow-600" id="admin-avg-class">0%</div>
+                <div class="text-xs text-slate-600 font-bold">Class Average</div>
               </div>
-              <div class="flex items-center gap-2">
-                <input type="radio" name="c-idx" value="3">
-                <input type="text" id="opt-3" placeholder="Option D" class="flex-1 p-2 rounded-lg border-2 border-slate-200 font-bold text-xs focus:border-blue-500 focus:outline-none">
+              <div class="admin-card">
+                <div class="text-2xl font-black text-purple-600" id="admin-active-students">0</div>
+                <div class="text-xs text-slate-600 font-bold">Active Students</div>
               </div>
             </div>
 
-            <div id="admin-text" class="hidden">
-              <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Correct Answer</label>
-              <input type="text" id="in-ans" placeholder="Correct Keyword/Answer" class="w-full p-4 rounded-xl border-2 border-green-300 bg-green-50 font-black text-xs focus:border-green-600 focus:outline-none">
+            <div class="mt-6 pt-6 border-t">
+              <h3 class="admin-header mb-3">System Control</h3>
+              <div class="space-y-2">
+                <input type="text" id="admin-date-input" placeholder="Set Date" class="input-field text-xs">
+                <button onclick="updateSystemDate()" class="btn-primary text-xs">
+                  <i class="fas fa-calendar mr-2"></i>Update Date
+                </button>
+              </div>
             </div>
-
-            <div>
-              <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Image URL (Optional)</label>
-              <input type="text" id="in-img" placeholder="Image URL" class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs focus:border-blue-500 focus:outline-none">
-            </div>
-
-            <div>
-              <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Heddy Bot Analysis</label>
-              <textarea id="in-bot" placeholder="Heddy Bot analysis..." class="w-full p-3 rounded-xl border-2 border-slate-200 font-bold text-xs h-16 focus:border-blue-500 focus:outline-none resize-none italic"></textarea>
-            </div>
-
-            <button onclick="save()" class="w-full heddy-gradient text-white py-4 rounded-xl font-black uppercase text-xs mt-6">
-              Publish to Portal
-            </button>
           </div>
         </div>
 
-        <!-- LIVE ACTIVITY -->
-        <div class="lg:col-span-2 space-y-6">
-          <!-- Date Control -->
-          <div class="glass-card rounded-3xl p-6 shadow-2xl">
-            <div class="flex gap-2 items-center">
-              <input type="text" id="admin-date-input" class="flex-1 p-3 rounded-lg border-2 border-slate-200 font-bold text-sm focus:border-blue-500 focus:outline-none">
-              <button onclick="updateSystemDate()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-3 rounded-lg text-xs">
-                Set Date
-              </button>
-            </div>
+        <!-- MAIN CONTENT -->
+        <div class="lg:col-span-3">
+          <!-- TABS -->
+          <div class="flex gap-2 mb-6 flex-wrap">
+            <button onclick="renderAdminViews('create')" class="admin-tab active" id="tab-create">
+              <i class="fas fa-plus mr-2"></i>Create
+            </button>
+            <button onclick="renderAdminViews('questions')" class="admin-tab inactive" id="tab-questions">
+              <i class="fas fa-list mr-2"></i>Questions
+            </button>
+            <button onclick="renderAdminViews('submissions')" class="admin-tab inactive" id="tab-submissions">
+              <i class="fas fa-check-circle mr-2"></i>Submissions
+            </button>
+            <button onclick="renderAdminViews('analytics')" class="admin-tab inactive" id="tab-analytics">
+              <i class="fas fa-chart-bar mr-2"></i>Analytics
+            </button>
+            <button onclick="renderAdminViews('performance')" class="admin-tab inactive" id="tab-performance">
+              <i class="fas fa-star mr-2"></i>Performance
+            </button>
           </div>
 
-          <!-- Assessment Feed -->
-          <div class="glass-card rounded-3xl p-6 shadow-2xl">
-            <div class="flex gap-2 mb-6 flex-wrap">
-              <button onclick="renderAdminViews('questions')" class="bg-blue-600 text-white px-3 py-1 rounded text-xs font-bold">QUESTIONS</button>
-              <button onclick="renderAdminViews('reviews')" class="bg-slate-300 text-slate-900 px-3 py-1 rounded text-xs font-bold">SUBMISSIONS</button>
-              <button onclick="renderAdminViews('analytics')" class="bg-slate-300 text-slate-900 px-3 py-1 rounded text-xs font-bold">ANALYTICS</button>
-              <button onclick="renderAdminViews('performance')" class="bg-slate-300 text-slate-900 px-3 py-1 rounded text-xs font-bold">PERFORMANCE</button>
+          <!-- CREATE ASSESSMENT PANEL -->
+          <div id="admin-create" class="glass-card rounded-2xl p-8 shadow-2xl">
+            <h3 class="admin-header mb-6">Add New Assessment</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="input-group">
+                <label class="input-label">Student Level</label>
+                <select id="in-level" class="input-field">
+                  <option>Basic 6-7</option>
+                  <option>Basic 8</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label">Difficulty Level</label>
+                <select id="in-difficulty" class="input-field">
+                  <option value="Easy">Easy</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="Hard">Hard</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label">Question Type</label>
+                <select id="in-type" onchange="toggleAdminInput()" class="input-field">
+                  <option value="mcq">Multiple Choice (MCQ)</option>
+                  <option value="text">Theory (Text Response)</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label class="input-label">Subject Name</label>
+                <input type="text" id="in-subject" placeholder="E.g., MATHEMATICS" class="input-field">
+              </div>
             </div>
-            <div id="admin-feed" class="space-y-4 max-h-[600px] overflow-y-auto pr-2"></div>
+
+            <div class="input-group">
+              <label class="input-label">Question Text</label>
+              <textarea id="in-q" placeholder="Enter the question here..." class="input-field h-24 resize-none"></textarea>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">Image URL (Optional)</label>
+              <input type="text" id="in-img" placeholder="https://example.com/image.jpg" class="input-field">
+            </div>
+
+            <!-- MCQ OPTIONS -->
+            <div id="admin-mcq" class="space-y-3 mb-6">
+              <label class="input-label">Answer Options (Select Correct Answer)</label>
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="c-idx" value="0" checked id="radio-0">
+                  <input type="text" id="opt-0" placeholder="Option A" class="input-field flex-1">
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="c-idx" value="1" id="radio-1">
+                  <input type="text" id="opt-1" placeholder="Option B" class="input-field flex-1">
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="c-idx" value="2" id="radio-2">
+                  <input type="text" id="opt-2" placeholder="Option C" class="input-field flex-1">
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="c-idx" value="3" id="radio-3">
+                  <input type="text" id="opt-3" placeholder="Option D" class="input-field flex-1">
+                </div>
+              </div>
+            </div>
+
+            <!-- TEXT ANSWER -->
+            <div id="admin-text" class="hidden input-group">
+              <label class="input-label">Correct Answer (Keyword)</label>
+              <input type="text" id="in-ans" placeholder="Enter the correct answer" class="input-field bg-green-50 border-green-300">
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">Heddy Bot Analysis & Feedback</label>
+              <textarea id="in-bot" placeholder="Enter analysis or explanation for students..." class="input-field h-20 resize-none italic"></textarea>
+            </div>
+
+            <button onclick="save()" class="btn-primary">
+              <i class="fas fa-rocket mr-2"></i>Publish Assessment
+            </button>
+          </div>
+
+          <!-- QUESTIONS LIST -->
+          <div id="admin-questions" class="hidden space-y-4">
+            <h3 class="admin-header mb-4">All Questions in System</h3>
+            <div id="admin-feed-questions" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
+          </div>
+
+          <!-- SUBMISSIONS VIEW -->
+          <div id="admin-submissions" class="hidden space-y-4">
+            <h3 class="admin-header mb-4">Student Submissions</h3>
+            <div id="admin-feed-submissions" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
+          </div>
+
+          <!-- ANALYTICS -->
+          <div id="admin-analytics" class="hidden space-y-4">
+            <h3 class="admin-header mb-4">System Analytics</h3>
+            <div id="admin-feed-analytics" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
+          </div>
+
+          <!-- PERFORMANCE -->
+          <div id="admin-performance" class="hidden space-y-4">
+            <h3 class="admin-header mb-4">Student Performance Rankings</h3>
+            <div id="admin-feed-performance" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
           </div>
         </div>
       </div>
@@ -753,12 +922,13 @@
     let currentScreen = 'login';
     let growthChart = null;
     let streak = 0;
+    let currentAdminView = 'create';
 
     window.onload = () => {
       document.getElementById('display-date').innerText = sysDate;
       document.getElementById('admin-date-input').value = sysDate;
-      renderAdminViews('questions');
       initializeStudentRecords();
+      updateAdminStats();
     };
 
     function initializeStudentRecords() {
@@ -773,6 +943,21 @@
           };
         }
       });
+    }
+
+    function updateAdminStats() {
+      document.getElementById('admin-total-q').innerText = questions.length;
+      document.getElementById('admin-total-sub').innerText = submissions.length;
+      
+      const activeStudents = new Set(Object.keys(studentRecords).filter(name => studentRecords[name].attempts.length > 0)).size;
+      document.getElementById('admin-active-students').innerText = activeStudents;
+      
+      const totalScore = Object.values(studentRecords).reduce((sum, rec) => {
+        return sum + rec.attempts.reduce((s, a) => s + a.score, 0);
+      }, 0);
+      const totalAttempts = Object.values(studentRecords).reduce((sum, rec) => sum + rec.attempts.length, 0);
+      const classAvg = totalAttempts > 0 ? Math.round(totalScore / totalAttempts) : 0;
+      document.getElementById('admin-avg-class').innerText = classAvg + '%';
     }
 
     function setScreen(screen) {
@@ -902,7 +1087,7 @@
               streak = 0;
               const percentage = Math.round((score / (cur + 1)) * 100);
               showFeedback(false, percentage);
-              document.getElementById('answer-reveal').innerHTML = `<strong>Correct Answer:</strong> ${q.options[q.correctIdx]}`;
+              document.getElementById('answer-reveal').innerHTML = `<strong>✓ Correct Answer:</strong> ${q.options[q.correctIdx]}`;
               document.getElementById('answer-reveal').classList.remove('hidden');
             }
             
@@ -944,7 +1129,7 @@
         streak = 0;
         const percentage = Math.round((score / (cur + 1)) * 100);
         showFeedback(false, percentage);
-        document.getElementById('answer-reveal').innerHTML = `<strong>Correct Answer:</strong> ${q.correctAns}`;
+        document.getElementById('answer-reveal').innerHTML = `<strong>✓ Correct Answer:</strong> ${q.correctAns}`;
         document.getElementById('answer-reveal').classList.remove('hidden');
       }
       
@@ -996,10 +1181,10 @@
       }
       studentRecords[user.name].yearData[year].push(percentage);
       
-      // Check achievements
       checkAchievements(user.name, percentage);
       
       localStorage.setItem('h_sup_records', JSON.stringify(studentRecords));
+      updateAdminStats();
       
       const medal = percentage >= 90 ? '🥇' : percentage >= 75 ? '🥈' : percentage >= 60 ? '🥉' : '📜';
       
@@ -1073,7 +1258,6 @@
       document.getElementById('rec-best-score').innerText = bestScore + '%';
       document.getElementById('rec-subjects-count').innerText = subjects;
       
-      // Achievements
       const achievementMap = {
         'perfect': { icon: '💯', label: 'Perfect Score' },
         'five-attempts': { icon: '5️⃣', label: '5 Attempts' },
@@ -1088,10 +1272,8 @@
         ).join('');
       }
       
-      // Growth chart
       renderGrowthChart(record);
       
-      // Subject performance
       const subjectPerf = {};
       record.attempts.forEach(a => {
         if (!subjectPerf[a.subject]) subjectPerf[a.subject] = [];
@@ -1120,7 +1302,6 @@
       
       document.getElementById('rec-subject-list').innerHTML = subjectHtml;
       
-      // History
       const historyHtml = record.attempts.map((a, i) => `
         <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
           <div class="flex justify-between items-start mb-2">
@@ -1252,7 +1433,7 @@
       
       questions.push(q);
       localStorage.setItem('h_sup_q_vFinal', JSON.stringify(questions));
-      alert("TASK PUBLISHED!");
+      alert("✅ ASSESSMENT PUBLISHED SUCCESSFULLY!");
       
       document.getElementById('in-subject').value = '';
       document.getElementById('in-q').value = '';
@@ -1263,111 +1444,187 @@
       document.getElementById('opt-2').value = '';
       document.getElementById('opt-3').value = '';
       
+      updateAdminStats();
       renderAdminViews('questions');
     }
 
     function renderAdminViews(type) {
-      const feed = document.getElementById('admin-feed');
-      feed.innerHTML = '';
+      currentAdminView = type;
       
-      if (type === 'questions') {
-        questions.forEach((q, i) => {
-          feed.innerHTML += `
-            <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500 flex justify-between items-start">
-              <div class="text-xs">
-                <span class="font-bold text-blue-600">[${q.level}]</span>
-                <span class="font-bold text-slate-900"> ${q.subject}:</span>
-                <span class="text-slate-600"> ${q.text.substring(0, 40)}...</span>
-                <span class="badge badge-average ml-2">${q.difficulty || 'Medium'}</span>
-              </div>
-              <button onclick="deleteQ(${i})" class="text-red-400 hover:text-red-600 text-xs">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          `;
-        });
-      } else if (type === 'reviews') {
-        submissions.forEach((s, i) => {
-          feed.innerHTML += `
-            <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
-              <p class="text-xs font-black text-blue-600 mb-2 uppercase">${s.student} • ${s.sub}</p>
-              <p class="text-xs font-bold mb-3">Q: ${s.q}</p>
-              <div class="grid grid-cols-2 gap-2 text-xs">
-                <div class="bg-red-50 p-2 rounded border border-red-200">
-                  <b class="text-red-700">STUDENT:</b>
-                  <p class="text-red-600 mt-1">${s.typed}</p>
-                </div>
-                <div class="bg-green-50 p-2 rounded border border-green-200">
-                  <b class="text-green-700">EXPECTED:</b>
-                  <p class="text-green-600 mt-1">${s.expected}</p>
-                </div>
-              </div>
-            </div>
-          `;
-        });
+      // Update tab styles
+      document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.classList.remove('active');
+        tab.classList.add('inactive');
+      });
+      document.getElementById(`tab-${type}`).classList.add('active');
+      document.getElementById(`tab-${type}`).classList.remove('inactive');
+      
+      // Hide all sections
+      document.getElementById('admin-create').classList.add('hidden');
+      document.getElementById('admin-questions').classList.add('hidden');
+      document.getElementById('admin-submissions').classList.add('hidden');
+      document.getElementById('admin-analytics').classList.add('hidden');
+      document.getElementById('admin-performance').classList.add('hidden');
+      
+      if (type === 'create') {
+        document.getElementById('admin-create').classList.remove('hidden');
+      } else if (type === 'questions') {
+        document.getElementById('admin-questions').classList.remove('hidden');
+        renderQuestionsList();
+      } else if (type === 'submissions') {
+        document.getElementById('admin-submissions').classList.remove('hidden');
+        renderSubmissionsList();
       } else if (type === 'analytics') {
-        const studentStats = {};
-        submissions.forEach(s => {
-          if (!studentStats[s.student]) {
-            studentStats[s.student] = { submissions: 0, correct: 0 };
-          }
-          studentStats[s.student].submissions++;
-        });
-        
-        Object.entries(studentStats).forEach(([name, stats]) => {
-          const percentage = Math.round((stats.correct / stats.submissions) * 100) || 0;
-          feed.innerHTML += `
-            <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
-              <p class="font-bold text-slate-900">${name}</p>
-              <p class="text-xs text-slate-600">${stats.submissions} submissions</p>
-              <p class="text-lg font-black text-blue-900 mt-2">${percentage}%</p>
-            </div>
-          `;
-        });
+        document.getElementById('admin-analytics').classList.remove('hidden');
+        renderAnalytics();
       } else if (type === 'performance') {
-        const perfData = {};
-        Object.entries(studentRecords).forEach(([name, record]) => {
-          if (record.attempts.length > 0) {
-            const avg = Math.round(record.attempts.reduce((a, b) => a + b.score, 0) / record.attempts.length);
-            perfData[name] = { avg, attempts: record.attempts.length, best: Math.max(...record.attempts.map(a => a.score)) };
-          }
-        });
-        
-        Object.entries(perfData).sort((a, b) => b[1].avg - a[1].avg).forEach(([name, data], idx) => {
-          feed.innerHTML += `
-            <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
-              <div class="flex justify-between items-start">
-                <div>
-                  <p class="font-bold text-slate-900">${idx + 1}. ${name}</p>
-                  <p class="text-xs text-slate-600">${data.attempts} attempts</p>
-                </div>
-                <div class="text-right">
-                  <p class="text-lg font-black text-blue-900">${data.avg}%</p>
-                  <p class="text-xs text-slate-600">Best: ${data.best}%</p>
-                </div>
-              </div>
-            </div>
-          `;
-        });
+        document.getElementById('admin-performance').classList.remove('hidden');
+        renderPerformanceList();
       }
     }
 
+    function renderQuestionsList() {
+      const feed = document.getElementById('admin-feed-questions');
+      feed.innerHTML = '';
+      
+      if (questions.length === 0) {
+        feed.innerHTML = '<p class="text-slate-400 italic text-center py-8">No questions created yet.</p>';
+        return;
+      }
+      
+      questions.forEach((q, i) => {
+        feed.innerHTML += `
+          <div class="admin-card">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <span class="admin-header">[${q.level}] ${q.subject}</span>
+                <p class="text-slate-600 text-sm mt-1">${q.text.substring(0, 50)}...</p>
+              </div>
+              <button onclick="deleteQ(${i})" class="btn-danger">
+                <i class="fas fa-trash mr-1"></i>Delete
+              </button>
+            </div>
+            <div class="flex gap-2 mt-3">
+              <span class="badge ${q.difficulty === 'Easy' ? 'badge-good' : q.difficulty === 'Hard' ? 'badge-poor' : 'badge-average'}">${q.difficulty}</span>
+              <span class="badge badge-info">${q.type === 'mcq' ? 'Multiple Choice' : 'Theory'}</span>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderSubmissionsList() {
+      const feed = document.getElementById('admin-feed-submissions');
+      feed.innerHTML = '';
+      
+      if (submissions.length === 0) {
+        feed.innerHTML = '<p class="text-slate-400 italic text-center py-8">No submissions yet.</p>';
+        return;
+      }
+      
+      submissions.forEach((s, i) => {
+        feed.innerHTML += `
+          <div class="admin-card">
+            <p class="admin-header mb-2">${s.student} • ${s.sub}</p>
+            <p class="text-xs font-bold mb-3">Q: ${s.q}</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="bg-red-50 p-2 rounded border border-red-200">
+                <b class="text-red-700">STUDENT:</b>
+                <p class="text-red-600 mt-1 font-bold">${s.typed}</p>
+              </div>
+              <div class="bg-green-50 p-2 rounded border border-green-200">
+                <b class="text-green-700">EXPECTED:</b>
+                <p class="text-green-600 mt-1 font-bold">${s.expected}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderAnalytics() {
+      const feed = document.getElementById('admin-feed-analytics');
+      feed.innerHTML = '';
+      
+      const subjectStats = {};
+      questions.forEach(q => {
+        if (!subjectStats[q.subject]) {
+          subjectStats[q.subject] = { count: 0, levels: new Set() };
+        }
+        subjectStats[q.subject].count++;
+        subjectStats[q.subject].levels.add(q.level);
+      });
+      
+      Object.entries(subjectStats).forEach(([sub, stats]) => {
+        feed.innerHTML += `
+          <div class="admin-card">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="admin-title">${sub}</p>
+                <p class="text-xs text-slate-600">${Array.from(stats.levels).join(', ')}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-2xl font-black text-blue-600">${stats.count}</p>
+                <p class="text-xs text-slate-600">Questions</p>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderPerformanceList() {
+      const feed = document.getElementById('admin-feed-performance');
+      feed.innerHTML = '';
+      
+      const perfData = {};
+      Object.entries(studentRecords).forEach(([name, record]) => {
+        if (record.attempts.length > 0) {
+          const avg = Math.round(record.attempts.reduce((a, b) => a + b.score, 0) / record.attempts.length);
+          perfData[name] = { avg, attempts: record.attempts.length, best: Math.max(...record.attempts.map(a => a.score)) };
+        }
+      });
+      
+      Object.entries(perfData).sort((a, b) => b[1].avg - a[1].avg).forEach(([name, data], idx) => {
+        feed.innerHTML += `
+          <div class="admin-card">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="admin-title">${idx + 1}. ${name}</p>
+                <p class="text-xs text-slate-600">${data.attempts} attempts</p>
+              </div>
+              <div class="text-right">
+                <p class="text-2xl font-black text-blue-900">${data.avg}%</p>
+                <p class="text-xs text-slate-600">Best: ${data.best}%</p>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
     function deleteQ(i) {
-      questions.splice(i, 1);
-      localStorage.setItem('h_sup_q_vFinal', JSON.stringify(questions));
-      renderAdminViews('questions');
+      if (confirm('Delete this question?')) {
+        questions.splice(i, 1);
+        localStorage.setItem('h_sup_q_vFinal', JSON.stringify(questions));
+        updateAdminStats();
+        renderQuestionsList();
+      }
     }
 
     function updateSystemDate() {
       sysDate = document.getElementById('admin-date-input').value.toUpperCase();
       localStorage.setItem('h_sup_date', sysDate);
       document.getElementById('display-date').innerText = sysDate;
-      alert("DATE UPDATED");
+      alert("✅ System date updated!");
     }
 
     function adminLogin() {
-      if (prompt("Key:") === "1234") {
+      if (prompt("Enter Admin Key:") === "1234") {
         setScreen('admin');
+        updateAdminStats();
+      } else {
+        alert("❌ Invalid key!");
       }
     }
 
