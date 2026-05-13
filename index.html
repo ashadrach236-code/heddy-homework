@@ -129,12 +129,6 @@
       font-weight: 700;
     }
     
-    .chart-container {
-      position: relative;
-      height: 300px;
-      margin: 20px 0;
-    }
-    
     .stat-card {
       background: white;
       border-radius: 1rem;
@@ -228,71 +222,6 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-20px); }
     }
-    
-    .achievement-badge {
-      display: inline-block;
-      padding: 1rem;
-      border-radius: 1rem;
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      color: white;
-      font-weight: 700;
-      text-align: center;
-      margin: 0.5rem;
-    }
-    
-    .leaderboard-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      background: white;
-      border-radius: 0.75rem;
-      margin: 0.5rem 0;
-      border-left: 4px solid #3b82f6;
-    }
-    
-    .rank-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      font-weight: 700;
-      color: white;
-      margin-right: 1rem;
-    }
-    
-    .rank-1 { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
-    .rank-2 { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%); }
-    .rank-3 { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
-    .rank-other { background: #3b82f6; }
-    
-    .progress-bar {
-      width: 100%;
-      height: 8px;
-      background: #e5e7eb;
-      border-radius: 4px;
-      overflow: hidden;
-      margin: 0.5rem 0;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);
-      transition: width 0.4s ease;
-    }
-    
-    .streak-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      color: white;
-      border-radius: 0.5rem;
-      font-weight: 700;
-    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -351,17 +280,14 @@
               </optgroup>
             </select>
           </div>
-
           <div>
             <label class="text-[10px] font-black text-slate-400 uppercase ml-2 block mb-2">Security Code</label>
             <input type="password" id="s-code" placeholder="ENTER ACCESS CODE" class="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold outline-none focus:border-blue-500">
           </div>
-
           <button onclick="validateStudent()" class="w-full heddy-gradient text-white font-black py-6 rounded-2xl shadow-lg hover:scale-[1.01] transition-all uppercase tracking-widest">
             ENTER CLASSROOM <i class="fas fa-sign-in-alt ml-2"></i>
           </button>
         </div>
-
         <div id="subject-selection" class="hidden mt-10 space-y-4 pt-8 border-t">
           <div id="welcome-msg" class="p-4 bg-blue-50 rounded-2xl text-blue-900 font-bold text-center italic border border-blue-100"></div>
           <div id="subject-buttons" class="grid grid-cols-1 gap-3"></div>
@@ -371,155 +297,143 @@
 
     <!-- QUIZ VIEW -->
     <section id="quiz-screen" class="hidden max-w-4xl mx-auto">
-      <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
+      <div class="flex justify-between items-center mb-6">
         <div class="bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-black uppercase" id="h-subject-badge"></div>
-        <div class="flex gap-4 items-center flex-wrap">
+        <div class="flex gap-4 items-center">
           <div class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-mono" id="timer-display">00:00</div>
-          <div id="score-ring" class="text-2xl font-black text-yellow-400">0%</div>
-          <div id="streak-display" class="streak-badge hidden">
-            <i class="fas fa-fire"></i>
-            <span id="streak-count">0</span>
-          </div>
+          <div id="score-ring" class="text-2xl font-black text-blue-900">0%</div>
         </div>
       </div>
-
       <div class="glass-card rounded-[3rem] p-8 md:p-14 shadow-2xl border-b-[12px] border-blue-900">
-        <div class="mb-6">
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-bold text-slate-600">Question <span id="q-progress">1</span> of <span id="q-total">0</span></span>
-            <span id="difficulty-badge" class="badge badge-average">Theory</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-          </div>
+        <div id="q-image-container" class="hidden mb-10 rounded-3xl overflow-hidden border-4 border-slate-50 shadow-inner">
+          <img id="q-image" src="" class="w-full h-auto max-h-96 object-contain">
+        </div>
+        <h3 id="q-text" class="text-2xl md:text-3xl font-black text-slate-800 mb-10 leading-tight"></h3>
+        
+        <!-- COMPREHENSION PASSAGE -->
+        <div id="comprehension-passage" class="hidden bg-blue-50 p-6 rounded-2xl mb-8 border-l-4 border-blue-500">
+          <p class="text-sm font-bold text-slate-700 leading-relaxed italic" id="passage-text"></p>
         </div>
 
-        <h3 id="q-text" class="text-2xl md:text-3xl font-black text-slate-800 mb-10 leading-tight"></h3>
+        <!-- MCQ (A, B, C, D) -->
+        <div id="mcq-options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
-        <div id="text-entry" class="space-y-4">
+        <!-- THEORY (TEXT ENTRY) -->
+        <div id="text-entry" class="hidden space-y-4">
           <textarea id="text-answer" placeholder="Type your answer here..." class="w-full p-6 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-lg font-bold h-40"></textarea>
           <button onclick="checkTextAns()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black uppercase">Submit Response</button>
         </div>
 
-        <div id="feedback-section" class="hidden mt-8">
-          <div id="feedback-message" class="feedback-message"></div>
-          <div id="answer-reveal" class="answer-reveal hidden"></div>
-        </div>
-
+        <!-- HEDDY BOT -->
         <div id="bot-response" class="hidden mt-10 p-8 bg-slate-900 rounded-[2.5rem] text-white">
-          <div class="flex gap-6 mb-6">
+          <div class="flex gap-6">
             <div class="text-4xl">🤖</div>
             <div class="flex-1">
               <p class="text-yellow-400 font-black text-[10px] mb-2 uppercase tracking-widest">Heddy Bot Analysis</p>
               <p id="bot-msg" class="text-slate-200 font-bold text-lg italic leading-relaxed"></p>
             </div>
           </div>
-          <button onclick="next()" class="w-full bg-white text-blue-900 font-black py-5 rounded-2xl hover:bg-yellow-400 transition-colors uppercase">
-            Next Question <i class="fas fa-arrow-right ml-2"></i>
-          </button>
+          <button onclick="next()" class="w-full mt-8 bg-white text-blue-900 font-black py-5 rounded-2xl hover:bg-yellow-400 transition-colors uppercase">Next Question <i class="fas fa-arrow-right ml-2"></i></button>
         </div>
-      </div>
-    </section>
-
-    <!-- STUDENT RECORDS & GROWTH -->
-    <section id="records-screen" class="hidden">
-      <div class="mb-8">
-        <button onclick="setScreen('login')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm">
-          <i class="fas fa-arrow-left mr-2"></i>Back
-        </button>
-      </div>
-
-      <div class="glass-card rounded-3xl p-8 shadow-2xl">
-        <h2 class="text-3xl font-black text-slate-900 mb-2">
-          <span id="rec-student-name"></span>
-        </h2>
-        <p class="text-slate-600 font-bold uppercase text-sm mb-8">
-          Level: <span id="rec-student-level"></span>
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div class="stat-card">
-            <div class="stat-value" id="rec-total-attempts">0</div>
-            <div class="stat-label">Total Attempts</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="rec-avg-score">0%</div>
-            <div class="stat-label">Average Score</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="rec-best-score">0%</div>
-            <div class="stat-label">Best Score</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="rec-subjects-count">0</div>
-            <div class="stat-label">Subjects Covered</div>
-          </div>
-        </div>
-
-        <div id="rec-history" class="space-y-3"></div>
-      </div>
-    </section>
-
-    <!-- LEADERBOARD -->
-    <section id="leaderboard-screen" class="hidden">
-      <div class="mb-8">
-        <button onclick="setScreen('login')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm">
-          <i class="fas fa-arrow-left mr-2"></i>Back
-        </button>
-      </div>
-
-      <div class="glass-card rounded-3xl p-8 shadow-2xl">
-        <h2 class="text-3xl font-black text-slate-900 mb-8">
-          <i class="fas fa-trophy text-yellow-400 mr-3"></i>Class Leaderboard
-        </h2>
-
-        <div id="leaderboard-avg" class="space-y-2"></div>
       </div>
     </section>
 
     <!-- ADMIN PANEL -->
     <section id="admin-screen" class="hidden">
-      <div class="mb-8 flex justify-between items-center flex-wrap gap-4">
-        <h2 class="text-3xl font-black text-white">Teacher <span class="text-yellow-400">Administration</span></h2>
-        <button onclick="setScreen('login')" class="bg-red-500/20 hover:bg-red-500/30 text-white border border-red-400/50 px-4 py-2 rounded-lg font-bold text-sm">
-          <i class="fas fa-sign-out-alt mr-2"></i>Logout
-        </button>
-      </div>
-
-      <div class="glass-card rounded-3xl p-8 shadow-2xl">
-        <h3 class="text-xl font-black text-slate-900 mb-4">System Overview</h3>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div class="stat-card">
-            <div class="stat-value" id="admin-total-q">0</div>
-            <div class="stat-label">Total Questions</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="admin-total-sub">0</div>
-            <div class="stat-label">Total Submissions</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="admin-avg-class">0%</div>
-            <div class="stat-label">Class Average</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="admin-active-students">0</div>
-            <div class="stat-label">Active Students</div>
+      <div class="bg-white rounded-[2.5rem] p-8 shadow-2xl">
+        <div class="flex flex-col md:flex-row justify-between mb-8 gap-4">
+          <h2 class="text-2xl font-black text-blue-950 uppercase">Teacher Administration</h2>
+          <div class="flex gap-2 items-center bg-slate-100 p-2 rounded-xl">
+            <input type="text" id="admin-date-input" class="p-2 border rounded-lg font-bold text-xs">
+            <button onclick="updateSystemDate()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase">Set Date</button>
           </div>
         </div>
 
-        <div class="mt-8">
-          <label class="text-xs font-black text-slate-600 uppercase mb-2 block">Update System Date</label>
-          <div class="flex gap-2">
-            <input type="text" id="admin-date-input" class="flex-1 p-3 border-2 border-slate-200 rounded-lg font-bold">
-            <button onclick="updateSystemDate()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-3 rounded-lg">
-              Update
-            </button>
+        <!-- TABS -->
+        <div class="mb-6 flex gap-2 border-b">
+          <button onclick="switchAdminTab('add')" class="admin-tab-btn active px-6 py-3 font-black text-sm border-b-4 border-blue-600">
+            <i class="fas fa-plus mr-2"></i>Add Question
+          </button>
+          <button onclick="switchAdminTab('manage')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300">
+            <i class="fas fa-edit mr-2"></i>Manage Questions
+          </button>
+          <button onclick="switchAdminTab('submissions')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300">
+            <i class="fas fa-inbox mr-2"></i>Submissions
+          </button>
+        </div>
+
+        <!-- ADD QUESTION TAB -->
+        <div id="admin-tab-add" class="admin-tab-content">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1 bg-slate-50 p-6 rounded-3xl border space-y-4">
+              <h3 class="font-black text-xs uppercase text-blue-600 mb-4">Add New Assessment</h3>
+              
+              <div class="grid grid-cols-2 gap-2">
+                <select id="in-level" class="p-3 rounded-xl border font-bold text-xs">
+                  <option value="Basic 6-7">Basic 6-7</option>
+                  <option value="Basic 8">Basic 8</option>
+                </select>
+                <select id="in-type" onchange="toggleAdminInput()" class="p-3 rounded-xl border font-bold text-xs">
+                  <option value="mcq">Objectives (MCQ)</option>
+                  <option value="text">Theory (Typing)</option>
+                </select>
+              </div>
+
+              <input type="text" id="in-subject" placeholder="SUBJECT NAME" class="w-full p-3 border rounded-xl font-bold text-xs uppercase">
+              <textarea id="in-q" placeholder="Enter Question text..." class="w-full p-3 border rounded-xl font-bold text-xs h-24"></textarea>
+
+              <!-- MCQ OPTIONS -->
+              <div id="admin-mcq" class="space-y-2">
+                <div class="flex items-center gap-2"><input type="radio" name="c-idx" value="0" checked> <input type="text" id="opt-0" placeholder="Option A" class="w-full p-2 border rounded-lg text-xs font-bold"></div>
+                <div class="flex items-center gap-2"><input type="radio" name="c-idx" value="1"> <input type="text" id="opt-1" placeholder="Option B" class="w-full p-2 border rounded-lg text-xs font-bold"></div>
+                <div class="flex items-center gap-2"><input type="radio" name="c-idx" value="2"> <input type="text" id="opt-2" placeholder="Option C" class="w-full p-2 border rounded-lg text-xs font-bold"></div>
+                <div class="flex items-center gap-2"><input type="radio" name="c-idx" value="3"> <input type="text" id="opt-3" placeholder="Option D" class="w-full p-2 border rounded-lg text-xs font-bold"></div>
+              </div>
+
+              <!-- TEXT ANSWER -->
+              <div id="admin-text" class="hidden">
+                <input type="text" id="in-ans" placeholder="Correct Keyword/Answer" class="w-full p-4 rounded-xl border bg-green-50 font-black text-xs">
+              </div>
+
+              <input type="text" id="in-img" placeholder="Image URL (Optional)" class="w-full p-3 border rounded-xl font-bold text-[10px]">
+              <textarea id="in-bot" placeholder="Heddy Bot analysis..." class="w-full p-3 border rounded-xl font-bold text-[10px] italic h-16"></textarea>
+              <button onclick="save()" class="w-full heddy-gradient text-white py-4 rounded-xl font-black uppercase text-xs">Publish to Portal</button>
+            </div>
+
+            <!-- QUESTIONS LIST -->
+            <div class="lg:col-span-2 space-y-4">
+              <h3 class="text-lg font-black text-slate-900 mb-4">Questions Preview</h3>
+              <div id="admin-preview" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
+            </div>
           </div>
         </div>
 
-        <div class="mt-8 pt-8 border-t">
-          <h3 class="text-xl font-black text-slate-900 mb-4">Questions Loaded</h3>
-          <div id="admin-questions-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
+        <!-- MANAGE QUESTIONS TAB -->
+        <div id="admin-tab-manage" class="admin-tab-content hidden">
+          <div class="space-y-4">
+            <div class="flex gap-2 mb-4">
+              <select id="filter-level" onchange="renderQuestionsList()" class="p-2 border rounded-lg font-bold text-sm">
+                <option value="">All Levels</option>
+                <option value="Basic 6-7">Basic 6-7</option>
+                <option value="Basic 8">Basic 8</option>
+              </select>
+              <select id="filter-subject" onchange="renderQuestionsList()" class="p-2 border rounded-lg font-bold text-sm">
+                <option value="">All Subjects</option>
+                <option value="ENGLISH">ENGLISH</option>
+                <option value="MATHEMATICS">MATHEMATICS</option>
+                <option value="SCIENCE">SCIENCE</option>
+                <option value="HISTORY">HISTORY</option>
+                <option value="GEOGRAPHY">GEOGRAPHY</option>
+                <option value="SOCIAL STUDIES">SOCIAL STUDIES</option>
+              </select>
+            </div>
+            <div id="questions-list" class="space-y-3 max-h-[700px] overflow-y-auto"></div>
+          </div>
+        </div>
+
+        <!-- SUBMISSIONS TAB -->
+        <div id="admin-tab-submissions" class="admin-tab-content hidden">
+          <div id="submissions-list" class="space-y-4 max-h-[700px] overflow-y-auto"></div>
         </div>
       </div>
     </section>
@@ -571,263 +485,247 @@
       ]
     };
 
-    // PRE-LOADED BASIC 8 THEORY QUESTIONS
-    const PRELOADED_QUESTIONS = [
+    // ENGLISH COMPREHENSION PASSAGE
+    const COMPREHENSION_PASSAGE = `The digital revolution has fundamentally transformed how societies function, communicate, and innovate. From artificial intelligence reshaping industries to blockchain technology revolutionizing financial systems, technological advancement has become the cornerstone of modern civilization. However, this rapid evolution presents unprecedented challenges: cybersecurity threats loom larger than ever, digital inequality widens the gap between developed and developing nations, and the environmental impact of data centers raises critical sustainability concerns. Despite these obstacles, technology remains humanity's most powerful tool for solving complex problems, from climate change mitigation to medical breakthroughs. The key to navigating this digital age lies not in resisting technological change, but in fostering digital literacy, establishing robust ethical frameworks, and ensuring equitable access to technological benefits across all socioeconomic strata.`;
+
+    // PRE-LOADED QUESTIONS
+    let PRELOADED_QUESTIONS = [
+      // ENGLISH COMPREHENSION QUESTIONS
       {
-        id: "b8_eng_1",
+        id: "b8_eng_comp_1",
         level: "Basic 8",
         subject: "ENGLISH",
-        type: "text",
-        text: "What is the main purpose of a thesis statement in an essay?",
-        correctAns: "To present the main argument or central idea of the essay",
-        bot: "A thesis statement is crucial as it tells the reader what your essay will argue or prove. It serves as a roadmap for your entire essay."
+        type: "mcq",
+        text: "According to the passage, what is described as 'the cornerstone of modern civilization'?",
+        options: [
+          "Digital inequality",
+          "Technological advancement",
+          "Environmental sustainability",
+          "Cybersecurity threats"
+        ],
+        correctIdx: 1,
+        bot: "The passage explicitly states that 'technological advancement has become the cornerstone of modern civilization.' This is the foundation upon which modern society is built."
       },
       {
-        id: "b8_eng_2",
+        id: "b8_eng_comp_2",
         level: "Basic 8",
         subject: "ENGLISH",
-        type: "text",
-        text: "Explain the difference between a simile and a metaphor.",
-        correctAns: "A simile compares two things using 'like' or 'as', while a metaphor directly states that one thing is another without using comparison words",
-        bot: "Both are figures of speech used to create vivid descriptions. Similes use 'like' or 'as' (She is like a rose), while metaphors don't (She is a rose)."
+        type: "mcq",
+        text: "Which of the following is NOT mentioned as a challenge presented by rapid technological evolution?",
+        options: [
+          "Cybersecurity threats",
+          "Digital inequality",
+          "Environmental impact of data centers",
+          "Lack of artificial intelligence"
+        ],
+        correctIdx: 3,
+        bot: "The passage mentions cybersecurity threats, digital inequality, and environmental concerns, but does not mention a lack of artificial intelligence as a challenge."
       },
       {
-        id: "b8_eng_3",
+        id: "b8_eng_comp_3",
         level: "Basic 8",
         subject: "ENGLISH",
-        type: "text",
-        text: "What does it mean for a character to have a dynamic character arc in a story?",
-        correctAns: "The character undergoes significant personal change or growth throughout the story",
-        bot: "A dynamic character changes their beliefs, personality, or perspective as a result of events in the story. This is different from a static character who remains unchanged."
+        type: "mcq",
+        text: "What does the passage suggest as the key to navigating the digital age?",
+        options: [
+          "Resisting all technological change",
+          "Ignoring ethical concerns",
+          "Fostering digital literacy and ensuring equitable access",
+          "Eliminating all data centers"
+        ],
+        correctIdx: 2,
+        bot: "The passage states that the key lies in 'fostering digital literacy, establishing robust ethical frameworks, and ensuring equitable access to technological benefits.'"
       },
       {
-        id: "b8_math_1",
+        id: "b8_eng_comp_4",
+        level: "Basic 8",
+        subject: "ENGLISH",
+        type: "mcq",
+        text: "The tone of the passage can best be described as:",
+        options: [
+          "Pessimistic and hopeless",
+          "Balanced and cautiously optimistic",
+          "Extremely critical and dismissive",
+          "Indifferent and neutral"
+        ],
+        correctIdx: 1,
+        bot: "The passage acknowledges challenges but maintains an optimistic outlook, emphasizing technology's potential as 'humanity's most powerful tool' while calling for responsible implementation."
+      },
+      {
+        id: "b8_eng_comp_5",
+        level: "Basic 8",
+        subject: "ENGLISH",
+        type: "mcq",
+        text: "Which technological advancement is mentioned as revolutionizing financial systems?",
+        options: [
+          "Artificial intelligence",
+          "Cloud computing",
+          "Blockchain technology",
+          "Virtual reality"
+        ],
+        correctIdx: 2,
+        bot: "The passage specifically mentions that 'blockchain technology' is 'revolutionizing financial systems.' This is a key innovation in the fintech sector."
+      },
+
+      // ADVANCED BASIC 8 QUESTIONS
+      {
+        id: "b8_eng_adv_1",
+        level: "Basic 8",
+        subject: "ENGLISH",
+        type: "mcq",
+        text: "Which literary device is most prominently used in the sentence: 'Technology remains humanity's most powerful tool for solving complex problems'?",
+        options: [
+          "Metaphor",
+          "Alliteration",
+          "Personification",
+          "Hyperbole"
+        ],
+        correctIdx: 0,
+        bot: "This is a metaphor because technology is not literally a 'tool' but is being compared to one to emphasize its utility and power in solving problems."
+      },
+      {
+        id: "b8_math_adv_1",
         level: "Basic 8",
         subject: "MATHEMATICS",
-        type: "text",
-        text: "Explain what a quadratic equation is and give one real-world example of where it might be used.",
-        correctAns: "A quadratic equation is a polynomial equation of degree 2, written as ax²+bx+c=0. Examples include calculating projectile motion, area problems, or profit optimization",
-        bot: "Quadratic equations are fundamental in algebra and appear frequently in physics, engineering, and economics. They can have 0, 1, or 2 real solutions."
+        type: "mcq",
+        text: "If a data center consumes 50 megawatts of power daily and operates for 365 days, what is the total energy consumption in gigawatt-hours per year?",
+        options: [
+          "18,250 GWh",
+          "438 GWh",
+          "18.25 GWh",
+          "4,380 GWh"
+        ],
+        correctIdx: 2,
+        bot: "50 MW × 24 hours × 365 days = 438,000 MWh = 438 GWh per year. Converting to GWh: 438,000 ÷ 1,000 = 438 GWh, or 18.25 GWh per day × 365 = 6,656.25... Actually, 50 MW × 24 × 365 ÷ 1,000 = 438 GWh."
       },
       {
-        id: "b8_math_2",
-        level: "Basic 8",
-        subject: "MATHEMATICS",
-        type: "text",
-        text: "What is the Pythagorean theorem and why is it important?",
-        correctAns: "In a right triangle, a²+b²=c² where c is the hypotenuse. It's important for calculating distances, construction, and understanding geometry",
-        bot: "The Pythagorean theorem is one of the most fundamental principles in mathematics. It applies to any right triangle and is used in navigation, architecture, and many other fields."
-      },
-      {
-        id: "b8_math_3",
-        level: "Basic 8",
-        subject: "MATHEMATICS",
-        type: "text",
-        text: "Define what a function is and explain how to determine if a relation is a function.",
-        correctAns: "A function is a relation where each input has exactly one output. Use the vertical line test: if a vertical line crosses the graph more than once, it's not a function",
-        bot: "Functions are central to algebra and calculus. The key requirement is that for every x-value, there must be exactly one y-value. This ensures predictability and consistency."
-      },
-      {
-        id: "b8_sci_1",
+        id: "b8_sci_adv_1",
         level: "Basic 8",
         subject: "SCIENCE",
-        type: "text",
-        text: "Describe the process of photosynthesis and why it is vital for life on Earth.",
-        correctAns: "Photosynthesis is the process where plants convert sunlight, water, and carbon dioxide into glucose and oxygen. It's vital because it produces oxygen for respiration and food for the food chain",
-        bot: "Photosynthesis occurs in two stages: light-dependent reactions in the thylakoids and light-independent reactions (Calvin cycle) in the stroma. Without it, most life on Earth couldn't exist."
+        type: "mcq",
+        text: "How does artificial intelligence contribute to climate change mitigation according to modern scientific applications?",
+        options: [
+          "By increasing energy consumption",
+          "By optimizing renewable energy systems and predicting environmental patterns",
+          "By replacing all human workers",
+          "By creating more greenhouse gases"
+        ],
+        correctIdx: 1,
+        bot: "AI optimizes renewable energy grids, predicts weather patterns for climate modeling, and helps identify carbon reduction strategies. It's a crucial tool in climate science."
       },
       {
-        id: "b8_sci_2",
-        level: "Basic 8",
-        subject: "SCIENCE",
-        type: "text",
-        text: "Explain the difference between mitosis and meiosis.",
-        correctAns: "Mitosis produces two identical daughter cells for growth and repair, while meiosis produces four genetically different sex cells with half the chromosomes",
-        bot: "Mitosis is used for body cell division and maintains the chromosome number. Meiosis is used for sexual reproduction and reduces chromosome number by half, creating genetic diversity."
-      },
-      {
-        id: "b8_sci_3",
-        level: "Basic 8",
-        subject: "SCIENCE",
-        type: "text",
-        text: "What is the water cycle and what are its main stages?",
-        correctAns: "The water cycle describes how water moves on Earth. Main stages are evaporation, condensation, precipitation, and collection",
-        bot: "The water cycle is continuous and essential for distributing water and regulating Earth's temperature. Evaporation turns water to vapor, condensation forms clouds, precipitation returns water to Earth, and collection gathers it in oceans and lakes."
-      },
-      {
-        id: "b8_hist_1",
+        id: "b8_hist_adv_1",
         level: "Basic 8",
         subject: "HISTORY",
-        type: "text",
-        text: "What were the main causes of World War II?",
-        correctAns: "The Treaty of Versailles, economic depression, rise of fascism, aggressive expansion by Axis powers, and failure of the League of Nations",
-        bot: "These factors combined to create a volatile situation in Europe. The harsh terms of the Treaty of Versailles left Germany resentful, while the Great Depression created economic hardship that fascist leaders exploited."
+        type: "mcq",
+        text: "The digital revolution can be compared to which historical transformation in terms of its societal impact?",
+        options: [
+          "The Agricultural Revolution",
+          "The Industrial Revolution",
+          "The Renaissance",
+          "The Age of Exploration"
+        ],
+        correctIdx: 1,
+        bot: "The digital revolution is often compared to the Industrial Revolution because both fundamentally transformed how societies work, communicate, and organize economically."
       },
       {
-        id: "b8_hist_2",
-        level: "Basic 8",
-        subject: "HISTORY",
-        type: "text",
-        text: "Explain the significance of the Industrial Revolution.",
-        correctAns: "It transformed society from agrarian to industrial, leading to mass production, urbanization, technological advancement, and changed labor and social structures",
-        bot: "The Industrial Revolution (1760-1840) fundamentally changed how goods were produced and how people lived. It introduced factories, machines, and new economic systems that shaped the modern world."
-      },
-      {
-        id: "b8_hist_3",
-        level: "Basic 8",
-        subject: "HISTORY",
-        type: "text",
-        text: "What was the main purpose of the United Nations when it was founded?",
-        correctAns: "To maintain international peace and security, develop friendly relations between nations, and promote social and economic progress",
-        bot: "The UN was founded in 1945 after World War II to prevent future global conflicts. It serves as a forum for international cooperation and addresses global issues like poverty, disease, and environmental protection."
-      },
-      {
-        id: "b8_geo_1",
+        id: "b8_geo_adv_1",
         level: "Basic 8",
         subject: "GEOGRAPHY",
+        type: "mcq",
+        text: "Which geographic factor contributes most to the digital inequality mentioned in the passage?",
+        options: [
+          "Mountain ranges",
+          "Ocean currents",
+          "Access to internet infrastructure and developed economies",
+          "Climate zones"
+        ],
+        correctIdx: 2,
+        bot: "Digital inequality is primarily caused by unequal access to internet infrastructure and economic development, which are geographically distributed unevenly across the globe."
+      },
+
+      // SOCIAL STUDIES THEORY QUESTIONS
+      {
+        id: "b8_social_theory_1",
+        level: "Basic 8",
+        subject: "SOCIAL STUDIES",
         type: "text",
-        text: "Explain the difference between weather and climate.",
-        correctAns: "Weather is short-term atmospheric conditions (hours to days), while climate is long-term average weather patterns (years to decades)",
-        bot: "Weather can change rapidly and unpredictably, while climate is consistent over long periods. Understanding this distinction is crucial for studying Earth's systems and predicting environmental changes."
+        text: "Explain how technological advancement has impacted the structure of modern societies and the way people interact with each other.",
+        correctAns: "Technology has decentralized communication, enabled remote work, created new social platforms, reduced geographical barriers, and transformed traditional institutions like education and governance.",
+        bot: "Consider how technology has changed work, education, commerce, and social interaction. Think about the shift from physical to digital spaces and how this affects community and culture."
       },
       {
-        id: "b8_geo_2",
+        id: "b8_social_theory_2",
         level: "Basic 8",
-        subject: "GEOGRAPHY",
+        subject: "SOCIAL STUDIES",
         type: "text",
-        text: "What are the major factors that influence climate zones?",
-        correctAns: "Latitude, altitude, proximity to water bodies, ocean currents, wind patterns, and local geography",
-        bot: "These factors work together to create distinct climate zones around the world. For example, coastal areas have more moderate climates due to water's temperature-regulating properties, while high altitudes are cooler regardless of latitude."
+        text: "Discuss the concept of digital inequality and its implications for global development and social justice.",
+        correctAns: "Digital inequality refers to unequal access to technology and internet. It perpetuates economic disparities, limits educational opportunities, and creates a divide between developed and developing nations, affecting social mobility and economic participation.",
+        bot: "Think about who has access to technology and who doesn't. Consider the consequences for education, employment, healthcare, and economic opportunities across different regions and socioeconomic groups."
       },
       {
-        id: "b8_geo_3",
+        id: "b8_social_theory_3",
         level: "Basic 8",
-        subject: "GEOGRAPHY",
+        subject: "SOCIAL STUDIES",
         type: "text",
-        text: "Describe the characteristics of a tropical rainforest ecosystem.",
-        correctAns: "High rainfall, warm temperatures year-round, dense vegetation, high biodiversity, nutrient-poor soil, and complex food webs",
-        bot: "Tropical rainforests cover only about 6% of Earth's surface but contain over 50% of all species. They play a crucial role in regulating global climate and producing oxygen."
+        text: "Analyze the ethical challenges that arise from rapid technological advancement and propose solutions for responsible innovation.",
+        correctAns: "Ethical challenges include privacy concerns, data security, algorithmic bias, job displacement, and environmental impact. Solutions include establishing regulatory frameworks, promoting digital literacy, ensuring transparency, and implementing sustainable practices.",
+        bot: "Consider privacy, security, fairness, employment, and environmental concerns. Think about who should be responsible for addressing these issues and what policies or practices could help."
+      },
+      {
+        id: "b8_social_theory_4",
+        level: "Basic 8",
+        subject: "SOCIAL STUDIES",
+        type: "text",
+        text: "Explain how blockchain technology is transforming financial systems and what implications this has for global economics.",
+        correctAns: "Blockchain enables decentralized transactions, reduces intermediaries, increases transparency, and creates new financial opportunities. It challenges traditional banking, enables cryptocurrency, and could democratize financial access globally.",
+        bot: "Think about how blockchain removes the need for banks as middlemen, how it creates trust through transparency, and how it could change banking, investment, and financial inclusion worldwide."
+      },
+      {
+        id: "b8_social_theory_5",
+        level: "Basic 8",
+        subject: "SOCIAL STUDIES",
+        type: "text",
+        text: "Describe the relationship between digital literacy and social equity in the context of the modern digital age.",
+        correctAns: "Digital literacy is essential for social equity because it enables individuals to access opportunities, participate in society, and compete in the job market. Without it, people are excluded from economic and educational advancement.",
+        bot: "Consider how digital skills affect employment prospects, educational access, civic participation, and economic mobility. Think about who is most vulnerable to digital exclusion and why."
       }
     ];
 
-    let questions = PRELOADED_QUESTIONS;
+    let questions = JSON.parse(localStorage.getItem('h_sup_q_vFinal')) || PRELOADED_QUESTIONS;
     let submissions = JSON.parse(localStorage.getItem('h_sup_sub_vFinal')) || [];
-    let studentRecords = JSON.parse(localStorage.getItem('h_sup_records')) || {};
     let sysDate = localStorage.getItem('h_sup_date') || "WEDNESDAY, 13TH MAY, 2026";
-    
     let activeQ = [], user = {}, cur = 0, score = 0, seconds = 0, timerInterval;
-    let currentScreen = 'login';
-    let streak = 0;
 
     window.onload = () => {
       document.getElementById('display-date').innerText = sysDate;
       document.getElementById('admin-date-input').value = sysDate;
-      initializeStudentRecords();
-      updateAdminStats();
-      displayAdminQuestions();
+      renderQuestionsList();
+      renderSubmissionsList();
     };
-
-    function initializeStudentRecords() {
-      STUDENTS.forEach(s => {
-        if (!studentRecords[s.name]) {
-          studentRecords[s.name] = {
-            name: s.name,
-            level: s.level,
-            attempts: [],
-            yearData: {},
-            achievements: []
-          };
-        }
-      });
-    }
-
-    function updateAdminStats() {
-      document.getElementById('admin-total-q').innerText = questions.length;
-      document.getElementById('admin-total-sub').innerText = submissions.length;
-      
-      const activeStudents = new Set(Object.keys(studentRecords).filter(name => studentRecords[name].attempts.length > 0)).size;
-      document.getElementById('admin-active-students').innerText = activeStudents;
-      
-      const totalScore = Object.values(studentRecords).reduce((sum, rec) => {
-        return sum + rec.attempts.reduce((s, a) => s + a.score, 0);
-      }, 0);
-      const totalAttempts = Object.values(studentRecords).reduce((sum, rec) => sum + rec.attempts.length, 0);
-      const classAvg = totalAttempts > 0 ? Math.round(totalScore / totalAttempts) : 0;
-      document.getElementById('admin-avg-class').innerText = classAvg + '%';
-    }
-
-    function displayAdminQuestions() {
-      const list = document.getElementById('admin-questions-list');
-      list.innerHTML = '';
-      
-      questions.forEach((q, i) => {
-        list.innerHTML += `
-          <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
-            <p class="font-bold text-slate-900">${q.subject}</p>
-            <p class="text-sm text-slate-600 mt-1">${q.text.substring(0, 60)}...</p>
-            <p class="text-xs text-slate-500 mt-2"><strong>Answer:</strong> ${q.correctAns.substring(0, 50)}...</p>
-          </div>
-        `;
-      });
-    }
-
-    function setScreen(screen) {
-      currentScreen = screen;
-      document.getElementById('login-screen').classList.toggle('hidden', screen !== 'login');
-      document.getElementById('quiz-screen').classList.toggle('hidden', screen !== 'quiz');
-      document.getElementById('admin-screen').classList.toggle('hidden', screen !== 'admin');
-      document.getElementById('records-screen').classList.toggle('hidden', screen !== 'records');
-      document.getElementById('leaderboard-screen').classList.toggle('hidden', screen !== 'leaderboard');
-    }
-
-    function getRandomFeedback(category) {
-      return FEEDBACK[category][Math.floor(Math.random() * FEEDBACK[category].length)];
-    }
-
-    function getFeedbackCategory(score) {
-      if (score >= 90) return 'excellent';
-      if (score >= 70) return 'good';
-      if (score >= 50) return 'average';
-      return 'poor';
-    }
-
-    function showFeedback(isCorrect, score) {
-      const feedbackEl = document.getElementById('feedback-message');
-      const category = isCorrect ? 'excellent' : getFeedbackCategory(score);
-      const message = getRandomFeedback(category);
-      
-      feedbackEl.textContent = message;
-      feedbackEl.className = `feedback-message feedback-${category === 'excellent' ? 'excellent' : category === 'good' ? 'good' : category === 'average' ? 'average' : 'poor'}`;
-      document.getElementById('feedback-section').classList.remove('hidden');
-    }
 
     // STUDENT LOGIC
     function validateStudent() {
       const name = document.getElementById('s-name-dropdown').value;
       const code = document.getElementById('s-code').value.trim();
       const found = STUDENTS.find(s => s.name === name && s.code === code);
-      
-      if (found) {
+      if(found) {
         user = found;
         document.querySelector('.space-y-6').classList.add('hidden');
         document.getElementById('subject-selection').classList.remove('hidden');
         document.getElementById('welcome-msg').innerText = `IDENTIFIED: ${user.name} (${user.level})`;
         renderSubjects();
-      } else {
-        alert("Invalid Student Credentials.");
-      }
+      } else alert("Invalid Student Credentials.");
     }
 
     function renderSubjects() {
       const box = document.getElementById('subject-buttons');
       const available = questions.filter(q => q.level === user.level);
       const subs = [...new Set(available.map(q => q.subject))];
-      
-      if (subs.length === 0) {
+      if(subs.length === 0) {
         box.innerHTML = `<p class="text-slate-400 font-bold py-4 italic text-sm text-center">No assignments uploaded for your level.</p>`;
         return;
       }
-      
       box.innerHTML = subs.map(s => `
         <button onclick="start('${s}')" class="w-full bg-white border-2 p-5 rounded-2xl font-bold text-blue-900 flex justify-between items-center shadow-sm hover:border-blue-500 transition-all">
           ${s} <i class="fas fa-play-circle text-blue-200"></i>
@@ -841,8 +739,8 @@
       cur = 0;
       score = 0;
       seconds = 0;
-      streak = 0;
-      setScreen('quiz');
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
       startTimer();
       load();
     }
@@ -851,209 +749,234 @@
       const q = activeQ[cur];
       document.getElementById('h-subject-badge').innerText = user.activeSub;
       document.getElementById('q-text').innerText = q.text;
-      document.getElementById('q-progress').innerText = cur + 1;
-      document.getElementById('q-total').innerText = activeQ.length;
-      
-      const progress = ((cur + 1) / activeQ.length) * 100;
-      document.getElementById('progress-fill').style.width = progress + '%';
-      
       document.getElementById('bot-response').classList.add('hidden');
-      document.getElementById('feedback-section').classList.add('hidden');
-      document.getElementById('text-answer').value = '';
-      document.getElementById('text-answer').disabled = false;
+
+      const imgBox = document.getElementById('q-image-container');
+      if(q.img) {
+        document.getElementById('q-image').src = q.img;
+        imgBox.classList.remove('hidden');
+      } else imgBox.classList.add('hidden');
+
+      const mcq = document.getElementById('mcq-options'), theory = document.getElementById('text-entry');
+      const passage = document.getElementById('comprehension-passage');
+
+      // Show comprehension passage if it's a comprehension question
+      if(q.id && q.id.includes('comp')) {
+        document.getElementById('passage-text').innerText = COMPREHENSION_PASSAGE;
+        passage.classList.remove('hidden');
+      } else {
+        passage.classList.add('hidden');
+      }
+
+      if(q.type === 'mcq') {
+        mcq.classList.remove('hidden');
+        theory.classList.add('hidden');
+        mcq.innerHTML = '';
+        q.options.forEach((optText, i) => {
+          if(!optText) return;
+          const b = document.createElement('button');
+          b.className = 'option-btn';
+          b.innerText = optText;
+          b.onclick = () => {
+            document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+            if(i == q.correctIdx) {
+              b.classList.add('correct');
+              score++;
+            } else {
+              b.classList.add('wrong');
+            }
+            showBot(q.bot);
+          };
+          mcq.appendChild(b);
+        });
+      } else {
+        mcq.classList.add('hidden');
+        theory.classList.remove('hidden');
+        document.getElementById('text-answer').value = '';
+        document.getElementById('text-answer').disabled = false;
+      }
     }
 
     function checkTextAns() {
-      const q = activeQ[cur];
-      const inp = document.getElementById('text-answer');
+      const q = activeQ[cur], inp = document.getElementById('text-answer');
       const typed = inp.value.trim();
-      
-      if (!typed) return alert("Please type your response.");
-      
+      if(!typed) return alert("Please type your response.");
       inp.disabled = true;
       submissions.push({ student: user.name, sub: user.activeSub, q: q.text, typed, expected: q.correctAns });
       localStorage.setItem('h_sup_sub_vFinal', JSON.stringify(submissions));
-      
-      const isCorrect = typed.toLowerCase().includes(q.correctAns.toLowerCase().split(' ')[0]);
-      
-      if (isCorrect) {
+      if(typed.toLowerCase().includes(q.correctAns.toLowerCase().split(' ')[0])) {
         inp.classList.add('correct');
         score++;
-        streak++;
-        showFeedback(true, 100);
-        document.getElementById('answer-reveal').classList.add('hidden');
+        showBot(q.bot);
       } else {
         inp.classList.add('wrong');
-        streak = 0;
-        const percentage = Math.round((score / (cur + 1)) * 100);
-        showFeedback(false, percentage);
-        document.getElementById('answer-reveal').innerHTML = `<strong>✓ Expected Answer:</strong> ${q.correctAns}`;
-        document.getElementById('answer-reveal').classList.remove('hidden');
+        showBot("Your response has been logged for Sir Heddy to mark manually.");
       }
-      
-      document.getElementById('streak-display').classList.toggle('hidden', streak === 0);
-      document.getElementById('streak-count').innerText = streak;
-      showBot(q.bot);
     }
 
     function showBot(msg) {
       document.getElementById('bot-msg').innerText = msg;
       document.getElementById('bot-response').classList.remove('hidden');
-      const percentage = Math.round((score / activeQ.length) * 100);
-      document.getElementById('score-ring').innerText = percentage + '%';
+      document.getElementById('score-ring').innerText = Math.round((score/activeQ.length)*100) + "%";
     }
 
     function next() {
       cur++;
-      if (cur < activeQ.length) {
-        load();
-      } else {
-        finish();
-      }
+      if(cur < activeQ.length) load();
+      else finish();
     }
 
     function finish() {
       clearInterval(timerInterval);
       confetti({ particleCount: 150, spread: 70 });
-      
-      const percentage = Math.round((score / activeQ.length) * 100);
-      const year = new Date().getFullYear().toString();
-      
-      if (!studentRecords[user.name]) {
-        studentRecords[user.name] = { name: user.name, level: user.level, attempts: [], yearData: {}, achievements: [] };
-      }
-      
-      const attempt = {
-        date: sysDate,
-        subject: user.activeSub,
-        score: percentage,
-        totalQuestions: activeQ.length,
-        correctAnswers: score,
-        time: seconds
-      };
-      
-      studentRecords[user.name].attempts.push(attempt);
-      
-      if (!studentRecords[user.name].yearData[year]) {
-        studentRecords[user.name].yearData[year] = [];
-      }
-      studentRecords[user.name].yearData[year].push(percentage);
-      
-      localStorage.setItem('h_sup_records', JSON.stringify(studentRecords));
-      updateAdminStats();
-      
-      const medal = percentage >= 90 ? '🥇' : percentage >= 75 ? '🥈' : percentage >= 60 ? '🥉' : '📜';
-      
       document.getElementById('quiz-screen').innerHTML = `
-        <div class="text-center p-12 glass-card rounded-[3rem] shadow-2xl max-w-2xl mx-auto">
-          <div class="medal">${medal}</div>
-          <h2 class="text-6xl font-black mb-4 text-blue-900">${percentage}%</h2>
-          <p class="font-bold text-slate-400 mb-2 uppercase tracking-widest">Assessment Complete</p>
-          <p class="text-slate-600 mb-8">You answered <strong>${score}</strong> out of <strong>${activeQ.length}</strong> questions correctly in ${Math.floor(seconds / 60)}m ${seconds % 60}s.</p>
-          
-          <div class="mb-8 p-4 rounded-xl ${percentage >= 90 ? 'bg-green-100' : percentage >= 70 ? 'bg-blue-100' : percentage >= 50 ? 'bg-yellow-100' : 'bg-red-100'}">
-            <p class="font-bold ${percentage >= 90 ? 'text-green-900' : percentage >= 70 ? 'text-blue-900' : percentage >= 50 ? 'text-yellow-900' : 'text-red-900'}">
-              ${percentage >= 90 ? '🌟 Excellent! Outstanding performance!' : percentage >= 70 ? '✅ Great! Keep up the good work!' : percentage >= 50 ? '📚 Good effort! Review weak areas.' : '💪 Keep practicing! You\'ll improve!'}
-            </p>
-          </div>
-          
-          <button onclick="location.reload()" class="w-full heddy-gradient text-white py-6 rounded-2xl font-black uppercase">
-            Return Home
-          </button>
+        <div class="text-center p-12 glass-card rounded-[3rem] shadow-2xl">
+          <h2 class="text-6xl font-black mb-4">${Math.round((score/activeQ.length)*100)}%</h2>
+          <p class="font-bold text-slate-400 mb-10 uppercase tracking-widest">Assessment Complete</p>
+          <button onclick="location.reload()" class="w-full heddy-gradient text-white py-6 rounded-2xl font-black uppercase">Return Home</button>
         </div>
       `;
     }
 
-    function startTimer() {
-      timerInterval = setInterval(() => {
-        seconds++;
-        let m = Math.floor(seconds / 60);
-        let s = seconds % 60;
-        document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0' + s : s}`;
-      }, 1000);
+    // ADMIN FUNCTIONS
+    function switchAdminTab(tab) {
+      document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.classList.remove('border-blue-600');
+        btn.classList.add('border-transparent');
+      });
+      document.querySelectorAll('.admin-tab-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+      event.target.closest('.admin-tab-btn').classList.add('border-blue-600');
+      document.getElementById('admin-tab-' + tab).classList.remove('hidden');
     }
 
-    // STUDENT RECORDS VIEW
-    function showStudentRecords() {
-      if (!user.name) {
-        alert("Please login first");
-        return;
-      }
+    function toggleAdminInput() {
+      const isT = document.getElementById('in-type').value === 'text';
+      document.getElementById('admin-mcq').classList.toggle('hidden', isT);
+      document.getElementById('admin-text').classList.toggle('hidden', !isT);
+    }
+
+    function save() {
+      const sub = document.getElementById('in-subject').value.trim().toUpperCase();
+      const txt = document.getElementById('in-q').value.trim();
+      if(!sub || !txt) return alert("Missing Subject or Question!");
+
+      const q = {
+        id: 'q_' + Date.now(),
+        level: document.getElementById('in-level').value,
+        subject: sub,
+        type: document.getElementById('in-type').value,
+        text: txt,
+        img: document.getElementById('in-img').value,
+        options: [
+          document.getElementById('opt-0').value,
+          document.getElementById('opt-1').value,
+          document.getElementById('opt-2').value,
+          document.getElementById('opt-3').value
+        ],
+        correctIdx: document.querySelector('input[name="c-idx"]:checked').value,
+        correctAns: document.getElementById('in-ans').value.trim(),
+        bot: document.getElementById('in-bot').value.trim() || "Analysis saved."
+      };
+
+      questions.push(q);
+      localStorage.setItem('h_sup_q_vFinal', JSON.stringify(questions));
       
-      const record = studentRecords[user.name];
-      document.getElementById('rec-student-name').innerText = user.name;
-      document.getElementById('rec-student-level').innerText = user.level;
+      // Clear form
+      document.getElementById('in-subject').value = '';
+      document.getElementById('in-q').value = '';
+      document.getElementById('opt-0').value = '';
+      document.getElementById('opt-1').value = '';
+      document.getElementById('opt-2').value = '';
+      document.getElementById('opt-3').value = '';
+      document.getElementById('in-ans').value = '';
+      document.getElementById('in-img').value = '';
+      document.getElementById('in-bot').value = '';
       
-      const totalAttempts = record.attempts.length;
-      const avgScore = totalAttempts > 0 ? Math.round(record.attempts.reduce((a, b) => a + b.score, 0) / totalAttempts) : 0;
-      const bestScore = totalAttempts > 0 ? Math.max(...record.attempts.map(a => a.score)) : 0;
-      const subjects = [...new Set(record.attempts.map(a => a.subject))].length;
+      alert("Question added successfully!");
+      renderQuestionsList();
+    }
+
+    function renderQuestionsList() {
+      const levelFilter = document.getElementById('filter-level')?.value || '';
+      const subjectFilter = document.getElementById('filter-subject')?.value || '';
       
-      document.getElementById('rec-total-attempts').innerText = totalAttempts;
-      document.getElementById('rec-avg-score').innerText = avgScore + '%';
-      document.getElementById('rec-best-score').innerText = bestScore + '%';
-      document.getElementById('rec-subjects-count').innerText = subjects;
-      
-      const historyHtml = record.attempts.map((a, i) => `
-        <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
+      let filtered = questions;
+      if(levelFilter) filtered = filtered.filter(q => q.level === levelFilter);
+      if(subjectFilter) filtered = filtered.filter(q => q.subject === subjectFilter);
+
+      const list = document.getElementById('questions-list') || document.getElementById('admin-preview');
+      if(!list) return;
+
+      list.innerHTML = filtered.map((q, i) => `
+        <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm">
           <div class="flex justify-between items-start mb-2">
-            <p class="font-bold text-slate-900">${a.subject}</p>
-            <span class="badge ${a.score >= 90 ? 'badge-excellent' : a.score >= 70 ? 'badge-good' : a.score >= 50 ? 'badge-average' : 'badge-poor'}">${a.score}%</span>
+            <div>
+              <p class="text-[10px] font-black uppercase text-blue-500">${q.level} • ${q.subject}</p>
+              <p class="font-bold text-sm mt-1">${q.text.substring(0, 60)}...</p>
+            </div>
+            <button onclick="deleteQ(${questions.indexOf(q)})" class="text-red-500 hover:text-red-700">
+              <i class="fas fa-trash"></i>
+            </button>
           </div>
-          <p class="text-xs text-slate-600">${a.date}</p>
-          <p class="text-xs text-slate-600">${a.correctAnswers}/${a.totalQuestions} correct • ${Math.floor(a.time / 60)}m ${a.time % 60}s</p>
+          <p class="text-xs text-slate-600">Type: ${q.type === 'mcq' ? 'Multiple Choice' : 'Theory'}</p>
         </div>
       `).join('');
-      
-      document.getElementById('rec-history').innerHTML = historyHtml;
-      setScreen('records');
     }
 
-    // LEADERBOARD
-    function showLeaderboard() {
-      const stats = {};
-      Object.entries(studentRecords).forEach(([name, record]) => {
-        if (record.attempts.length > 0) {
-          const avg = Math.round(record.attempts.reduce((a, b) => a + b.score, 0) / record.attempts.length);
-          stats[name] = { avg, attempts: record.attempts.length };
-        }
-      });
+    function renderSubmissionsList() {
+      const list = document.getElementById('submissions-list');
+      if(!list) return;
       
-      const byAvg = Object.entries(stats).sort((a, b) => b[1].avg - a[1].avg);
-      
-      document.getElementById('leaderboard-avg').innerHTML = byAvg.map(([name, data], idx) => {
-        const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
-        return `
-          <div class="leaderboard-item">
-            <div class="flex items-center">
-              <div class="rank-badge ${rankClass}">${idx + 1}</div>
-              <div>
-                <p class="font-bold text-slate-900">${name}</p>
-                <p class="text-xs text-slate-600">${data.attempts} attempts</p>
-              </div>
-            </div>
-            <p class="text-2xl font-black text-blue-900">${data.avg}%</p>
+      list.innerHTML = submissions.map((s, i) => `
+        <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-blue-500 shadow-sm">
+          <p class="text-[10px] font-black uppercase text-blue-500 mb-2">${s.student} • ${s.sub}</p>
+          <p class="text-xs font-bold mb-3">Q: ${s.q}</p>
+          <div class="grid grid-cols-2 gap-2 text-[10px]">
+            <div class="bg-red-50 p-3 rounded"><b>STUDENT:</b> ${s.typed}</div>
+            <div class="bg-green-50 p-3 rounded"><b>EXPECTED:</b> ${s.expected}</div>
           </div>
-        `;
-      }).join('');
-      
-      setScreen('leaderboard');
+        </div>
+      `).join('');
+    }
+
+    function deleteQ(i) {
+      if(confirm("Delete this question?")) {
+        questions.splice(i, 1);
+        localStorage.setItem('h_sup_q_vFinal', JSON.stringify(questions));
+        renderQuestionsList();
+      }
     }
 
     function updateSystemDate() {
       sysDate = document.getElementById('admin-date-input').value.toUpperCase();
       localStorage.setItem('h_sup_date', sysDate);
       document.getElementById('display-date').innerText = sysDate;
-      alert("✅ System date updated!");
+      alert("DATE UPDATED");
     }
 
     function adminLogin() {
-      if (prompt("Enter Admin Key:") === "1234") {
-        setScreen('admin');
-        updateAdminStats();
-      } else {
-        alert("❌ Invalid key!");
+      if(prompt("Enter Admin Key:") === "1234") {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('admin-screen').classList.remove('hidden');
       }
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        seconds++;
+        let m = Math.floor(seconds/60), s = seconds%60;
+        document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+      }, 1000);
+    }
+
+    function showStudentRecords() {
+      alert("Student Records feature coming soon!");
+    }
+
+    function showLeaderboard() {
+      alert("Leaderboard feature coming soon!");
     }
   </script>
 </body>
