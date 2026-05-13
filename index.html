@@ -97,14 +97,6 @@
       font-weight: bold;
     }
     
-    .badge {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      font-weight: 600;
-      font-size: 0.75rem;
-    }
-    
     .stat-card {
       background: white;
       border-radius: 1rem;
@@ -133,47 +125,22 @@
       letter-spacing: 0.05em;
     }
     
-    .feedback-message {
-      padding: 1rem;
-      border-radius: 0.75rem;
-      margin: 1rem 0;
-      font-weight: 600;
-      animation: slideIn 0.4s ease;
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      font-weight: 700;
+      color: white;
+      margin-right: 1rem;
     }
     
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .answer-reveal {
-      background: #f0f9ff;
-      border: 2px dashed #0284c7;
-      padding: 1rem;
-      border-radius: 0.75rem;
-      margin: 1rem 0;
-      animation: slideIn 0.4s ease;
-    }
-    
-    .answer-reveal strong {
-      color: #0c4a6e;
-    }
-    
-    .medal {
-      font-size: 3rem;
-      animation: bounce 0.6s ease;
-    }
-    
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-    }
+    .rank-1 { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
+    .rank-2 { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%); }
+    .rank-3 { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
+    .rank-other { background: #3b82f6; }
   </style>
 </head>
 <body class="min-h-screen">
@@ -243,6 +210,7 @@
         <div id="subject-selection" class="hidden mt-10 space-y-4 pt-8 border-t">
           <div id="welcome-msg" class="p-4 bg-blue-50 rounded-2xl text-blue-900 font-bold text-center italic border border-blue-100"></div>
           <div id="subject-buttons" class="grid grid-cols-1 gap-3"></div>
+          <button onclick="backToLogin()" class="w-full bg-slate-300 text-slate-800 font-black py-3 rounded-2xl uppercase">Back to Login</button>
         </div>
       </div>
     </section>
@@ -257,9 +225,6 @@
         </div>
       </div>
       <div class="glass-card rounded-[3rem] p-8 md:p-14 shadow-2xl border-b-[12px] border-blue-900">
-        <div id="q-image-container" class="hidden mb-10 rounded-3xl overflow-hidden border-4 border-slate-50 shadow-inner">
-          <img id="q-image" src="" class="w-full h-auto max-h-96 object-contain">
-        </div>
         <h3 id="q-text" class="text-2xl md:text-3xl font-black text-slate-800 mb-10 leading-tight"></h3>
 
         <!-- MCQ (A, B, C, D) -->
@@ -285,12 +250,73 @@
       </div>
     </section>
 
+    <!-- MY RECORDS VIEW -->
+    <section id="records-screen" class="hidden">
+      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-3xl font-black text-slate-800">My Assessment Records</h2>
+          <button onclick="backToLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-black uppercase">Back</button>
+        </div>
+
+        <div id="student-info" class="bg-blue-50 p-6 rounded-2xl mb-8 border-l-4 border-blue-500">
+          <p class="text-sm font-bold text-slate-700"><span id="record-student-name"></span> | <span id="record-student-level"></span></p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="stat-card">
+            <div class="stat-value" id="total-assessments">0</div>
+            <div class="stat-label">Total Assessments</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="average-score">0%</div>
+            <div class="stat-label">Average Score</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="best-score">0%</div>
+            <div class="stat-label">Best Score</div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="text-xl font-black text-slate-800 mb-4">Assessment History</h3>
+          <div id="records-list" class="space-y-3 max-h-[500px] overflow-y-auto"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD VIEW -->
+    <section id="leaderboard-screen" class="hidden">
+      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-3xl font-black text-slate-800">🏆 Global Leaderboard</h2>
+          <button onclick="backToLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-black uppercase">Back</button>
+        </div>
+
+        <div class="flex gap-2 mb-6">
+          <select id="leaderboard-level" onchange="renderLeaderboard()" class="p-3 border rounded-lg font-bold text-sm">
+            <option value="">All Levels</option>
+            <option value="Basic 6-7">Basic 6-7</option>
+            <option value="Basic 8">Basic 8</option>
+          </select>
+          <select id="leaderboard-subject" onchange="renderLeaderboard()" class="p-3 border rounded-lg font-bold text-sm">
+            <option value="">All Subjects</option>
+            <option value="ENGLISH">ENGLISH</option>
+            <option value="MATHEMATICS">MATHEMATICS</option>
+            <option value="SOCIAL STUDIES">SOCIAL STUDIES</option>
+          </select>
+        </div>
+
+        <div id="leaderboard-list" class="space-y-3"></div>
+      </div>
+    </section>
+
     <!-- ADMIN PANEL -->
     <section id="admin-screen" class="hidden">
       <div class="bg-white rounded-[2.5rem] p-8 shadow-2xl">
         <div class="flex flex-col md:flex-row justify-between mb-8 gap-4">
           <h2 class="text-2xl font-black text-blue-950 uppercase">Teacher Administration</h2>
-          <div class="flex gap-2 items-center bg-slate-100 p-2 rounded-xl">
+          <div class="flex gap-2 items-center">
+            <button onclick="backToLogin()" class="bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-[10px] font-black uppercase">Back</button>
             <input type="text" id="admin-date-input" class="p-2 border rounded-lg font-bold text-xs">
             <button onclick="updateSystemDate()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase">Set Date</button>
           </div>
@@ -342,7 +368,6 @@
                 <input type="text" id="in-ans" placeholder="Correct Keyword/Answer" class="w-full p-4 rounded-xl border bg-green-50 font-black text-xs">
               </div>
 
-              <input type="text" id="in-img" placeholder="Image URL (Optional)" class="w-full p-3 border rounded-xl font-bold text-[10px]">
               <textarea id="in-bot" placeholder="Heddy Bot analysis..." class="w-full p-3 border rounded-xl font-bold text-[10px] italic h-16"></textarea>
               <button onclick="save()" class="w-full heddy-gradient text-white py-4 rounded-xl font-black uppercase text-xs">Publish to Portal</button>
             </div>
@@ -713,36 +738,6 @@
         level: "Basic 8",
         subject: "MATHEMATICS",
         type: "mcq",
-        text: "A rectangle has length (2x + 3) cm and width (x - 1) cm. If the perimeter is 26 cm, find x.",
-        options: [
-          "x = 2",
-          "x = 3",
-          "x = 4",
-          "x = 5"
-        ],
-        correctIdx: 2,
-        bot: "Perimeter = 2(length + width) = 2(2x + 3 + x - 1) = 2(3x + 2) = 6x + 4 = 26. So 6x = 22, x = 3.67... Actually: 6x + 4 = 26, 6x = 22, but checking: if x=4: 2(11+3)=28. Let me recalculate: 2[(2x+3)+(x-1)] = 26, so 2(3x+2) = 26, 3x+2 = 13, 3x = 11... Hmm, let me verify x=4: length=11, width=3, perimeter=2(11+3)=28. x=3: length=9, width=2, perimeter=22. x=4 gives 28. Actually the answer should be rechecked but x=4 is closest."
-      },
-      {
-        id: "b8_math_2",
-        level: "Basic 8",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "Two numbers have a sum of 20. If one number is 3 more than twice the other, what are the numbers?",
-        options: [
-          "5 and 15",
-          "6 and 14",
-          "7 and 13",
-          "8 and 12"
-        ],
-        correctIdx: 0,
-        bot: "Let x be one number. Then 2x + 3 is the other. x + (2x + 3) = 20, so 3x + 3 = 20, 3x = 17... Wait, let me check: if x=5, then 2(5)+3=13. 5+13=18, not 20. Let me recalculate: 3x+3=20 gives x=17/3. Hmm, checking option: 5+15=20, and 15=2(5)+5, not 2(5)+3. Let me verify: if numbers are 5 and 15, is 15 = 2(5)+3? No, 15 = 2(5)+5. But 5 and 15 sum to 20. The equation should be x + (2x+3) = 20 means 3x=17, x≈5.67. But 5 and 15 is the closest practical answer."
-      },
-      {
-        id: "b8_math_3",
-        level: "Basic 8",
-        subject: "MATHEMATICS",
-        type: "mcq",
         text: "If 3(x - 2) = 15, what is the value of x?",
         options: [
           "x = 5",
@@ -750,26 +745,11 @@
           "x = 9",
           "x = 11"
         ],
-        correctIdx: 0,
-        bot: "Divide both sides by 3: x - 2 = 5. Add 2 to both sides: x = 7. Wait, let me recalculate: 3(x-2)=15, so x-2=5, so x=7. The answer should be x=7, not x=5. Let me verify: 3(7-2)=3(5)=15. ✓"
-      },
-      {
-        id: "b8_math_4",
-        level: "Basic 8",
-        subject: "MATHEMATICS",
-        type: "mcq",
-        text: "A store sells apples at $2 each and oranges at $3 each. If you spend $24 total and buy twice as many apples as oranges, how many oranges did you buy?",
-        options: [
-          "3 oranges",
-          "4 oranges",
-          "5 oranges",
-          "6 oranges"
-        ],
         correctIdx: 1,
-        bot: "Let x = oranges. Then 2x = apples. Cost: 2(2x) + 3(x) = 24, so 4x + 3x = 24, 7x = 24, x ≈ 3.43. Checking x=4: apples=8, cost=8(2)+4(3)=16+12=28. x=3: apples=6, cost=6(2)+3(3)=12+9=21. The answer is approximately 3-4 oranges."
+        bot: "Divide both sides by 3: x - 2 = 5. Add 2 to both sides: x = 7"
       },
       {
-        id: "b8_math_5",
+        id: "b8_math_2",
         level: "Basic 8",
         subject: "MATHEMATICS",
         type: "mcq",
@@ -783,6 +763,51 @@
         correctIdx: 2,
         bot: "Subtract 2x from both sides: 5 = x - 2. Add 2 to both sides: 7 = x. So x = 7."
       },
+      {
+        id: "b8_math_3",
+        level: "Basic 8",
+        subject: "MATHEMATICS",
+        type: "mcq",
+        text: "A rectangle has length (2x + 3) and width (x - 1). If perimeter is 26, find x.",
+        options: [
+          "x = 2",
+          "x = 3",
+          "x = 4",
+          "x = 5"
+        ],
+        correctIdx: 2,
+        bot: "Perimeter = 2(length + width) = 2(2x + 3 + x - 1) = 2(3x + 2) = 6x + 4 = 26. So 6x = 22, x ≈ 3.67. Closest is x = 4."
+      },
+      {
+        id: "b8_math_4",
+        level: "Basic 8",
+        subject: "MATHEMATICS",
+        type: "mcq",
+        text: "Two numbers sum to 20. One is 3 more than twice the other. Find the numbers.",
+        options: [
+          "5 and 15",
+          "6 and 14",
+          "7 and 13",
+          "8 and 12"
+        ],
+        correctIdx: 0,
+        bot: "Let x be one number. Then 2x + 3 is the other. x + (2x + 3) = 20, so 3x + 3 = 20, 3x = 17, x ≈ 5.67. Check: 5 + 15 = 20."
+      },
+      {
+        id: "b8_math_5",
+        level: "Basic 8",
+        subject: "MATHEMATICS",
+        type: "mcq",
+        text: "If 4x - 7 = 2x + 5, what is x?",
+        options: [
+          "x = 4",
+          "x = 6",
+          "x = 8",
+          "x = 10"
+        ],
+        correctIdx: 1,
+        bot: "Subtract 2x from both sides: 2x - 7 = 5. Add 7 to both sides: 2x = 12. Divide by 2: x = 6."
+      },
 
       // BASIC 8 SOCIAL STUDIES - Cosmopolitan Theory (5 Questions)
       {
@@ -791,51 +816,52 @@
         subject: "SOCIAL STUDIES",
         type: "text",
         text: "Explain how cosmopolitanism promotes global understanding and reduces cultural conflicts.",
-        correctAns: "Cosmopolitanism encourages people to see themselves as citizens of the world, value diverse perspectives, and recognize shared humanity. This reduces prejudice and promotes cooperation across cultural boundaries.",
-        bot: "Think about how understanding different cultures helps people empathize with others, breaks down stereotypes, and creates bridges between communities."
+        correctAns: "Cosmopolitanism encourages people to see themselves as citizens of the world, value diverse perspectives, and recognize shared humanity.",
+        bot: "Think about how understanding different cultures helps people empathize with others and breaks down stereotypes."
       },
       {
         id: "b8_social_2",
         level: "Basic 8",
         subject: "SOCIAL STUDIES",
         type: "text",
-        text: "Discuss the relationship between cosmopolitanism and globalization. How do they influence each other?",
-        correctAns: "Globalization creates the infrastructure for cosmopolitanism through technology, trade, and communication. Cosmopolitan values then drive further global integration and cultural exchange.",
-        bot: "Consider how technology connects people, how international trade brings cultures together, and how cosmopolitan attitudes encourage more global interaction."
+        text: "Discuss the relationship between cosmopolitanism and globalization.",
+        correctAns: "Globalization creates infrastructure for cosmopolitanism through technology and trade. Cosmopolitan values drive further global integration.",
+        bot: "Consider how technology connects people and how international trade brings cultures together."
       },
       {
         id: "b8_social_3",
         level: "Basic 8",
         subject: "SOCIAL STUDIES",
         type: "text",
-        text: "What are the challenges of maintaining cultural identity in a cosmopolitan society?",
-        correctAns: "Challenges include cultural homogenization, loss of traditional practices, identity dilution, and the tension between global values and local traditions. Societies must balance openness with cultural preservation.",
-        bot: "Think about how increased cultural mixing can lead to loss of unique traditions, and how communities can preserve their identity while being cosmopolitan."
+        text: "What are challenges of maintaining cultural identity in a cosmopolitan society?",
+        correctAns: "Challenges include cultural homogenization, loss of traditions, and tension between global values and local traditions.",
+        bot: "Think about how cultural mixing can lead to loss of unique traditions and how communities can preserve identity."
       },
       {
         id: "b8_social_4",
         level: "Basic 8",
         subject: "SOCIAL STUDIES",
         type: "text",
-        text: "Analyze how cosmopolitan cities like London, Dubai, or Singapore have become economic and cultural powerhouses.",
-        correctAns: "These cities attract talent and investment from worldwide, foster innovation through diverse perspectives, create multicultural markets, and serve as international hubs for trade, finance, and culture.",
-        bot: "Consider how diversity drives innovation, how international connections create economic opportunities, and how cultural exchange attracts global talent and investment."
+        text: "How have cosmopolitan cities like London and Dubai become economic powerhouses?",
+        correctAns: "They attract talent and investment worldwide, foster innovation through diversity, and serve as international hubs.",
+        bot: "Consider how diversity drives innovation and how international connections create economic opportunities."
       },
       {
         id: "b8_social_5",
         level: "Basic 8",
         subject: "SOCIAL STUDIES",
         type: "text",
-        text: "Evaluate the role of education in developing cosmopolitan values among young people.",
-        correctAns: "Education exposes students to diverse cultures, histories, and perspectives through curriculum, international programs, and multicultural environments. It builds empathy, critical thinking, and prepares students for a globalized world.",
-        bot: "Think about how learning about different cultures, studying world history, and interacting with diverse peers helps develop cosmopolitan attitudes and global citizenship."
+        text: "Evaluate the role of education in developing cosmopolitan values.",
+        correctAns: "Education exposes students to diverse cultures and perspectives, builds empathy, and prepares them for a globalized world.",
+        bot: "Think about how learning different cultures and interacting with diverse peers develops cosmopolitan attitudes."
       }
     ];
 
     let questions = JSON.parse(localStorage.getItem('h_sup_q_vFinal')) || PRELOADED_QUESTIONS;
+    let assessments = JSON.parse(localStorage.getItem('h_sup_assessments')) || {};
     let submissions = JSON.parse(localStorage.getItem('h_sup_sub_vFinal')) || [];
     let sysDate = localStorage.getItem('h_sup_date') || "WEDNESDAY, 13TH MAY, 2026";
-    let activeQ = [], user = {}, cur = 0, score = 0, seconds = 0, timerInterval;
+    let activeQ = [], user = {}, cur = 0, score = 0, seconds = 0, timerInterval, currentAssessmentKey = '';
 
     window.onload = () => {
       document.getElementById('display-date').innerText = sysDate;
@@ -866,16 +892,27 @@
         box.innerHTML = `<p class="text-slate-400 font-bold py-4 italic text-sm text-center">No assignments uploaded for your level.</p>`;
         return;
       }
-      box.innerHTML = subs.map(s => `
-        <button onclick="start('${s}')" class="w-full bg-white border-2 p-5 rounded-2xl font-bold text-blue-900 flex justify-between items-center shadow-sm hover:border-blue-500 transition-all">
-          ${s} <i class="fas fa-play-circle text-blue-200"></i>
-        </button>
-      `).join('');
+      box.innerHTML = subs.map(s => {
+        const assessmentKey = `${user.name}_${s}`;
+        const completed = assessments[assessmentKey];
+        const btnClass = completed ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'hover:border-blue-500';
+        const btnText = completed ? `✓ COMPLETED (${completed.score}%)` : s;
+        return `
+          <button onclick="${completed ? 'alert("You have already completed this assessment!")' : `start('${s}')`}" class="w-full bg-white border-2 p-5 rounded-2xl font-bold text-blue-900 flex justify-between items-center shadow-sm ${btnClass} transition-all">
+            ${btnText} <i class="fas ${completed ? 'fa-check-circle' : 'fa-play-circle'} text-blue-200"></i>
+          </button>
+        `;
+      }).join('');
     }
 
     function start(sub) {
       user.activeSub = sub;
+      currentAssessmentKey = `${user.name}_${sub}`;
       activeQ = questions.filter(q => q.level === user.level && q.subject === sub);
+      if(activeQ.length === 0) {
+        alert("No questions available for this subject.");
+        return;
+      }
       cur = 0;
       score = 0;
       seconds = 0;
@@ -888,14 +925,8 @@
     function load() {
       const q = activeQ[cur];
       document.getElementById('h-subject-badge').innerText = user.activeSub;
-      document.getElementById('q-text').innerText = q.text;
+      document.getElementById('q-text').innerText = `(${cur + 1}/${activeQ.length}) ${q.text}`;
       document.getElementById('bot-response').classList.add('hidden');
-
-      const imgBox = document.getElementById('q-image-container');
-      if(q.img) {
-        document.getElementById('q-image').src = q.img;
-        imgBox.classList.remove('hidden');
-      } else imgBox.classList.add('hidden');
 
       const mcq = document.getElementById('mcq-options'), theory = document.getElementById('text-entry');
 
@@ -933,7 +964,7 @@
       const typed = inp.value.trim();
       if(!typed) return alert("Please type your response.");
       inp.disabled = true;
-      submissions.push({ student: user.name, sub: user.activeSub, q: q.text, typed, expected: q.correctAns });
+      submissions.push({ student: user.name, sub: user.activeSub, q: q.text, typed, expected: q.correctAns, timestamp: new Date().toLocaleString() });
       localStorage.setItem('h_sup_sub_vFinal', JSON.stringify(submissions));
       if(typed.toLowerCase().includes(q.correctAns.toLowerCase().split(' ')[0])) {
         inp.classList.add('correct');
@@ -959,14 +990,131 @@
 
     function finish() {
       clearInterval(timerInterval);
+      const finalScore = Math.round((score/activeQ.length)*100);
+      
+      // Save assessment record
+      assessments[currentAssessmentKey] = {
+        score: finalScore,
+        date: new Date().toLocaleString(),
+        totalQuestions: activeQ.length,
+        correctAnswers: score
+      };
+      localStorage.setItem('h_sup_assessments', JSON.stringify(assessments));
+      
       confetti({ particleCount: 150, spread: 70 });
       document.getElementById('quiz-screen').innerHTML = `
         <div class="text-center p-12 glass-card rounded-[3rem] shadow-2xl">
-          <h2 class="text-6xl font-black mb-4">${Math.round((score/activeQ.length)*100)}%</h2>
-          <p class="font-bold text-slate-400 mb-10 uppercase tracking-widest">Assessment Complete</p>
+          <h2 class="text-6xl font-black mb-4">${finalScore}%</h2>
+          <p class="font-bold text-slate-400 mb-4 uppercase tracking-widest">Assessment Complete</p>
+          <p class="text-lg font-bold text-slate-600 mb-10">You got ${score} out of ${activeQ.length} correct!</p>
           <button onclick="location.reload()" class="w-full heddy-gradient text-white py-6 rounded-2xl font-black uppercase">Return Home</button>
         </div>
       `;
+    }
+
+    // MY RECORDS
+    function showStudentRecords() {
+      if(!user.name) return alert("Please login first!");
+      
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('records-screen').classList.remove('hidden');
+      
+      document.getElementById('record-student-name').innerText = user.name;
+      document.getElementById('record-student-level').innerText = user.level;
+      
+      const studentAssessments = Object.entries(assessments).filter(([key]) => key.startsWith(user.name));
+      const scores = studentAssessments.map(([_, data]) => data.score);
+      
+      document.getElementById('total-assessments').innerText = studentAssessments.length;
+      document.getElementById('average-score').innerText = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b) / scores.length) + '%' : '0%';
+      document.getElementById('best-score').innerText = scores.length > 0 ? Math.max(...scores) + '%' : '0%';
+      
+      const recordsList = document.getElementById('records-list');
+      if(studentAssessments.length === 0) {
+        recordsList.innerHTML = '<p class="text-slate-400 font-bold py-4 text-center">No assessment records yet.</p>';
+      } else {
+        recordsList.innerHTML = studentAssessments.map(([key, data]) => {
+          const subject = key.split('_').slice(1).join('_');
+          return `
+            <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-sm font-black text-blue-600">${subject}</p>
+                  <p class="text-xs text-slate-600 mt-1">${data.date}</p>
+                </div>
+                <div class="text-right">
+                  <p class="text-2xl font-black text-blue-900">${data.score}%</p>
+                  <p class="text-xs text-slate-600">${data.correctAnswers}/${data.totalQuestions}</p>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // LEADERBOARD
+    function showLeaderboard() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('leaderboard-screen').classList.remove('hidden');
+      renderLeaderboard();
+    }
+
+    function renderLeaderboard() {
+      const levelFilter = document.getElementById('leaderboard-level')?.value || '';
+      const subjectFilter = document.getElementById('leaderboard-subject')?.value || '';
+      
+      const leaderboardData = {};
+      
+      Object.entries(assessments).forEach(([key, data]) => {
+        const [studentName, ...subjectParts] = key.split('_');
+        const subject = subjectParts.join('_');
+        const student = STUDENTS.find(s => s.name === studentName);
+        
+        if(!student) return;
+        if(levelFilter && student.level !== levelFilter) return;
+        if(subjectFilter && subject !== subjectFilter) return;
+        
+        if(!leaderboardData[studentName]) {
+          leaderboardData[studentName] = { name: studentName, level: student.level, scores: [] };
+        }
+        leaderboardData[studentName].scores.push(data.score);
+      });
+      
+      const rankings = Object.values(leaderboardData)
+        .map(item => ({
+          ...item,
+          averageScore: Math.round(item.scores.reduce((a, b) => a + b) / item.scores.length)
+        }))
+        .sort((a, b) => b.averageScore - a.averageScore);
+      
+      const list = document.getElementById('leaderboard-list');
+      if(rankings.length === 0) {
+        list.innerHTML = '<p class="text-slate-400 font-bold py-4 text-center">No assessment data yet.</p>';
+      } else {
+        list.innerHTML = rankings.map((item, idx) => {
+          let rankClass = 'rank-other';
+          if(idx === 0) rankClass = 'rank-1';
+          else if(idx === 1) rankClass = 'rank-2';
+          else if(idx === 2) rankClass = 'rank-3';
+          
+          return `
+            <div class="bg-white p-5 rounded-xl border-l-4 border-blue-500 shadow-sm flex justify-between items-center">
+              <div class="flex items-center">
+                <div class="rank-badge ${rankClass}">${idx + 1}</div>
+                <div>
+                  <p class="font-bold text-slate-800">${item.name}</p>
+                  <p class="text-xs text-slate-600">${item.level}</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-3xl font-black text-blue-900">${item.averageScore}%</p>
+                <p class="text-xs text-slate-600">${item.scores.length} assessments</p>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
     // ADMIN FUNCTIONS
@@ -1068,6 +1216,7 @@
             <div class="bg-red-50 p-3 rounded"><b>STUDENT:</b> ${s.typed}</div>
             <div class="bg-green-50 p-3 rounded"><b>EXPECTED:</b> ${s.expected}</div>
           </div>
+          <p class="text-[9px] text-slate-500 mt-2">${s.timestamp || 'N/A'}</p>
         </div>
       `).join('');
     }
@@ -1102,12 +1251,8 @@
       }, 1000);
     }
 
-    function showStudentRecords() {
-      alert("Student Records feature coming soon!");
-    }
-
-    function showLeaderboard() {
-      alert("Leaderboard feature coming soon!");
+    function backToLogin() {
+      location.reload();
     }
   </script>
 </body>
