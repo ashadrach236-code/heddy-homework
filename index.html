@@ -1,787 +1,1042 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HEDDY SUPREME - OFFICIAL PORTAL</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap');
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Outfit', sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #1e293b;
-      min-height: 100vh;
-    }
-    
-    .heddy-gradient {
-      background: linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%);
-    }
-    
-    .glass-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-    }
-    
-    .correct {
-      background: #dcfce7 !important;
-      border-color: #22c55e !important;
-      color: #166534 !important;
-    }
-    
-    .wrong {
-      background: #fee2e2 !important;
-      border-color: #ef4444 !important;
-      color: #991b1b !important;
-    }
-    
-    .hidden {
-      display: none !important;
-    }
-    
-    .option-btn {
-      transition: all 0.3s ease;
-      border: 2px solid #e2e8f0;
-      text-align: left;
-      padding: 1.25rem;
-      border-radius: 1rem;
-      font-weight: 600;
-      width: 100%;
-      background: white;
-      cursor: pointer;
-      position: relative;
-    }
-    
-    .option-btn:hover:not(:disabled) {
-      border-color: #3b82f6;
-      background: #eff6ff;
-      transform: translateY(-2px);
-    }
-    
-    .option-btn:disabled {
-      opacity: 0.7;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEDDY SUPREME | Educational Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --secondary: #64748b;
+            --accent: #3b82f6;
+            --bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.3);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+
+        .option-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover {
+            background-color: #eff6ff;
+            border-color: #bfdbfe;
+        }
+
+        .option-card.selected {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+        }
+
+        .hidden { display: none; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
 </head>
-<body class="min-h-screen">
-  <!-- NAVIGATION -->
-  <nav class="heddy-gradient text-white py-5 px-6 sticky top-0 z-50 shadow-xl">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-      <div class="flex items-center gap-4">
-        <div class="bg-yellow-400 p-2 rounded-xl text-blue-900 shadow-md">
-          <i class="fas fa-graduation-cap text-xl"></i>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="glass sticky top-0 z-50 px-6 py-4 shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showView('home')">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-graduation-cap text-xl"></i>
+                </div>
+                <h1 class="text-xl font-800 tracking-tight text-slate-900">HEDDY <span class="text-blue-600">SUPREME</span></h1>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-6">
+                <button onclick="showView('leaderboard')" class="text-sm font-600 text-slate-600 hover:text-blue-600 transition-colors">Leaderboard</button>
+                <button onclick="showView('records')" class="text-sm font-600 text-slate-600 hover:text-blue-600 transition-colors">My Records</button>
+                <button onclick="promptAdmin()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-600 text-slate-700 transition-all">Admin Panel</button>
+            </div>
+
+            <div class="md:hidden">
+                <button onclick="toggleMobileMenu()" class="text-slate-600"><i class="fas fa-bars text-xl"></i></button>
+            </div>
         </div>
-        <div>
-          <h1 class="text-xl font-extrabold tracking-tighter uppercase">Heddy <span class="text-yellow-400">Supreme</span></h1>
-          <p id="display-date" class="text-[10px] font-bold text-blue-200 uppercase tracking-widest"></p>
-        </div>
-      </div>
-      <div class="flex gap-3 flex-wrap">
-        <button onclick="showPage('records')" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
-          <i class="fas fa-chart-line mr-2"></i>My Records
-        </button>
-        <button onclick="showPage('leaderboard')" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
-          <i class="fas fa-trophy mr-2"></i>Leaderboard
-        </button>
-        <button onclick="adminLogin()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
-          <i class="fas fa-lock mr-2"></i>Admin
-        </button>
-      </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-white p-6 flex flex-col gap-6 pt-24">
+        <button onclick="showView('leaderboard'); toggleMobileMenu()" class="text-lg font-600 text-slate-700">Leaderboard</button>
+        <button onclick="showView('records'); toggleMobileMenu()" class="text-lg font-600 text-slate-700">My Records</button>
+        <button onclick="promptAdmin(); toggleMobileMenu()" class="text-lg font-600 text-slate-700">Admin Panel</button>
+        <button onclick="toggleMobileMenu()" class="mt-auto py-4 bg-slate-100 rounded-xl font-700">Close Menu</button>
     </div>
-  </nav>
 
-  <main class="max-w-7xl mx-auto p-4 md:p-8">
-    <!-- LOGIN SCREEN -->
-    <section id="login-screen">
-      <div class="text-center mb-10">
-        <h2 class="text-3xl md:text-5xl font-black text-white mb-3">WELCOME TO</h2>
-        <p class="text-xl md:text-2xl font-bold text-yellow-400 uppercase tracking-tighter">Sir Heddy Supreme Portal</p>
-      </div>
-
-      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl max-w-xl mx-auto">
-        <div class="space-y-6">
-          <div>
-            <label class="text-[10px] font-black text-slate-400 uppercase ml-2 block mb-2">Select Your Name</label>
-            <select id="s-name" class="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold outline-none focus:border-blue-500">
-              <option value="">-- FIND YOUR NAME --</option>
-              <optgroup label="BASIC 6 - 7">
-                <option value="KENNETH ANTWI">KENNETH ANTWI</option>
-                <option value="PEACE OF GOD VICTOR">PEACE OF GOD VICTOR</option>
-                <option value="EMMANUEL GADZIE">EMMANUEL GADZIE</option>
-              </optgroup>
-              <optgroup label="BASIC 8">
-                <option value="PRINCE VICTOR SUNDAY">PRINCE VICTOR SUNDAY</option>
-                <option value="ROLAND AGBOZO">ROLAND AGBOZO</option>
-                <option value="EMMANUELLA GYAMFI">EMMANUELLA GYAMFI</option>
-                <option value="PATIENCE AMOAKOWAA">PATIENCE AMOAKOWAA</option>
-                <option value="BLESSING GADZE">BLESSING GADZE</option>
-                <option value="BRAHANNAH BOATENG">BRAHANNAH BOATENG</option>
-              </optgroup>
-            </select>
-          </div>
-          <div>
-            <label class="text-[10px] font-black text-slate-400 uppercase ml-2 block mb-2">Security Code</label>
-            <input type="password" id="s-code" placeholder="ENTER ACCESS CODE" class="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold outline-none focus:border-blue-500">
-          </div>
-          <button onclick="validateStudent()" class="w-full heddy-gradient text-white font-black py-6 rounded-2xl shadow-lg hover:scale-[1.01] transition-all uppercase tracking-widest">
-            ENTER CLASSROOM <i class="fas fa-sign-in-alt ml-2"></i>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- SUBJECTS SCREEN -->
-    <section id="subjects-screen" class="hidden">
-      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
-        <h2 class="text-2xl font-black text-slate-800 mb-2">Select Assessment</h2>
-        <p id="welcome-msg" class="text-slate-600 mb-8 font-bold"></p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <button onclick="startAssessment('ENGLISH')" class="p-6 bg-blue-50 hover:bg-blue-100 border-2 border-blue-200 rounded-2xl font-black text-blue-900 transition-all">
-            <i class="fas fa-book text-3xl mb-3 block"></i>ENGLISH
-          </button>
-          <button onclick="startAssessment('MATHEMATICS')" class="p-6 bg-green-50 hover:bg-green-100 border-2 border-green-200 rounded-2xl font-black text-green-900 transition-all">
-            <i class="fas fa-calculator text-3xl mb-3 block"></i>MATHEMATICS
-          </button>
-          <button onclick="startAssessment('SOCIAL STUDIES')" class="p-6 bg-purple-50 hover:bg-purple-100 border-2 border-purple-200 rounded-2xl font-black text-purple-900 transition-all">
-            <i class="fas fa-globe text-3xl mb-3 block"></i>SOCIAL STUDIES
-          </button>
-        </div>
-
-        <button onclick="backToLogin()" class="w-full bg-slate-300 text-slate-800 font-black py-3 rounded-2xl uppercase">Back to Login</button>
-      </div>
-    </section>
-
-    <!-- QUIZ SCREEN -->
-    <section id="quiz-screen" class="hidden max-w-4xl mx-auto">
-      <div class="flex justify-between items-center mb-6">
-        <div class="bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-black uppercase" id="h-subject-badge"></div>
-        <div id="score-ring" class="text-2xl font-black text-blue-900">0%</div>
-      </div>
-      <div class="glass-card rounded-[3rem] p-8 md:p-14 shadow-2xl">
-        <h3 id="q-text" class="text-2xl md:text-3xl font-black text-slate-800 mb-10 leading-tight"></h3>
-
-        <div id="mcq-options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-
-        <div id="text-entry" class="hidden space-y-4">
-          <textarea id="text-answer" placeholder="Type your answer here..." class="w-full p-6 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-lg font-bold h-40"></textarea>
-          <button onclick="checkTextAns()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black uppercase">Submit Response</button>
-        </div>
-
-        <div id="bot-response" class="hidden mt-10 p-8 bg-slate-900 rounded-[2.5rem] text-white">
-          <div class="flex gap-6">
-            <div class="text-4xl">🤖</div>
-            <div class="flex-1">
-              <p class="text-yellow-400 font-black text-[10px] mb-2 uppercase tracking-widest">Heddy Bot Analysis</p>
-              <p id="bot-msg" class="text-slate-200 font-bold text-lg italic leading-relaxed"></p>
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-5xl">
+        
+        <!-- LOGIN VIEW -->
+        <section id="view-login" class="animate-fade-in">
+            <div class="max-w-md mx-auto mt-12">
+                <div class="text-center mb-10">
+                    <h2 class="text-4xl font-800 text-slate-900 mb-2">Welcome Back</h2>
+                    <p class="text-slate-500">Enter your credentials to access your portal</p>
+                </div>
+                
+                <div class="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-700 text-slate-700 mb-2">Select Student</label>
+                            <select id="login-student" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all appearance-none bg-slate-50">
+                                <option value="">Choose your name...</option>
+                                <optgroup label="Basic 6-7">
+                                    <option value="KENNETH ANTWI">KENNETH ANTWI</option>
+                                    <option value="PEACE OF GOD VICTOR">PEACE OF GOD VICTOR</option>
+                                    <option value="EMMANUEL GADZIE">EMMANUEL GADZIE</option>
+                                </optgroup>
+                                <optgroup label="Basic 8">
+                                    <option value="PRINCE VICTOR SUNDAY">PRINCE VICTOR SUNDAY</option>
+                                    <option value="ROLAND AGBOZO">ROLAND AGBOZO</option>
+                                    <option value="EMMANUELLA GYAMFI">EMMANUELLA GYAMFI</option>
+                                    <option value="PATIENCE AMOAKOWAA">PATIENCE AMOAKOWAA</option>
+                                    <option value="BLESSING GADZE">BLESSING GADZE</option>
+                                    <option value="BRAHANNAH BOATENG">BRAHANNAH BOATENG</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-700 text-slate-700 mb-2">Access Code</label>
+                            <input type="password" id="login-code" placeholder="••••" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-slate-50">
+                        </div>
+                        
+                        <button onclick="handleLogin()" class="w-full py-4 btn-primary text-white rounded-xl font-700 shadow-lg">
+                            Login to Portal
+                        </button>
+                    </div>
+                </div>
             </div>
-          </div>
-          <button onclick="next()" class="w-full mt-8 bg-white text-blue-900 font-black py-5 rounded-2xl hover:bg-yellow-400 transition-colors uppercase">Next Question <i class="fas fa-arrow-right ml-2"></i></button>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- RECORDS SCREEN -->
-    <section id="records-screen" class="hidden">
-      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
-        <div class="flex justify-between items-center mb-8">
-          <h2 class="text-3xl font-black text-slate-800">My Performance Dashboard</h2>
-          <button onclick="backToLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-black uppercase">Back</button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-            <p class="text-sm text-slate-600 font-bold uppercase">Total Assessments</p>
-            <p class="text-3xl font-black text-blue-600" id="total-assessments">0</p>
-          </div>
-          <div class="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-            <p class="text-sm text-slate-600 font-bold uppercase">Average Score</p>
-            <p class="text-3xl font-black text-green-600" id="average-score">0%</p>
-          </div>
-          <div class="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
-            <p class="text-sm text-slate-600 font-bold uppercase">Best Score</p>
-            <p class="text-3xl font-black text-purple-600" id="best-score">0%</p>
-          </div>
-          <div class="p-4 bg-orange-50 rounded-lg border-l-4 border-orange-500">
-            <p class="text-sm text-slate-600 font-bold uppercase">Badges Earned</p>
-            <p class="text-3xl font-black text-orange-600" id="total-badges">0</p>
-          </div>
-        </div>
-
-        <h3 class="text-xl font-black text-slate-800 mb-4">Assessment History</h3>
-        <div id="records-list" class="space-y-3 max-h-[600px] overflow-y-auto"></div>
-      </div>
-    </section>
-
-    <!-- LEADERBOARD SCREEN -->
-    <section id="leaderboard-screen" class="hidden">
-      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
-        <div class="flex justify-between items-center mb-8">
-          <h2 class="text-3xl font-black text-slate-800">🏆 Global Leaderboard</h2>
-          <button onclick="backToLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-black uppercase">Back</button>
-        </div>
-
-        <div id="leaderboard-list" class="space-y-3"></div>
-      </div>
-    </section>
-
-    <!-- ADMIN SCREEN -->
-    <section id="admin-screen" class="hidden">
-      <div class="bg-white rounded-[2.5rem] p-8 shadow-2xl">
-        <div class="flex justify-between mb-8">
-          <h2 class="text-2xl font-black text-blue-950 uppercase">Teacher Administration</h2>
-          <button onclick="backToLogin()" class="bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-[10px] font-black uppercase">Back</button>
-        </div>
-
-        <div class="mb-6 flex gap-2 border-b overflow-x-auto">
-          <button onclick="switchAdminTab('add')" class="admin-tab-btn active px-6 py-3 font-black text-sm border-b-4 border-blue-600 whitespace-nowrap">
-            <i class="fas fa-plus mr-2"></i>Add Question
-          </button>
-          <button onclick="switchAdminTab('submissions')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300 whitespace-nowrap">
-            <i class="fas fa-inbox mr-2"></i>Submissions & Weakness
-          </button>
-        </div>
-
-        <!-- ADD QUESTION TAB -->
-        <div id="admin-tab-add" class="admin-tab-content">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-1 bg-slate-50 p-6 rounded-3xl border space-y-4">
-              <h3 class="font-black text-xs uppercase text-blue-600 mb-4">Add New Assessment</h3>
-              
-              <div class="grid grid-cols-2 gap-2">
-                <select id="in-level" class="p-3 rounded-xl border font-bold text-xs">
-                  <option value="Basic 6-7">Basic 6-7</option>
-                  <option value="Basic 8">Basic 8</option>
-                </select>
-                <select id="in-type" onchange="toggleAdminInput()" class="p-3 rounded-xl border font-bold text-xs">
-                  <option value="mcq">Objectives (MCQ)</option>
-                  <option value="text">Theory (Typing)</option>
-                </select>
-              </div>
-
-              <input type="text" id="in-subject" placeholder="SUBJECT NAME" class="w-full p-3 border rounded-xl font-bold text-xs uppercase">
-              <textarea id="in-q" placeholder="Enter Question text..." class="w-full p-3 border rounded-xl font-bold text-xs h-24"></textarea>
-
-              <!-- MCQ OPTIONS -->
-              <div id="admin-mcq" class="space-y-2">
-                <div class="flex items-center gap-2"><input type="radio" name="c-idx" value="0" checked> <input type="text" id="opt-0" placeholder="Option A" class="w-full p-2 border rounded-lg text-xs font-bold"></div>
-                <div class="flex items-center gap-2"><input type="radio" name="c-idx" value="1"> <input type="text" id="opt-1" placeholder="Option B" class="w-full p-2 border rounded-lg text-xs font-bold"></div>
-                <div class="flex items-center gap-2"><input type="radio" name="c-idx" value="2"> <input type="text" id="opt-2" placeholder="Option C" class="w-full p-2 border rounded-lg text-xs font-bold"></div>
-                <div class="flex items-center gap-2"><input type="radio" name="c-idx" value="3"> <input type="text" id="opt-3" placeholder="Option D" class="w-full p-2 border rounded-lg text-xs font-bold"></div>
-              </div>
-
-              <!-- TEXT ANSWER -->
-              <div id="admin-text" class="hidden">
-                <input type="text" id="in-ans" placeholder="Correct Keyword/Answer" class="w-full p-4 rounded-xl border bg-green-50 font-black text-xs">
-              </div>
-
-              <textarea id="in-bot" placeholder="Heddy Bot analysis..." class="w-full p-3 border rounded-xl font-bold text-[10px] italic h-16"></textarea>
-              <button onclick="save()" class="w-full heddy-gradient text-white py-4 rounded-xl font-black uppercase text-xs">Publish to Portal</button>
-            </div>
-
-            <!-- QUESTIONS LIST -->
-            <div class="lg:col-span-2 space-y-4">
-              <h3 class="text-lg font-black text-slate-900 mb-4">Questions Preview</h3>
-              <div id="admin-preview" class="space-y-3 max-h-[600px] overflow-y-auto pr-2"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SUBMISSIONS TAB -->
-        <div id="admin-tab-submissions" class="admin-tab-content hidden">
-          <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
-            <p class="text-sm font-black text-blue-900">📊 STUDENT EFFORT & WEAKNESS ANALYSIS</p>
-            <p class="text-xs text-blue-700 mt-1">All submissions displayed below with automatic weakness detection</p>
-          </div>
-          <div id="submissions-list" class="space-y-6 max-h-[900px] overflow-y-auto"></div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    // OFFICIAL RECORDS
-    const STUDENTS = [
-      { name: "KENNETH ANTWI", level: "Basic 6-7", code: "3478" },
-      { name: "PEACE OF GOD VICTOR", level: "Basic 6-7", code: "P24" },
-      { name: "EMMANUEL GADZIE", level: "Basic 6-7", code: "44" },
-      { name: "PRINCE VICTOR SUNDAY", level: "Basic 8", code: "zxcbnabc" },
-      { name: "ROLAND AGBOZO", level: "Basic 8", code: "MIDNIGHTCALLERS" },
-      { name: "EMMANUELLA GYAMFI", level: "Basic 8", code: "4952" },
-      { name: "PATIENCE AMOAKOWAA", level: "Basic 8", code: "9876" },
-      { name: "BLESSING GADZE", level: "Basic 8", code: "080852" },
-      { name: "BRAHANNAH BOATENG", level: "Basic 8", code: "14396" }
-    ];
-
-    // PRE-LOADED QUESTIONS
-    let PRELOADED_QUESTIONS = [
-      // BASIC 6-7 ENGLISH
-      { id: "b67_eng_1", level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What is a noun?", options: ["A word that describes an action", "A word that names a person, place, or thing", "A word that describes a quality", "A word that connects sentences"], correctIdx: 1, bot: "A noun is a word used to name a person, place, thing, or idea." },
-      { id: "b67_eng_2", level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Which sentence is grammatically correct?", options: ["She go to school every day", "She goes to school every day", "She going to school every day", "She gone to school every day"], correctIdx: 1, bot: "The correct form uses 'goes' for third person singular." },
-      { id: "b67_eng_3", level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What does 'benevolent' mean?", options: ["Angry and hostile", "Kind and generous", "Confused and lost", "Tired and weak"], correctIdx: 1, bot: "Benevolent means kind and generous." },
-      { id: "b67_eng_4", level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Identify the adjective: 'The beautiful garden has colorful flowers.'", options: ["garden and flowers", "beautiful and colorful", "has", "the"], correctIdx: 1, bot: "Adjectives describe nouns." },
-      { id: "b67_eng_5", level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What is the past tense of 'run'?", options: ["runned", "runs", "ran", "running"], correctIdx: 2, bot: "'Ran' is an irregular verb." },
-      
-      // BASIC 6-7 MATHEMATICS
-      { id: "b67_math_1", level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "If x = 5, what is 2x + 3?", options: ["8", "10", "13", "15"], correctIdx: 2, bot: "2(5) + 3 = 13" },
-      { id: "b67_math_2", level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "A book costs $x and a pen costs $3. If you buy 2 books and 4 pens, what is the total?", options: ["2x + 12", "2x + 7", "x + 12", "5x + 3"], correctIdx: 0, bot: "2 books = 2x, 4 pens = 12. Total = 2x + 12" },
-      { id: "b67_math_3", level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Solve: x + 7 = 15", options: ["x = 8", "x = 22", "x = 2", "x = 10"], correctIdx: 0, bot: "x = 15 - 7 = 8" },
-      { id: "b67_math_4", level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Maria has m marbles. Her friend gives her 12 more. Now she has 35. Equation?", options: ["m - 12 = 35", "m + 12 = 35", "12m = 35", "m = 35 + 12"], correctIdx: 1, bot: "m + 12 = 35" },
-      { id: "b67_math_5", level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Simplify: 3x + 2x - 5", options: ["5x - 5", "6x - 5", "x - 5", "3x - 5"], correctIdx: 0, bot: "3x + 2x = 5x" },
-      
-      // BASIC 6-7 SOCIAL STUDIES
-      { id: "b67_social_1", level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "What does 'cosmopolitan' mean?", options: ["Related to one country only", "Familiar with many different countries and cultures", "Living in the countryside", "Speaking only one language"], correctIdx: 1, bot: "Cosmopolitan means familiar with many cultures." },
-      { id: "b67_social_2", level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Which city is a cosmopolitan hub?", options: ["A small rural village", "New York City", "An isolated mountain town", "A factory town"], correctIdx: 1, bot: "NYC is diverse and multicultural." },
-      { id: "b67_social_3", level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "What is cultural diversity?", options: ["Having only one culture", "The variety of different cultures and beliefs", "Rejecting foreign influences", "Speaking one language"], correctIdx: 1, bot: "Diversity means variety of cultures." },
-      { id: "b67_social_4", level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "How does globalization promote cosmopolitanism?", options: ["By isolating countries", "By connecting people through trade and technology", "By eliminating differences", "By preventing exchange"], correctIdx: 1, bot: "Globalization connects people worldwide." },
-      { id: "b67_social_5", level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "What is an example of cosmopolitan values?", options: ["Rejecting outsiders", "Respecting different cultures", "Speaking only native language", "Staying in one place"], correctIdx: 1, bot: "Cosmopolitan values respect diversity." },
-      
-      // BASIC 8 ENGLISH
-      { id: "b8_eng_1", level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Which literary device: 'The world is a stage'?", options: ["Simile", "Metaphor", "Personification", "Alliteration"], correctIdx: 1, bot: "This is a metaphor." },
-      { id: "b8_eng_2", level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Main purpose of a thesis statement?", options: ["Introduce author", "Present main argument", "Conclude essay", "Define words"], correctIdx: 1, bot: "Thesis presents the main argument." },
-      { id: "b8_eng_3", level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Tone: 'The politician's promises were as empty as his pockets.'", options: ["Respectful", "Sarcastic and critical", "Neutral", "Cheerful"], correctIdx: 1, bot: "The tone is sarcastic and critical." },
-      { id: "b8_eng_4", level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "What does 'ambiguous' mean?", options: ["Clearly stated", "Having multiple meanings", "Completely false", "Very long"], correctIdx: 1, bot: "Ambiguous means multiple interpretations." },
-      { id: "b8_eng_5", level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Example of foreshadowing?", options: ["Describing weather", "Hinting at future events", "Explaining setting", "Introducing character"], correctIdx: 1, bot: "Foreshadowing hints at future events." },
-      
-      // BASIC 8 MATHEMATICS
-      { id: "b8_math_1", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "If 3(x - 2) = 15, find x.", options: ["x = 5", "x = 7", "x = 9", "x = 11"], correctIdx: 1, bot: "x - 2 = 5, so x = 7" },
-      { id: "b8_math_2", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Solve: 2x + 5 = 3x - 2", options: ["x = 3", "x = 5", "x = 7", "x = 9"], correctIdx: 2, bot: "x = 7" },
-      { id: "b8_math_3", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Rectangle: length (2x+3), width (x-1), perimeter 26. Find x.", options: ["x = 2", "x = 3", "x = 4", "x = 5"], correctIdx: 2, bot: "x = 4" },
-      { id: "b8_math_4", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Two numbers sum to 20. One is 3 more than twice the other.", options: ["5 and 15", "6 and 14", "7 and 13", "8 and 12"], correctIdx: 0, bot: "5 + 15 = 20" },
-      { id: "b8_math_5", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "If 4x - 7 = 2x + 5, find x.", options: ["x = 4", "x = 6", "x = 8", "x = 10"], correctIdx: 1, bot: "x = 6" },
-      
-      // BASIC 8 SOCIAL STUDIES
-      { id: "b8_social_1", level: "Basic 8", subject: "SOCIAL STUDIES", type: "text", text: "Explain how cosmopolitanism promotes global understanding.", correctAns: "Cosmopolitanism encourages people to see themselves as world citizens and value diverse perspectives.", bot: "Think about shared humanity and empathy." },
-      { id: "b8_social_2", level: "Basic 8", subject: "SOCIAL STUDIES", type: "text", text: "Discuss cosmopolitanism and globalization relationship.", correctAns: "Globalization creates infrastructure; cosmopolitan values drive integration.", bot: "Technology connects people globally." },
-      { id: "b8_social_3", level: "Basic 8", subject: "SOCIAL STUDIES", type: "text", text: "What are challenges of maintaining cultural identity in cosmopolitan society?", correctAns: "Cultural homogenization, loss of traditions, tension between global and local values.", bot: "Balance openness with preservation." },
-      { id: "b8_social_4", level: "Basic 8", subject: "SOCIAL STUDIES", type: "text", text: "How have cosmopolitan cities become economic powerhouses?", correctAns: "They attract talent, foster innovation through diversity, and serve as international hubs.", bot: "Diversity drives innovation." },
-      { id: "b8_social_5", level: "Basic 8", subject: "SOCIAL STUDIES", type: "text", text: "Role of education in developing cosmopolitan values?", correctAns: "Education exposes students to diverse cultures, builds empathy, and prepares for globalized world.", bot: "Learning diversity develops cosmopolitan attitudes." }
-    ];
-
-    let questions = JSON.parse(localStorage.getItem('h_sup_q_vFinal')) || PRELOADED_QUESTIONS;
-    let assessments = JSON.parse(localStorage.getItem('h_sup_assessments')) || {};
-    let submissions = JSON.parse(localStorage.getItem('h_sup_submissions_v2')) || [];
-    let sysDate = localStorage.getItem('h_sup_date') || "WEDNESDAY, 13TH MAY, 2026";
-    let activeQ = [], user = {}, cur = 0, score = 0, timerInterval, currentAssessmentKey = '';
-
-    window.onload = () => {
-      document.getElementById('display-date').innerText = sysDate;
-      renderQuestionsList();
-      renderSubmissionsList();
-    };
-
-    function showPage(page) {
-      if (page === 'records' && !user.name) {
-        alert("Please login first!");
-        return;
-      }
-      
-      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-      
-      if (page === 'records') {
-        document.getElementById('records-screen').classList.remove('hidden');
-        displayRecords();
-      } else if (page === 'leaderboard') {
-        document.getElementById('leaderboard-screen').classList.remove('hidden');
-        displayLeaderboard();
-      }
-    }
-
-    function validateStudent() {
-      const name = document.getElementById('s-name').value;
-      const code = document.getElementById('s-code').value.trim();
-      const found = STUDENTS.find(s => s.name === name && s.code === code);
-      if(found) {
-        user = found;
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('subjects-screen').classList.remove('hidden');
-        document.getElementById('welcome-msg').innerText = `IDENTIFIED: ${user.name} (${user.level})`;
-      } else alert("Invalid Student Credentials.");
-    }
-
-    function startAssessment(sub) {
-      user.activeSub = sub;
-      currentAssessmentKey = `${user.name}_${sub}`;
-      
-      // Check if already took this assessment
-      if (assessments[currentAssessmentKey]) {
-        alert("You have already completed this assessment!");
-        return;
-      }
-      
-      activeQ = questions.filter(q => q.level === user.level && q.subject === sub);
-      if(activeQ.length === 0) {
-        alert("No questions available for this subject.");
-        return;
-      }
-      cur = 0;
-      score = 0;
-      document.getElementById('subjects-screen').classList.add('hidden');
-      document.getElementById('quiz-screen').classList.remove('hidden');
-      load();
-    }
-
-    function load() {
-      const q = activeQ[cur];
-      document.getElementById('h-subject-badge').innerText = user.activeSub;
-      document.getElementById('q-text').innerText = `(${cur + 1}/${activeQ.length}) ${q.text}`;
-      document.getElementById('bot-response').classList.add('hidden');
-
-      const mcq = document.getElementById('mcq-options'), theory = document.getElementById('text-entry');
-
-      if(q.type === 'mcq') {
-        mcq.classList.remove('hidden');
-        theory.classList.add('hidden');
-        mcq.innerHTML = '';
-        q.options.forEach((optText, i) => {
-          if(!optText) return;
-          const b = document.createElement('button');
-          b.className = 'option-btn';
-          b.innerText = optText;
-          b.onclick = () => {
-            document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
-            if(i == q.correctIdx) {
-              b.classList.add('correct');
-              score++;
-            } else {
-              b.classList.add('wrong');
-            }
-            
-            // Log submission
-            submissions.push({
-              id: Date.now(),
-              student: user.name,
-              level: user.level,
-              subject: user.activeSub,
-              question: q.text,
-              studentAnswer: optText,
-              expectedAnswer: q.options[q.correctIdx],
-              isCorrect: i == q.correctIdx,
-              timestamp: new Date().toLocaleString()
-            });
-            localStorage.setItem('h_sup_submissions_v2', JSON.stringify(submissions));
-            
-            showBot(q.bot);
-          };
-          mcq.appendChild(b);
-        });
-      } else {
-        mcq.classList.add('hidden');
-        theory.classList.remove('hidden');
-        document.getElementById('text-answer').value = '';
-        document.getElementById('text-answer').disabled = false;
-      }
-    }
-
-    function checkTextAns() {
-      const q = activeQ[cur], inp = document.getElementById('text-answer');
-      const typed = inp.value.trim();
-      if(!typed) return alert("Please type your response.");
-      inp.disabled = true;
-      
-      submissions.push({
-        id: Date.now(),
-        student: user.name,
-        level: user.level,
-        subject: user.activeSub,
-        question: q.text,
-        studentAnswer: typed,
-        expectedAnswer: q.correctAns,
-        isCorrect: typed.toLowerCase().includes(q.correctAns.toLowerCase().split(' ')[0]),
-        timestamp: new Date().toLocaleString()
-      });
-      localStorage.setItem('h_sup_submissions_v2', JSON.stringify(submissions));
-      
-      if(typed.toLowerCase().includes(q.correctAns.toLowerCase().split(' ')[0])) {
-        inp.classList.add('correct');
-        score++;
-        showBot(q.bot);
-      } else {
-        inp.classList.add('wrong');
-        showBot("Your response has been logged for Sir Heddy to mark manually.");
-      }
-    }
-
-    function showBot(msg) {
-      document.getElementById('bot-msg').innerText = msg;
-      document.getElementById('bot-response').classList.remove('hidden');
-      document.getElementById('score-ring').innerText = Math.round((score/activeQ.length)*100) + "%";
-    }
-
-    function next() {
-      cur++;
-      if(cur < activeQ.length) load();
-      else finish();
-    }
-
-    function finish() {
-      const finalScore = Math.round((score/activeQ.length)*100);
-      
-      assessments[currentAssessmentKey] = {
-        score: finalScore,
-        date: new Date().toLocaleString(),
-        totalQuestions: activeQ.length,
-        correctAnswers: score
-      };
-      localStorage.setItem('h_sup_assessments', JSON.stringify(assessments));
-      
-      confetti({ particleCount: 150, spread: 70 });
-      document.getElementById('quiz-screen').innerHTML = `
-        <div class="text-center p-12 glass-card rounded-[3rem] shadow-2xl">
-          <h2 class="text-6xl font-black mb-4">${finalScore}%</h2>
-          <p class="font-bold text-slate-400 mb-4 uppercase tracking-widest">Assessment Complete</p>
-          <p class="text-lg font-bold text-slate-600 mb-10">You got ${score} out of ${activeQ.length} correct!</p>
-          <button onclick="location.reload()" class="w-full heddy-gradient text-white py-6 rounded-2xl font-black uppercase">Return Home</button>
-        </div>
-      `;
-    }
-
-    function displayRecords() {
-      const studentAssessments = Object.entries(assessments).filter(([key]) => key.startsWith(user.name));
-      const scores = studentAssessments.map(([_, data]) => data.score);
-      
-      document.getElementById('total-assessments').innerText = studentAssessments.length;
-      document.getElementById('average-score').innerText = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b) / scores.length) + '%' : '0%';
-      document.getElementById('best-score').innerText = scores.length > 0 ? Math.max(...scores) + '%' : '0%';
-      
-      let badges = 0;
-      if(scores.length > 0) {
-        if(Math.max(...scores) >= 90) badges++;
-        if(scores.length >= 3) badges++;
-        if(Math.min(...scores) >= 70) badges++;
-      }
-      document.getElementById('total-badges').innerText = badges;
-      
-      const recordsList = document.getElementById('records-list');
-      if(studentAssessments.length === 0) {
-        recordsList.innerHTML = '<p class="text-slate-400 font-bold py-4 text-center">No assessment records yet.</p>';
-      } else {
-        recordsList.innerHTML = studentAssessments.map(([key, data]) => {
-          const subject = key.split('_').slice(1).join('_');
-          const badge = data.score >= 90 ? '🌟' : data.score >= 80 ? '⭐' : data.score >= 70 ? '✓' : '→';
-          return `
-            <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm">
-              <div class="flex justify-between items-start">
+        <!-- DASHBOARD VIEW -->
+        <section id="view-dashboard" class="hidden animate-fade-in">
+            <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <p class="text-sm font-black text-blue-600">${subject}</p>
-                  <p class="text-xs text-slate-600 mt-1">${data.date}</p>
+                    <h2 class="text-3xl font-800 text-slate-900">Hello, <span id="user-display-name" class="text-blue-600">Student</span>!</h2>
+                    <p class="text-slate-500" id="user-display-level">Basic Level</p>
+                </div>
+                <button onclick="logout()" class="self-start px-4 py-2 text-sm font-600 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 card-hover">
+                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mb-4">
+                        <i class="fas fa-book-open text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-700 mb-1">English</h3>
+                    <p class="text-sm text-slate-500 mb-4">Grammar, Vocabulary & Literature</p>
+                    <div id="status-english"></div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 card-hover">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 mb-4">
+                        <i class="fas fa-calculator text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-700 mb-1">Mathematics</h3>
+                    <p class="text-sm text-slate-500 mb-4">Algebra & Problem Solving</p>
+                    <div id="status-mathematics"></div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 card-hover">
+                    <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 mb-4">
+                        <i class="fas fa-globe-africa text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-700 mb-1">Social Studies</h3>
+                    <p class="text-sm text-slate-500 mb-4">Culture & Globalization</p>
+                    <div id="status-social"></div>
+                </div>
+            </div>
+
+            <div class="bg-blue-600 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-2xl font-800 mb-2">Ready for a challenge?</h3>
+                    <p class="text-blue-100 mb-6 max-w-md">Complete all your assessments to earn the "Supreme Scholar" badge and climb the leaderboard!</p>
+                    <button onclick="showView('leaderboard')" class="px-6 py-3 bg-white text-blue-600 rounded-xl font-700 hover:bg-blue-50 transition-colors">
+                        View Leaderboard
+                    </button>
+                </div>
+                <i class="fas fa-trophy absolute -right-4 -bottom-4 text-9xl text-blue-500 opacity-30 rotate-12"></i>
+            </div>
+        </section>
+
+        <!-- ASSESSMENT VIEW -->
+        <section id="view-assessment" class="hidden animate-fade-in max-w-3xl mx-auto">
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <span id="quiz-subject-tag" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-700 uppercase tracking-wider">Subject</span>
+                    <h2 id="quiz-title" class="text-2xl font-800 text-slate-900 mt-2">Assessment</h2>
                 </div>
                 <div class="text-right">
-                  <p class="text-3xl font-black text-blue-900">${badge} ${data.score}%</p>
-                  <p class="text-xs text-slate-600">${data.correctAnswers}/${data.totalQuestions}</p>
+                    <p class="text-xs font-700 text-slate-400 uppercase">Progress</p>
+                    <p class="text-lg font-800 text-blue-600"><span id="current-q-num">1</span>/<span id="total-q-num">15</span></p>
                 </div>
-              </div>
             </div>
-          `;
-        }).join('');
-      }
-    }
 
-    function displayLeaderboard() {
-      const leaderboardData = {};
-      
-      Object.entries(assessments).forEach(([key, data]) => {
-        const [studentName, ...subjectParts] = key.split('_');
-        const subject = subjectParts.join('_');
-        const student = STUDENTS.find(s => s.name === studentName);
+            <div class="w-full bg-slate-200 h-2 rounded-full mb-8 overflow-hidden">
+                <div id="quiz-progress-bar" class="progress-bar bg-blue-600 h-full w-0"></div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 shadow-xl border border-slate-100 mb-6">
+                <p id="question-text" class="text-xl font-600 text-slate-800 mb-8 leading-relaxed">Loading question...</p>
+                
+                <div id="options-container" class="grid grid-cols-1 gap-4">
+                    <!-- Options will be injected here -->
+                </div>
+
+                <div id="theory-container" class="hidden">
+                    <textarea id="theory-answer" rows="5" class="w-full p-4 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-slate-50 font-500" placeholder="Type your answer here..."></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center">
+                <button onclick="exitAssessment()" class="text-slate-500 font-600 hover:text-slate-700 transition-colors">Exit</button>
+                <button id="next-btn" onclick="handleNextQuestion()" class="px-8 py-4 btn-primary text-white rounded-2xl font-700 shadow-lg flex items-center gap-2">
+                    Next Question <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- RESULTS VIEW -->
+        <section id="view-results" class="hidden animate-fade-in text-center max-w-md mx-auto">
+            <div class="bg-white rounded-3xl p-10 shadow-xl border border-slate-100">
+                <div id="result-icon" class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mx-auto mb-6">
+                    <i class="fas fa-check text-3xl"></i>
+                </div>
+                <h2 class="text-3xl font-800 text-slate-900 mb-2">Well Done!</h2>
+                <p class="text-slate-500 mb-8">You've completed the <span id="result-subject" class="font-700 text-slate-700">Subject</span> assessment.</p>
+                
+                <div class="bg-slate-50 rounded-2xl p-6 mb-8">
+                    <p class="text-sm font-700 text-slate-400 uppercase mb-1">Your Score</p>
+                    <p class="text-5xl font-800 text-blue-600"><span id="result-score">0</span>%</p>
+                    <p class="text-sm text-slate-500 mt-2"><span id="result-correct">0</span> out of <span id="result-total">0</span> correct</p>
+                </div>
+
+                <button onclick="showView('dashboard')" class="w-full py-4 btn-primary text-white rounded-xl font-700 shadow-lg mb-4">
+                    Back to Dashboard
+                </button>
+            </div>
+        </section>
+
+        <!-- LEADERBOARD VIEW -->
+        <section id="view-leaderboard" class="hidden animate-fade-in">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-800 text-slate-900">Leaderboard</h2>
+                <div class="flex gap-2">
+                    <select id="leaderboard-filter-level" onchange="renderLeaderboard()" class="px-3 py-2 rounded-lg border border-slate-200 text-sm font-600 outline-none">
+                        <option value="all">All Levels</option>
+                        <option value="Basic 6-7">Basic 6-7</option>
+                        <option value="Basic 8">Basic 8</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-100">
+                            <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Rank</th>
+                            <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Student</th>
+                            <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Level</th>
+                            <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Avg. Score</th>
+                            <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Assessments</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Leaderboard rows injected here -->
+                    </tbody>
+                </table>
+                <div id="leaderboard-empty" class="hidden p-12 text-center text-slate-400">
+                    <i class="fas fa-users text-4xl mb-4 opacity-20"></i>
+                    <p>No records found yet.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- RECORDS VIEW -->
+        <section id="view-records" class="hidden animate-fade-in">
+            <h2 class="text-3xl font-800 text-slate-900 mb-8">My Records</h2>
+            
+            <div id="records-content">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                        <p class="text-xs font-700 text-slate-400 uppercase mb-1">Total Taken</p>
+                        <p id="rec-total" class="text-3xl font-800 text-blue-600">0</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                        <p class="text-xs font-700 text-slate-400 uppercase mb-1">Average Score</p>
+                        <p id="rec-avg" class="text-3xl font-800 text-emerald-600">0%</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                        <p class="text-xs font-700 text-slate-400 uppercase mb-1">Best Score</p>
+                        <p id="rec-best" class="text-3xl font-800 text-amber-600">0%</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                        <p class="text-xs font-700 text-slate-400 uppercase mb-1">Badges</p>
+                        <p id="rec-badges" class="text-3xl font-800 text-purple-600">0</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-800 text-slate-900 mb-4">Assessment History</h3>
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100">
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Subject</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Date</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Score</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body">
+                            <!-- History rows injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="records-login-prompt" class="hidden p-12 text-center bg-white rounded-3xl shadow-xl border border-slate-100">
+                <i class="fas fa-lock text-4xl text-slate-200 mb-4"></i>
+                <h3 class="text-xl font-700 text-slate-800 mb-2">Login Required</h3>
+                <p class="text-slate-500 mb-6">Please login to view your personal records and achievements.</p>
+                <button onclick="showView('login')" class="px-6 py-3 btn-primary text-white rounded-xl font-700">Go to Login</button>
+            </div>
+        </section>
+
+        <!-- ADMIN VIEW -->
+        <section id="view-admin" class="hidden animate-fade-in">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-800 text-slate-900">Admin Panel</h2>
+                <button onclick="showView('home')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-600 transition-all">Exit Admin</button>
+            </div>
+
+            <div class="flex gap-4 mb-8 border-b border-slate-200">
+                <button onclick="setAdminTab('submissions')" id="tab-submissions" class="pb-4 px-2 text-sm font-700 text-blue-600 border-b-2 border-blue-600 transition-all">Submissions</button>
+                <button onclick="setAdminTab('questions')" id="tab-questions" class="pb-4 px-2 text-sm font-700 text-slate-400 hover:text-slate-600 transition-all">Manage Questions</button>
+            </div>
+
+            <!-- Submissions Tab -->
+            <div id="admin-submissions" class="space-y-6">
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-x-auto">
+                    <table class="w-full text-left min-w-[800px]">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100">
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Student</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Subject</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Question</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Answer</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Expected</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-submissions-body">
+                            <!-- Submissions injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Questions Tab -->
+            <div id="admin-questions" class="hidden space-y-8">
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
+                    <h3 class="text-xl font-800 mb-6">Add New Question</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-700 text-slate-700 mb-2">Level</label>
+                            <select id="add-q-level" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none bg-slate-50">
+                                <option value="Basic 6-7">Basic 6-7</option>
+                                <option value="Basic 8">Basic 8</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-700 text-slate-700 mb-2">Subject</label>
+                            <select id="add-q-subject" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none bg-slate-50">
+                                <option value="ENGLISH">ENGLISH</option>
+                                <option value="MATHEMATICS">MATHEMATICS</option>
+                                <option value="SOCIAL STUDIES">SOCIAL STUDIES</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-700 text-slate-700 mb-2">Question Text</label>
+                            <input type="text" id="add-q-text" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-700 text-slate-700 mb-2">Type</label>
+                            <select id="add-q-type" onchange="toggleAddOptions()" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none bg-slate-50">
+                                <option value="mcq">Multiple Choice (MCQ)</option>
+                                <option value="theory">Theory</option>
+                            </select>
+                        </div>
+                        <div id="add-q-theory-ans-container" class="hidden">
+                            <label class="block text-sm font-700 text-slate-700 mb-2">Expected Answer (Keywords)</label>
+                            <input type="text" id="add-q-theory-ans" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none bg-slate-50">
+                        </div>
+                    </div>
+
+                    <div id="add-q-mcq-options" class="space-y-4 mb-8">
+                        <label class="block text-sm font-700 text-slate-700">Options (Mark the correct one)</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center gap-3">
+                                <input type="radio" name="correct-opt" value="0" checked>
+                                <input type="text" id="opt-0" placeholder="Option A" class="flex-grow px-4 py-2 rounded-lg border border-slate-200 outline-none bg-slate-50">
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <input type="radio" name="correct-opt" value="1">
+                                <input type="text" id="opt-1" placeholder="Option B" class="flex-grow px-4 py-2 rounded-lg border border-slate-200 outline-none bg-slate-50">
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <input type="radio" name="correct-opt" value="2">
+                                <input type="text" id="opt-2" placeholder="Option C" class="flex-grow px-4 py-2 rounded-lg border border-slate-200 outline-none bg-slate-50">
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <input type="radio" name="correct-opt" value="3">
+                                <input type="text" id="opt-3" placeholder="Option D" class="flex-grow px-4 py-2 rounded-lg border border-slate-200 outline-none bg-slate-50">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="addNewQuestion()" class="px-8 py-3 btn-primary text-white rounded-xl font-700 shadow-lg">Add Question</button>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100">
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Level</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Subject</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Question</th>
+                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-questions-body">
+                            <!-- Questions list injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-8 text-center text-slate-400 text-sm">
+        <p>&copy; 2026 HEDDY SUPREME Educational Portal. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // --- DATA & INITIALIZATION ---
+        const STUDENTS = [
+            { name: "KENNETH ANTWI", code: "3478", level: "Basic 6-7" },
+            { name: "PEACE OF GOD VICTOR", code: "P24", level: "Basic 6-7" },
+            { name: "EMMANUEL GADZIE", code: "44", level: "Basic 6-7" },
+            { name: "PRINCE VICTOR SUNDAY", code: "zxcbnabc", level: "Basic 8" },
+            { name: "ROLAND AGBOZO", code: "MIDNIGHTCALLERS", level: "Basic 8" },
+            { name: "EMMANUELLA GYAMFI", code: "4952", level: "Basic 8" },
+            { name: "PATIENCE AMOAKOWAA", code: "9876", level: "Basic 8" },
+            { name: "BLESSING GADZE", code: "080852", level: "Basic 8" },
+            { name: "BRAHANNAH BOATENG", code: "14396", level: "Basic 8" }
+        ];
+
+        const PRELOADED_QUESTIONS = [
+            // BASIC 6-7 ENGLISH
+            { id: 1, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Identify the noun in this sentence: 'The quick brown fox jumps over the lazy dog.'", options: ["Quick", "Brown", "Fox", "Jumps"], correctIdx: 2 },
+            { id: 2, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What is the synonym of 'Happy'?", options: ["Sad", "Joyful", "Angry", "Tired"], correctIdx: 1 },
+            { id: 3, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Which of these is a pronoun?", options: ["He", "Run", "Beautiful", "Table"], correctIdx: 0 },
+            { id: 4, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Choose the correct spelling:", options: ["Recieve", "Receive", "Receve", "Recive"], correctIdx: 1 },
+            { id: 5, level: "Basic 6-7", subject: "ENGLISH", type: "theory", text: "Write a short sentence using the word 'Education'.", correctAns: "Education is the key to success." },
+            
+            // BASIC 6-7 MATHEMATICS
+            { id: 6, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "What is 15 + 27?", options: ["32", "42", "52", "44"], correctIdx: 1 },
+            { id: 7, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Solve for x: x + 5 = 12", options: ["5", "6", "7", "8"], correctIdx: 2 },
+            { id: 8, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "What is 8 x 7?", options: ["54", "56", "58", "60"], correctIdx: 1 },
+            { id: 9, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Which is a prime number?", options: ["4", "9", "13", "15"], correctIdx: 2 },
+            { id: 10, level: "Basic 6-7", subject: "MATHEMATICS", type: "theory", text: "If a rectangle has a length of 5cm and width of 3cm, what is its area?", correctAns: "15" },
+
+            // BASIC 6-7 SOCIAL STUDIES
+            { id: 11, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Which continent is Ghana located in?", options: ["Asia", "Europe", "Africa", "South America"], correctIdx: 2 },
+            { id: 12, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "What is the capital city of Ghana?", options: ["Kumasi", "Accra", "Tamale", "Takoradi"], correctIdx: 1 },
+            { id: 13, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Which of these is a traditional Ghanaian dance?", options: ["Salsa", "Adowa", "Ballet", "Tango"], correctIdx: 1 },
+            { id: 14, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Who was the first President of Ghana?", options: ["J.B. Danquah", "Kwame Nkrumah", "Kofi Annan", "Jerry Rawlings"], correctIdx: 1 },
+            { id: 15, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "theory", text: "Mention one importance of culture in our society.", correctAns: "Identity" },
+
+            // BASIC 8 ENGLISH
+            { id: 16, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Which literary device is used in 'The wind whispered through the trees'?", options: ["Simile", "Metaphor", "Personification", "Hyperbole"], correctIdx: 2 },
+            { id: 17, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "What is the main purpose of a thesis statement?", options: ["To conclude", "To present the main argument", "To list references", "To introduce the author"], correctIdx: 1 },
+            { id: 18, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Identify the antonym of 'Arrogant':", options: ["Proud", "Humble", "Confident", "Selfish"], correctIdx: 1 },
+            { id: 19, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Which sentence is in the passive voice?", options: ["The boy kicked the ball.", "The ball was kicked by the boy.", "The boy is kicking the ball.", "The boy will kick the ball."], correctIdx: 1 },
+            { id: 20, level: "Basic 8", subject: "ENGLISH", type: "theory", text: "Explain the term 'Alliteration' and give an example.", correctAns: "Repetition of initial consonant sounds" },
+
+            // BASIC 8 MATHEMATICS
+            { id: 21, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Solve for x: 2x - 4 = 10", options: ["3", "5", "7", "9"], correctIdx: 2 },
+            { id: 22, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Simplify: 3(x + 2) - 2x", options: ["x + 6", "x + 2", "5x + 6", "x - 6"], correctIdx: 0 },
+            { id: 23, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "What is the value of 5 squared plus 3 cubed?", options: ["34", "43", "52", "61"], correctIdx: 2 },
+            { id: 24, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "If a car travels 120km in 2 hours, what is its speed?", options: ["40km/h", "50km/h", "60km/h", "70km/h"], correctIdx: 2 },
+            { id: 25, level: "Basic 8", subject: "MATHEMATICS", type: "theory", text: "Solve for y: 3y + 7 = 22", correctAns: "5" },
+
+            // BASIC 8 SOCIAL STUDIES
+            { id: 26, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "What is globalization?", options: ["Isolation of countries", "Integration of world economies", "A type of local farming", "Building more walls"], correctIdx: 1 },
+            { id: 27, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "Which of these is a benefit of cultural diversity?", options: ["Conflict", "Narrow-mindedness", "Innovation and creativity", "Segregation"], correctIdx: 2 },
+            { id: 28, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "What does 'Cosmopolitan' mean?", options: ["Only local", "Worldly and diverse", "Rural and simple", "Strictly traditional"], correctIdx: 1 },
+            { id: 29, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "Which organization promotes global cooperation?", options: ["FIFA", "United Nations", "Local Council", "School Board"], correctIdx: 1 },
+            { id: 30, level: "Basic 8", subject: "SOCIAL STUDIES", type: "theory", text: "How does technology contribute to globalization?", correctAns: "Communication" }
+        ];
+
+        let questions = JSON.parse(localStorage.getItem('heddy_questions')) || PRELOADED_QUESTIONS;
+        let submissions = JSON.parse(localStorage.getItem('heddy_submissions')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('heddy_user')) || null;
         
-        if(!student) return;
-        
-        if(!leaderboardData[studentName]) {
-          leaderboardData[studentName] = { name: studentName, level: student.level, scores: [] };
+        let currentQuiz = {
+            subject: "",
+            questions: [],
+            currentIndex: 0,
+            score: 0,
+            answers: []
+        };
+
+        // --- NAVIGATION ---
+        function showView(viewId) {
+            const views = ['login', 'dashboard', 'assessment', 'results', 'leaderboard', 'records', 'admin'];
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if (el) el.classList.add('hidden');
+            });
+            
+            if (viewId === 'home') {
+                if (currentUser) showView('dashboard');
+                else showView('login');
+                return;
+            }
+
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            window.scrollTo(0, 0);
+
+            if (viewId === 'dashboard') renderDashboard();
+            if (viewId === 'leaderboard') renderLeaderboard();
+            if (viewId === 'records') renderRecords();
+            if (viewId === 'admin') renderAdmin();
         }
-        leaderboardData[studentName].scores.push(data.score);
-      });
-      
-      const rankings = Object.values(leaderboardData)
-        .map(item => ({
-          ...item,
-          averageScore: Math.round(item.scores.reduce((a, b) => a + b) / item.scores.length)
-        }))
-        .sort((a, b) => b.averageScore - a.averageScore);
-      
-      const list = document.getElementById('leaderboard-list');
-      if(rankings.length === 0) {
-        list.innerHTML = '<p class="text-slate-400 font-bold py-4 text-center">No assessment data yet.</p>';
-      } else {
-        list.innerHTML = rankings.map((item, idx) => {
-          const medals = ['🥇', '🥈', '🥉'];
-          const medal = idx < 3 ? medals[idx] : '•';
-          return `
-            <div class="bg-white p-5 rounded-xl border-l-4 border-blue-500 shadow-sm flex justify-between items-center">
-              <div class="flex items-center gap-4">
-                <span class="text-3xl">${medal}</span>
-                <div>
-                  <p class="font-bold text-slate-800">${item.name}</p>
-                  <p class="text-xs text-slate-600">${item.level}</p>
-                </div>
-              </div>
-              <div class="text-right">
-                <p class="text-3xl font-black text-blue-900">${item.averageScore}%</p>
-                <p class="text-xs text-slate-600">${item.scores.length} assessments</p>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-    }
 
-    function switchAdminTab(tab) {
-      document.querySelectorAll('.admin-tab-btn').forEach(btn => {
-        btn.classList.remove('border-blue-600');
-        btn.classList.add('border-transparent');
-      });
-      document.querySelectorAll('.admin-tab-content').forEach(content => {
-        content.classList.add('hidden');
-      });
-      event.target.closest('.admin-tab-btn').classList.add('border-blue-600');
-      document.getElementById('admin-tab-' + tab).classList.remove('hidden');
-      if(tab === 'submissions') renderSubmissionsList();
-    }
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
 
-    function toggleAdminInput() {
-      const isT = document.getElementById('in-type').value === 'text';
-      document.getElementById('admin-mcq').classList.toggle('hidden', isT);
-      document.getElementById('admin-text').classList.toggle('hidden', !isT);
-    }
-
-    function save() {
-      const sub = document.getElementById('in-subject').value.trim().toUpperCase();
-      const txt = document.getElementById('in-q').value.trim();
-      if(!sub || !txt) return alert("Missing Subject or Question!");
-
-      const q = {
-        id: 'q_' + Date.now(),
-        level: document.getElementById('in-level').value,
-        subject: sub,
-        type: document.getElementById('in-type').value,
-        text: txt,
-        options: [
-          document.getElementById('opt-0').value,
-          document.getElementById('opt-1').value,
-          document.getElementById('opt-2').value,
-          document.getElementById('opt-3').value
-        ],
-        correctIdx: parseInt(document.querySelector('input[name="c-idx"]:checked').value),
-        correctAns: document.getElementById('in-ans').value.trim(),
-        bot: document.getElementById('in-bot').value.trim() || "Analysis saved."
-      };
-
-      questions.push(q);
-      localStorage.setItem('h_sup_q_vFinal', JSON.stringify(questions));
-      
-      document.getElementById('in-subject').value = '';
-      document.getElementById('in-q').value = '';
-      document.getElementById('opt-0').value = '';
-      document.getElementById('opt-1').value = '';
-      document.getElementById('opt-2').value = '';
-      document.getElementById('opt-3').value = '';
-      document.getElementById('in-ans').value = '';
-      document.getElementById('in-bot').value = '';
-      
-      alert("Question added successfully!");
-      renderQuestionsList();
-    }
-
-    function renderQuestionsList() {
-      const list = document.getElementById('admin-preview');
-      if(!list) return;
-
-      list.innerHTML = questions.map((q, i) => `
-        <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm">
-          <div class="flex justify-between items-start mb-2">
-            <div>
-              <p class="text-[10px] font-black uppercase text-blue-500">${q.level} • ${q.subject}</p>
-              <p class="font-bold text-sm mt-1">${q.text.substring(0, 60)}...</p>
-            </div>
-            <button onclick="deleteQ(${questions.indexOf(q)})" class="text-red-500 hover:text-red-700">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-          <p class="text-xs text-slate-600">Type: ${q.type === 'mcq' ? 'Multiple Choice' : 'Theory'}</p>
-        </div>
-      `).join('');
-    }
-
-    function renderSubmissionsList() {
-      const list = document.getElementById('submissions-list');
-      if(!list) return;
-      
-      if(submissions.length === 0) {
-        list.innerHTML = '<p class="text-slate-400 font-bold py-6 text-center italic">No submissions yet. Students will submit their responses here.</p>';
-        return;
-      }
-      
-      list.innerHTML = submissions.map((s) => {
-        return `
-          <div class="bg-white rounded-2xl p-6 border-l-8 border-blue-500 shadow-md">
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <p class="text-sm font-black text-blue-900">${s.student}</p>
-                <p class="text-[10px] font-bold text-slate-500 uppercase">${s.level} • ${s.subject}</p>
-              </div>
-              <p class="text-[9px] text-slate-400 font-mono">${s.timestamp}</p>
-            </div>
+        // --- AUTHENTICATION ---
+        function handleLogin() {
+            const name = document.getElementById('login-student').value;
+            const code = document.getElementById('login-code').value;
             
-            <div class="bg-slate-50 p-4 rounded-xl mb-4 border-l-4 border-slate-300">
-              <p class="text-[10px] font-black text-slate-600 uppercase mb-1">Question</p>
-              <p class="text-sm font-bold text-slate-800">${s.question}</p>
-            </div>
+            const student = STUDENTS.find(s => s.name === name && s.code === code);
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                <p class="text-[10px] font-black text-blue-900 uppercase mb-2">📝 Student's Answer</p>
-                <p class="text-sm font-bold text-blue-800 italic">"${s.studentAnswer}"</p>
-              </div>
-              <div class="bg-green-50 p-4 rounded-xl border border-green-200">
-                <p class="text-[10px] font-black text-green-900 uppercase mb-2">✓ Expected Answer</p>
-                <p class="text-sm font-bold text-green-800 italic">"${s.expectedAnswer}"</p>
-              </div>
-            </div>
+            if (student) {
+                currentUser = student;
+                localStorage.setItem('heddy_user', JSON.stringify(student));
+                showView('dashboard');
+            } else {
+                alert("Invalid name or access code. Please try again.");
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('heddy_user');
+            showView('login');
+        }
+
+        function promptAdmin() {
+            const key = prompt("Enter Admin Key:");
+            if (key === "1234") {
+                showView('admin');
+            } else if (key !== null) {
+                alert("Incorrect Admin Key.");
+            }
+        }
+
+        // --- DASHBOARD ---
+        function renderDashboard() {
+            document.getElementById('user-display-name').innerText = currentUser.name;
+            document.getElementById('user-display-level').innerText = currentUser.level;
             
-            <div class="mt-4 p-3 rounded-lg ${s.isCorrect ? 'bg-green-100 border border-green-300' : 'bg-red-100 border border-red-300'}">
-              <p class="text-xs font-black ${s.isCorrect ? 'text-green-900' : 'text-red-900'}">
-                ${s.isCorrect ? '✓ CORRECT' : '✗ NEEDS REVIEW'}
-              </p>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
+            const subjects = ['ENGLISH', 'MATHEMATICS', 'SOCIAL STUDIES'];
+            subjects.forEach(sub => {
+                const subId = sub.toLowerCase().split(' ')[0];
+                const statusEl = document.getElementById(`status-${subId}`);
+                
+                const hasTaken = submissions.some(s => s.student === currentUser.name && s.subject === sub);
+                
+                if (hasTaken) {
+                    const subData = submissions.find(s => s.student === currentUser.name && s.subject === sub);
+                    statusEl.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-700 text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">COMPLETED</span>
+                            <span class="text-sm font-800 text-slate-700">${subData.score}%</span>
+                        </div>
+                    `;
+                } else {
+                    statusEl.innerHTML = `
+                        <button onclick="startAssessment('${sub}')" class="w-full py-2 bg-blue-50 text-blue-600 rounded-xl text-sm font-700 hover:bg-blue-600 hover:text-white transition-all">
+                            Start Quiz
+                        </button>
+                    `;
+                }
+            });
+        }
 
-    function deleteQ(i) {
-      if(confirm("Delete this question?")) {
-        questions.splice(i, 1);
-        localStorage.setItem('h_sup_q_vFinal', JSON.stringify(questions));
-        renderQuestionsList();
-      }
-    }
+        // --- ASSESSMENT ENGINE ---
+        function startAssessment(subject) {
+            const levelQuestions = questions.filter(q => q.level === currentUser.level && q.subject === subject);
+            
+            if (levelQuestions.length === 0) {
+                alert("No questions available for this subject yet.");
+                return;
+            }
 
-    function adminLogin() {
-      const key = prompt("Enter Admin Key:");
-      if(key === "1234") {
-        document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-        document.getElementById('admin-screen').classList.remove('hidden');
-      } else if(key) {
-        alert("Invalid admin key");
-      }
-    }
+            currentQuiz = {
+                subject: subject,
+                questions: levelQuestions,
+                currentIndex: 0,
+                score: 0,
+                answers: []
+            };
 
-    function backToLogin() {
-      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-      document.getElementById('login-screen').classList.remove('hidden');
-      user = {};
-    }
-  </script>
+            document.getElementById('quiz-subject-tag').innerText = subject;
+            document.getElementById('quiz-title').innerText = `${subject} Assessment`;
+            document.getElementById('total-q-num').innerText = levelQuestions.length;
+            
+            showView('assessment');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = currentQuiz.questions[currentQuiz.currentIndex];
+            document.getElementById('current-q-num').innerText = currentQuiz.currentIndex + 1;
+            
+            const progress = ((currentQuiz.currentIndex) / currentQuiz.questions.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${progress}%`;
+            
+            document.getElementById('question-text').innerText = q.text;
+            
+            const optionsContainer = document.getElementById('options-container');
+            const theoryContainer = document.getElementById('theory-container');
+            
+            optionsContainer.innerHTML = "";
+            theoryContainer.classList.add('hidden');
+            
+            if (q.type === 'mcq') {
+                optionsContainer.classList.remove('hidden');
+                q.options.forEach((opt, idx) => {
+                    const div = document.createElement('div');
+                    div.className = "option-card p-4 rounded-2xl border-2 border-slate-100 flex items-center gap-4";
+                    div.innerHTML = `
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-800 text-slate-500">${String.fromCharCode(65 + idx)}</div>
+                        <span class="font-600 text-slate-700">${opt}</span>
+                    `;
+                    div.onclick = () => selectOption(idx, div);
+                    optionsContainer.appendChild(div);
+                });
+            } else {
+                optionsContainer.classList.add('hidden');
+                theoryContainer.classList.remove('hidden');
+                document.getElementById('theory-answer').value = "";
+            }
+
+            document.getElementById('next-btn').innerText = currentQuiz.currentIndex === currentQuiz.questions.length - 1 ? "Finish Assessment" : "Next Question";
+        }
+
+        let selectedOptionIdx = null;
+        function selectOption(idx, el) {
+            selectedOptionIdx = idx;
+            document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected', 'border-blue-500'));
+            el.classList.add('selected', 'border-blue-500');
+        }
+
+        function handleNextQuestion() {
+            const q = currentQuiz.questions[currentQuiz.currentIndex];
+            let studentAnswer = "";
+            let isCorrect = false;
+
+            if (q.type === 'mcq') {
+                if (selectedOptionIdx === null) {
+                    alert("Please select an option.");
+                    return;
+                }
+                studentAnswer = q.options[selectedOptionIdx];
+                isCorrect = selectedOptionIdx === q.correctIdx;
+                selectedOptionIdx = null;
+            } else {
+                studentAnswer = document.getElementById('theory-answer').value.trim();
+                if (!studentAnswer) {
+                    alert("Please type your answer.");
+                    return;
+                }
+                // Simple keyword matching for theory
+                const keywords = q.correctAns.toLowerCase().split(' ');
+                isCorrect = keywords.some(k => studentAnswer.toLowerCase().includes(k));
+            }
+
+            if (isCorrect) currentQuiz.score++;
+            
+            currentQuiz.answers.push({
+                question: q.text,
+                studentAnswer: studentAnswer,
+                expectedAnswer: q.type === 'mcq' ? q.options[q.correctIdx] : q.correctAns,
+                isCorrect: isCorrect
+            });
+
+            if (currentQuiz.currentIndex < currentQuiz.questions.length - 1) {
+                currentQuiz.currentIndex++;
+                loadQuestion();
+            } else {
+                finishAssessment();
+            }
+        }
+
+        function finishAssessment() {
+            const finalScore = Math.round((currentQuiz.score / currentQuiz.questions.length) * 100);
+            
+            const submission = {
+                id: Date.now(),
+                student: currentUser.name,
+                level: currentUser.level,
+                subject: currentQuiz.subject,
+                score: finalScore,
+                correctCount: currentQuiz.score,
+                totalCount: currentQuiz.questions.length,
+                date: new Date().toLocaleDateString(),
+                details: currentQuiz.answers
+            };
+
+            submissions.push(submission);
+            localStorage.setItem('heddy_submissions', JSON.stringify(submissions));
+
+            document.getElementById('result-subject').innerText = currentQuiz.subject;
+            document.getElementById('result-score').innerText = finalScore;
+            document.getElementById('result-correct').innerText = currentQuiz.score;
+            document.getElementById('result-total').innerText = currentQuiz.questions.length;
+            
+            showView('results');
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#1e40af', '#3b82f6', '#fbbf24']
+            });
+        }
+
+        function exitAssessment() {
+            if (confirm("Are you sure you want to exit? Your progress will be lost.")) {
+                showView('dashboard');
+            }
+        }
+
+        // --- LEADERBOARD ---
+        function renderLeaderboard() {
+            const filterLevel = document.getElementById('leaderboard-filter-level').value;
+            const body = document.getElementById('leaderboard-body');
+            const empty = document.getElementById('leaderboard-empty');
+            
+            body.innerHTML = "";
+            
+            // Group submissions by student
+            const studentStats = STUDENTS.map(s => {
+                const studentSubs = submissions.filter(sub => sub.student === s.name);
+                const avgScore = studentSubs.length > 0 
+                    ? Math.round(studentSubs.reduce((acc, curr) => acc + curr.score, 0) / studentSubs.length)
+                    : 0;
+                return {
+                    name: s.name,
+                    level: s.level,
+                    avgScore: avgScore,
+                    count: studentSubs.length
+                };
+            });
+
+            let filtered = studentStats;
+            if (filterLevel !== 'all') {
+                filtered = studentStats.filter(s => s.level === filterLevel);
+            }
+
+            // Sort by avg score
+            filtered.sort((a, b) => b.avgScore - a.avgScore);
+
+            if (filtered.length === 0 || filtered.every(s => s.count === 0)) {
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            filtered.forEach((s, idx) => {
+                if (s.count === 0) return;
+                
+                let medal = "";
+                if (idx === 0) medal = "🥇";
+                else if (idx === 1) medal = "🥈";
+                else if (idx === 2) medal = "🥉";
+                else medal = `<span class="text-slate-400 font-700">${idx + 1}</span>`;
+
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-50 hover:bg-slate-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-6 py-4">${medal}</td>
+                    <td class="px-6 py-4 font-700 text-slate-700">${s.name}</td>
+                    <td class="px-6 py-4 text-sm text-slate-500">${s.level}</td>
+                    <td class="px-6 py-4 font-800 text-blue-600">${s.avgScore}%</td>
+                    <td class="px-6 py-4 text-sm text-slate-500">${s.count}</td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+
+        // --- RECORDS ---
+        function renderRecords() {
+            const content = document.getElementById('records-content');
+            const prompt = document.getElementById('records-login-prompt');
+            
+            if (!currentUser) {
+                content.classList.add('hidden');
+                prompt.classList.remove('hidden');
+                return;
+            }
+
+            content.classList.remove('hidden');
+            prompt.classList.add('hidden');
+
+            const mySubs = submissions.filter(s => s.student === currentUser.name);
+            const scores = mySubs.map(s => s.score);
+            
+            const total = mySubs.length;
+            const avg = total > 0 ? Math.round(scores.reduce((a, b) => a + b) / total) : 0;
+            const best = total > 0 ? Math.max(...scores) : 0;
+            
+            let badges = 0;
+            if (best >= 90) badges++;
+            if (avg >= 80) badges++;
+            if (total >= 3) badges++;
+
+            document.getElementById('rec-total').innerText = total;
+            document.getElementById('rec-avg').innerText = `${avg}%`;
+            document.getElementById('rec-best').innerText = `${best}%`;
+            document.getElementById('rec-badges').innerText = badges;
+
+            const body = document.getElementById('history-body');
+            body.innerHTML = "";
+            
+            if (total === 0) {
+                body.innerHTML = `<tr><td colspan="4" class="px-6 py-8 text-center text-slate-400">No assessments taken yet.</td></tr>`;
+                return;
+            }
+
+            mySubs.reverse().forEach(s => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-50";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-700 text-slate-700">${s.subject}</td>
+                    <td class="px-6 py-4 text-sm text-slate-500">${s.date}</td>
+                    <td class="px-6 py-4 font-800 text-blue-600">${s.score}%</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded-md text-[10px] font-800 ${s.score >= 50 ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}">
+                            ${s.score >= 50 ? 'PASSED' : 'REVIEW'}
+                        </span>
+                    </td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+
+        // --- ADMIN PANEL ---
+        let activeAdminTab = 'submissions';
+        function setAdminTab(tab) {
+            activeAdminTab = tab;
+            document.getElementById('admin-submissions').classList.toggle('hidden', tab !== 'submissions');
+            document.getElementById('admin-questions').classList.toggle('hidden', tab !== 'questions');
+            
+            document.getElementById('tab-submissions').className = tab === 'submissions' 
+                ? "pb-4 px-2 text-sm font-700 text-blue-600 border-b-2 border-blue-600 transition-all"
+                : "pb-4 px-2 text-sm font-700 text-slate-400 hover:text-slate-600 transition-all";
+            
+            document.getElementById('tab-questions').className = tab === 'questions' 
+                ? "pb-4 px-2 text-sm font-700 text-blue-600 border-b-2 border-blue-600 transition-all"
+                : "pb-4 px-2 text-sm font-700 text-slate-400 hover:text-slate-600 transition-all";
+            
+            renderAdmin();
+        }
+
+        function renderAdmin() {
+            if (activeAdminTab === 'submissions') {
+                const body = document.getElementById('admin-submissions-body');
+                body.innerHTML = "";
+                
+                if (submissions.length === 0) {
+                    body.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400">No submissions yet.</td></tr>`;
+                    return;
+                }
+
+                submissions.slice().reverse().forEach(sub => {
+                    sub.details.forEach(detail => {
+                        const tr = document.createElement('tr');
+                        tr.className = "border-b border-slate-50 hover:bg-slate-50 transition-colors";
+                        tr.innerHTML = `
+                            <td class="px-6 py-4">
+                                <div class="font-700 text-slate-700">${sub.student}</div>
+                                <div class="text-[10px] text-slate-400 font-700 uppercase">${sub.level}</div>
+                            </td>
+                            <td class="px-6 py-4 text-sm font-600 text-slate-600">${sub.subject}</td>
+                            <td class="px-6 py-4 text-sm text-slate-500 max-w-xs truncate">${detail.question}</td>
+                            <td class="px-6 py-4 text-sm font-600 text-slate-700">${detail.studentAnswer}</td>
+                            <td class="px-6 py-4 text-sm text-slate-400 italic">${detail.expectedAnswer}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2 py-1 rounded-md text-[10px] font-800 ${detail.isCorrect ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}">
+                                    ${detail.isCorrect ? 'CORRECT' : 'NEEDS REVIEW'}
+                                </span>
+                            </td>
+                        `;
+                        body.appendChild(tr);
+                    });
+                });
+            } else {
+                const body = document.getElementById('admin-questions-body');
+                body.innerHTML = "";
+                
+                questions.forEach((q, idx) => {
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-slate-50";
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 text-sm font-700 text-slate-500">${q.level}</td>
+                        <td class="px-6 py-4 text-sm font-700 text-blue-600">${q.subject}</td>
+                        <td class="px-6 py-4 text-sm text-slate-700">${q.text}</td>
+                        <td class="px-6 py-4">
+                            <button onclick="deleteQuestion(${q.id})" class="text-red-500 hover:text-red-700 transition-colors">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    body.appendChild(tr);
+                });
+            }
+        }
+
+        function toggleAddOptions() {
+            const type = document.getElementById('add-q-type').value;
+            document.getElementById('add-q-mcq-options').classList.toggle('hidden', type !== 'mcq');
+            document.getElementById('add-q-theory-ans-container').classList.toggle('hidden', type !== 'theory');
+        }
+
+        function addNewQuestion() {
+            const level = document.getElementById('add-q-level').value;
+            const subject = document.getElementById('add-q-subject').value;
+            const text = document.getElementById('add-q-text').value.trim();
+            const type = document.getElementById('add-q-type').value;
+            
+            if (!text) return alert("Please enter question text.");
+
+            let newQ = {
+                id: Date.now(),
+                level,
+                subject,
+                text,
+                type
+            };
+
+            if (type === 'mcq') {
+                const options = [
+                    document.getElementById('opt-0').value.trim(),
+                    document.getElementById('opt-1').value.trim(),
+                    document.getElementById('opt-2').value.trim(),
+                    document.getElementById('opt-3').value.trim()
+                ];
+                if (options.some(o => !o)) return alert("Please fill all options.");
+                
+                newQ.options = options;
+                newQ.correctIdx = parseInt(document.querySelector('input[name="correct-opt"]:checked').value);
+            } else {
+                const ans = document.getElementById('add-q-theory-ans').value.trim();
+                if (!ans) return alert("Please enter expected answer keywords.");
+                newQ.correctAns = ans;
+            }
+
+            questions.push(newQ);
+            localStorage.setItem('heddy_questions', JSON.stringify(questions));
+            alert("Question added successfully!");
+            
+            // Reset form
+            document.getElementById('add-q-text').value = "";
+            if (type === 'theory') document.getElementById('add-q-theory-ans').value = "";
+            renderAdmin();
+        }
+
+        function deleteQuestion(id) {
+            if (confirm("Are you sure you want to delete this question?")) {
+                questions = questions.filter(q => q.id !== id);
+                localStorage.setItem('heddy_questions', JSON.stringify(questions));
+                renderAdmin();
+            }
+        }
+
+        // --- INITIAL RUN ---
+        window.onload = () => {
+            if (currentUser) showView('dashboard');
+            else showView('login');
+        };
+    </script>
 </body>
 </html>
