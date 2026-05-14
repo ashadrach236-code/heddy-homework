@@ -3,146 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEDDY SUPREME | Educational Portal</title>
+    <title>HEDDY SUPREME | Strict Educational Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
         
         :root {
-            --primary: #1e40af;
-            --primary-dark: #1e3a8a;
+            --primary: #1e3a8a;
             --secondary: #64748b;
-            --accent: #3b82f6;
-            --bg: #f8fafc;
+            --accent: #f59e0b;
+            --bg: #f1f5f9;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Outfit', sans-serif;
             background-color: var(--bg);
-            color: #1e293b;
-            overflow-x: hidden;
+            color: #0f172a;
+            user-select: none; /* Prevent copying */
         }
 
-        .glass {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .heddy-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.3);
-        }
-
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        .progress-bar {
-            transition: width 0.5s ease-in-out;
-        }
-
-        .option-card {
+            background: var(--primary);
+            color: white;
             transition: all 0.2s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
         }
 
-        .option-card:hover {
-            background-color: #eff6ff;
-            border-color: #bfdbfe;
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
         }
 
-        .option-card.selected {
-            background-color: #dbeafe;
-            border-color: #3b82f6;
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 1.25rem;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            position: relative;
         }
 
-        .hidden { display: none; }
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
 
-        @keyframes fadeIn {
+        .option-btn.correct {
+            border-color: #22c55e;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .option-btn.wrong {
+            border-color: #ef4444;
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .bot-bubble {
+            background: #1e293b;
+            color: white;
+            border-radius: 20px 20px 20px 4px;
+            padding: 1.5rem;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
+        .hidden { display: none !important; }
+
+        /* Strict Mode Overlay */
+        #strict-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 2rem;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Navigation -->
-    <nav class="glass sticky top-0 z-50 px-6 py-4 shadow-sm">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="showView('home')">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg">
-                    <i class="fas fa-graduation-cap text-xl"></i>
-                </div>
-                <h1 class="text-xl font-800 tracking-tight text-slate-900">HEDDY <span class="text-blue-600">SUPREME</span></h1>
-            </div>
-            
-            <div class="hidden md:flex items-center gap-6">
-                <button onclick="showView('leaderboard')" class="text-sm font-600 text-slate-600 hover:text-blue-600 transition-colors">Leaderboard</button>
-                <button onclick="showView('records')" class="text-sm font-600 text-slate-600 hover:text-blue-600 transition-colors">My Records</button>
-                <button onclick="promptAdmin()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-600 text-slate-700 transition-all">Admin Panel</button>
-            </div>
+    <!-- Strict Mode Warning -->
+    <div id="strict-overlay" class="hidden">
+        <i class="fas fa-exclamation-triangle text-6xl text-yellow-500 mb-6"></i>
+        <h2 class="text-3xl font-800 mb-4">STRICT MODE VIOLATION</h2>
+        <p class="text-xl text-slate-300 mb-8">You attempted to leave the assessment page. This incident has been logged.</p>
+        <button onclick="resumeAssessment()" class="px-8 py-4 bg-white text-black rounded-xl font-800">I UNDERSTAND, RESUME</button>
+    </div>
 
-            <div class="md:hidden">
-                <button onclick="toggleMobileMenu()" class="text-slate-600"><i class="fas fa-bars text-xl"></i></button>
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-900 rounded-xl flex items-center justify-center text-white">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h1 class="text-xl font-800 tracking-tight">HEDDY <span class="text-blue-700">SUPREME</span></h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="sync-status" class="text-[10px] font-800 uppercase tracking-widest text-slate-400">
+                    <i class="fas fa-circle text-[8px] mr-1"></i> Local Mode
+                </div>
+                <button onclick="promptAdmin()" class="text-sm font-700 text-slate-500 hover:text-blue-900">Admin</button>
             </div>
         </div>
     </nav>
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-white p-6 flex flex-col gap-6 pt-24">
-        <button onclick="showView('leaderboard'); toggleMobileMenu()" class="text-lg font-600 text-slate-700">Leaderboard</button>
-        <button onclick="showView('records'); toggleMobileMenu()" class="text-lg font-600 text-slate-700">My Records</button>
-        <button onclick="promptAdmin(); toggleMobileMenu()" class="text-lg font-600 text-slate-700">Admin Panel</button>
-        <button onclick="toggleMobileMenu()" class="mt-auto py-4 bg-slate-100 rounded-xl font-700">Close Menu</button>
-    </div>
-
-    <main class="flex-grow container mx-auto px-4 py-8 max-w-5xl">
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl">
         
-        <!-- LOGIN VIEW -->
-        <section id="view-login" class="animate-fade-in">
-            <div class="max-w-md mx-auto mt-12">
-                <div class="text-center mb-10">
-                    <h2 class="text-4xl font-800 text-slate-900 mb-2">Welcome Back</h2>
-                    <p class="text-slate-500">Enter your credentials to access your portal</p>
-                </div>
+        <!-- LOGIN SECTION -->
+        <section id="login-view" class="mt-12">
+            <div class="max-w-md mx-auto text-center">
+                <h2 class="text-4xl font-800 mb-2">Student Portal</h2>
+                <p class="text-slate-500 mb-10">Enter your credentials to begin your assessment.</p>
                 
-                <div class="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
+                <div class="heddy-card p-8 text-left">
                     <div class="space-y-6">
                         <div>
-                            <label class="block text-sm font-700 text-slate-700 mb-2">Select Student</label>
-                            <select id="login-student" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all appearance-none bg-slate-50">
-                                <option value="">Choose your name...</option>
+                            <label class="block text-xs font-800 uppercase tracking-widest text-slate-400 mb-2">Select Name</label>
+                            <select id="login-name" class="w-full p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-blue-900 font-700 appearance-none bg-slate-50">
+                                <option value="">-- SELECT YOUR NAME --</option>
                                 <optgroup label="Basic 6-7">
                                     <option value="KENNETH ANTWI">KENNETH ANTWI</option>
                                     <option value="PEACE OF GOD VICTOR">PEACE OF GOD VICTOR</option>
@@ -158,334 +165,176 @@
                                 </optgroup>
                             </select>
                         </div>
-                        
                         <div>
-                            <label class="block text-sm font-700 text-slate-700 mb-2">Access Code</label>
-                            <input type="password" id="login-code" placeholder="••••" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-slate-50">
+                            <label class="block text-xs font-800 uppercase tracking-widest text-slate-400 mb-2">Access Code</label>
+                            <input type="password" id="login-code" placeholder="••••" class="w-full p-4 rounded-xl border-2 border-slate-100 outline-none focus:border-blue-900 font-700 bg-slate-50">
                         </div>
-                        
-                        <button onclick="handleLogin()" class="w-full py-4 btn-primary text-white rounded-xl font-700 shadow-lg">
-                            Login to Portal
+                        <button onclick="handleLogin()" class="w-full py-5 btn-primary rounded-xl font-800 text-lg shadow-lg">
+                            ENTER CLASSROOM
                         </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- DASHBOARD VIEW -->
-        <section id="view-dashboard" class="hidden animate-fade-in">
-            <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- DASHBOARD SECTION -->
+        <section id="dashboard-view" class="hidden">
+            <div class="flex justify-between items-end mb-8">
                 <div>
-                    <h2 class="text-3xl font-800 text-slate-900">Hello, <span id="user-display-name" class="text-blue-600">Student</span>!</h2>
-                    <p class="text-slate-500" id="user-display-level">Basic Level</p>
+                    <h2 class="text-3xl font-800" id="user-welcome">Welcome</h2>
+                    <p class="text-slate-500" id="user-level">Level</p>
                 </div>
-                <button onclick="logout()" class="self-start px-4 py-2 text-sm font-600 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                </button>
+                <button onclick="logout()" class="text-sm font-700 text-red-500">Logout</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 card-hover">
-                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 mb-4">
-                        <i class="fas fa-book-open text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-700 mb-1">English</h3>
-                    <p class="text-sm text-slate-500 mb-4">Grammar, Vocabulary & Literature</p>
-                    <div id="status-english"></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="heddy-card p-6 border-l-4 border-blue-600">
+                    <h3 class="font-800 text-slate-400 text-xs uppercase tracking-widest mb-4">English</h3>
+                    <div id="status-english" class="flex flex-col gap-3"></div>
                 </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 card-hover">
-                    <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 mb-4">
-                        <i class="fas fa-calculator text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-700 mb-1">Mathematics</h3>
-                    <p class="text-sm text-slate-500 mb-4">Algebra & Problem Solving</p>
-                    <div id="status-mathematics"></div>
+                <div class="heddy-card p-6 border-l-4 border-emerald-600">
+                    <h3 class="font-800 text-slate-400 text-xs uppercase tracking-widest mb-4">Mathematics</h3>
+                    <div id="status-mathematics" class="flex flex-col gap-3"></div>
                 </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 card-hover">
-                    <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 mb-4">
-                        <i class="fas fa-globe-africa text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-700 mb-1">Social Studies</h3>
-                    <p class="text-sm text-slate-500 mb-4">Culture & Globalization</p>
-                    <div id="status-social"></div>
+                <div class="heddy-card p-6 border-l-4 border-amber-600">
+                    <h3 class="font-800 text-slate-400 text-xs uppercase tracking-widest mb-4">Social Studies</h3>
+                    <div id="status-social" class="flex flex-col gap-3"></div>
                 </div>
             </div>
 
-            <div class="bg-blue-600 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
+            <div class="heddy-card p-8 bg-blue-900 text-white relative overflow-hidden">
                 <div class="relative z-10">
-                    <h3 class="text-2xl font-800 mb-2">Ready for a challenge?</h3>
-                    <p class="text-blue-100 mb-6 max-w-md">Complete all your assessments to earn the "Supreme Scholar" badge and climb the leaderboard!</p>
-                    <button onclick="showView('leaderboard')" class="px-6 py-3 bg-white text-blue-600 rounded-xl font-700 hover:bg-blue-50 transition-colors">
-                        View Leaderboard
-                    </button>
+                    <h3 class="text-2xl font-800 mb-2">Global Leaderboard</h3>
+                    <p class="text-blue-200 mb-6">See how you rank against other students.</p>
+                    <button onclick="showLeaderboard()" class="px-6 py-3 bg-white text-blue-900 rounded-xl font-800">View Rankings</button>
                 </div>
-                <i class="fas fa-trophy absolute -right-4 -bottom-4 text-9xl text-blue-500 opacity-30 rotate-12"></i>
+                <i class="fas fa-trophy absolute -right-4 -bottom-4 text-9xl text-blue-800 opacity-50 rotate-12"></i>
             </div>
         </section>
 
-        <!-- ASSESSMENT VIEW -->
-        <section id="view-assessment" class="hidden animate-fade-in max-w-3xl mx-auto">
-            <div class="mb-6 flex items-center justify-between">
-                <div>
-                    <span id="quiz-subject-tag" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-700 uppercase tracking-wider">Subject</span>
-                    <h2 id="quiz-title" class="text-2xl font-800 text-slate-900 mt-2">Assessment</h2>
-                </div>
+        <!-- ASSESSMENT SECTION -->
+        <section id="quiz-view" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div class="px-4 py-2 bg-blue-100 text-blue-900 rounded-full text-xs font-800 uppercase tracking-widest" id="quiz-subject">Subject</div>
                 <div class="text-right">
-                    <p class="text-xs font-700 text-slate-400 uppercase">Progress</p>
-                    <p class="text-lg font-800 text-blue-600"><span id="current-q-num">1</span>/<span id="total-q-num">15</span></p>
+                    <p class="text-[10px] font-800 text-slate-400 uppercase">Question</p>
+                    <p class="text-xl font-800"><span id="q-current">1</span>/<span id="q-total">15</span></p>
                 </div>
             </div>
 
             <div class="w-full bg-slate-200 h-2 rounded-full mb-8 overflow-hidden">
-                <div id="quiz-progress-bar" class="progress-bar bg-blue-600 h-full w-0"></div>
+                <div id="quiz-progress" class="h-full bg-blue-900 transition-all duration-500" style="width: 0%"></div>
             </div>
 
-            <div class="bg-white rounded-3xl p-8 shadow-xl border border-slate-100 mb-6">
-                <p id="question-text" class="text-xl font-600 text-slate-800 mb-8 leading-relaxed">Loading question...</p>
+            <div class="heddy-card p-8 mb-6">
+                <h3 id="q-text" class="text-2xl font-700 text-slate-800 mb-10 leading-relaxed">Question text goes here?</h3>
                 
-                <div id="options-container" class="grid grid-cols-1 gap-4">
-                    <!-- Options will be injected here -->
-                </div>
-
-                <div id="theory-container" class="hidden">
-                    <textarea id="theory-answer" rows="5" class="w-full p-4 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-slate-50 font-500" placeholder="Type your answer here..."></textarea>
+                <div id="mcq-options" class="grid grid-cols-1 gap-4"></div>
+                
+                <div id="theory-input" class="hidden space-y-4">
+                    <textarea id="theory-ans" rows="4" class="w-full p-6 rounded-2xl border-2 border-slate-100 outline-none focus:border-blue-900 font-600 bg-slate-50" placeholder="Type your detailed answer here..."></textarea>
+                    <button onclick="submitTheory()" id="theory-submit-btn" class="w-full py-4 btn-primary rounded-xl font-800">SUBMIT ANSWER</button>
                 </div>
             </div>
 
-            <div class="flex justify-between items-center">
-                <button onclick="exitAssessment()" class="text-slate-500 font-600 hover:text-slate-700 transition-colors">Exit</button>
-                <button id="next-btn" onclick="handleNextQuestion()" class="px-8 py-4 btn-primary text-white rounded-2xl font-700 shadow-lg flex items-center gap-2">
-                    Next Question <i class="fas fa-arrow-right"></i>
-                </button>
+            <!-- HEDDY BOT FEEDBACK -->
+            <div id="bot-feedback" class="hidden mb-8">
+                <div class="flex gap-4 items-start">
+                    <div class="w-12 h-12 bg-blue-900 rounded-2xl flex-shrink-0 flex items-center justify-center text-white text-xl">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="bot-bubble flex-grow">
+                        <p class="text-[10px] font-800 text-blue-400 uppercase tracking-widest mb-2">Heddy Bot Analysis</p>
+                        <p id="bot-msg" class="text-lg font-500 leading-relaxed italic"></p>
+                        <button onclick="nextQuestion()" class="mt-6 w-full py-3 bg-white text-blue-900 rounded-xl font-800 uppercase tracking-widest hover:bg-blue-50 transition-colors">
+                            Continue <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- RESULTS VIEW -->
-        <section id="view-results" class="hidden animate-fade-in text-center max-w-md mx-auto">
-            <div class="bg-white rounded-3xl p-10 shadow-xl border border-slate-100">
-                <div id="result-icon" class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mx-auto mb-6">
-                    <i class="fas fa-check text-3xl"></i>
+        <!-- RESULTS SECTION -->
+        <section id="result-view" class="hidden text-center max-w-md mx-auto">
+            <div class="heddy-card p-10">
+                <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6">
+                    <i class="fas fa-check-circle"></i>
                 </div>
-                <h2 class="text-3xl font-800 text-slate-900 mb-2">Well Done!</h2>
-                <p class="text-slate-500 mb-8">You've completed the <span id="result-subject" class="font-700 text-slate-700">Subject</span> assessment.</p>
+                <h2 class="text-3xl font-800 mb-2">Assessment Complete</h2>
+                <p class="text-slate-500 mb-8">Your results have been securely logged and synced to the teacher.</p>
                 
                 <div class="bg-slate-50 rounded-2xl p-6 mb-8">
-                    <p class="text-sm font-700 text-slate-400 uppercase mb-1">Your Score</p>
-                    <p class="text-5xl font-800 text-blue-600"><span id="result-score">0</span>%</p>
-                    <p class="text-sm text-slate-500 mt-2"><span id="result-correct">0</span> out of <span id="result-total">0</span> correct</p>
+                    <p class="text-[10px] font-800 text-slate-400 uppercase tracking-widest mb-1">Final Score</p>
+                    <p class="text-6xl font-800 text-blue-900"><span id="res-score">0</span>%</p>
+                    <p class="text-sm font-700 text-slate-500 mt-2"><span id="res-correct">0</span> / <span id="res-total">0</span> Correct</p>
                 </div>
 
-                <button onclick="showView('dashboard')" class="w-full py-4 btn-primary text-white rounded-xl font-700 shadow-lg mb-4">
-                    Back to Dashboard
-                </button>
+                <button onclick="showView('dashboard')" class="w-full py-4 btn-primary rounded-xl font-800">RETURN TO DASHBOARD</button>
             </div>
         </section>
 
-        <!-- LEADERBOARD VIEW -->
-        <section id="view-leaderboard" class="hidden animate-fade-in">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl font-800 text-slate-900">Leaderboard</h2>
-                <div class="flex gap-2">
-                    <select id="leaderboard-filter-level" onchange="renderLeaderboard()" class="px-3 py-2 rounded-lg border border-slate-200 text-sm font-600 outline-none">
-                        <option value="all">All Levels</option>
-                        <option value="Basic 6-7">Basic 6-7</option>
-                        <option value="Basic 8">Basic 8</option>
-                    </select>
-                </div>
+        <!-- LEADERBOARD SECTION -->
+        <section id="leaderboard-view" class="hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-800">Leaderboard</h2>
+                <button onclick="showView('dashboard')" class="text-sm font-700 text-slate-500">Back</button>
             </div>
-
-            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+            <div class="heddy-card overflow-hidden">
                 <table class="w-full text-left">
-                    <thead>
-                        <tr class="bg-slate-50 border-b border-slate-100">
-                            <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Rank</th>
-                            <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Student</th>
-                            <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Level</th>
-                            <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Avg. Score</th>
-                            <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Assessments</th>
+                    <thead class="bg-slate-50 border-b border-slate-100">
+                        <tr>
+                            <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Rank</th>
+                            <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Student</th>
+                            <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Level</th>
+                            <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Avg Score</th>
                         </tr>
                     </thead>
-                    <tbody id="leaderboard-body">
-                        <!-- Leaderboard rows injected here -->
-                    </tbody>
+                    <tbody id="leaderboard-body"></tbody>
                 </table>
-                <div id="leaderboard-empty" class="hidden p-12 text-center text-slate-400">
-                    <i class="fas fa-users text-4xl mb-4 opacity-20"></i>
-                    <p>No records found yet.</p>
-                </div>
             </div>
         </section>
 
-        <!-- RECORDS VIEW -->
-        <section id="view-records" class="hidden animate-fade-in">
-            <h2 class="text-3xl font-800 text-slate-900 mb-8">My Records</h2>
-            
-            <div id="records-content">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
-                        <p class="text-xs font-700 text-slate-400 uppercase mb-1">Total Taken</p>
-                        <p id="rec-total" class="text-3xl font-800 text-blue-600">0</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
-                        <p class="text-xs font-700 text-slate-400 uppercase mb-1">Average Score</p>
-                        <p id="rec-avg" class="text-3xl font-800 text-emerald-600">0%</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
-                        <p class="text-xs font-700 text-slate-400 uppercase mb-1">Best Score</p>
-                        <p id="rec-best" class="text-3xl font-800 text-amber-600">0%</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
-                        <p class="text-xs font-700 text-slate-400 uppercase mb-1">Badges</p>
-                        <p id="rec-badges" class="text-3xl font-800 text-purple-600">0</p>
-                    </div>
-                </div>
-
-                <h3 class="text-xl font-800 text-slate-900 mb-4">Assessment History</h3>
-                <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="bg-slate-50 border-b border-slate-100">
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Subject</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Date</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Score</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="history-body">
-                            <!-- History rows injected here -->
-                        </tbody>
-                    </table>
+        <!-- ADMIN SECTION -->
+        <section id="admin-view" class="hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-800">Teacher Admin</h2>
+                <div class="flex gap-3">
+                    <button onclick="syncFromCloud()" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-800 uppercase"><i class="fas fa-sync mr-2"></i>Fetch Cloud Data</button>
+                    <button onclick="showView('login')" class="px-4 py-2 bg-slate-200 rounded-lg text-xs font-800 uppercase">Exit</button>
                 </div>
             </div>
 
-            <div id="records-login-prompt" class="hidden p-12 text-center bg-white rounded-3xl shadow-xl border border-slate-100">
-                <i class="fas fa-lock text-4xl text-slate-200 mb-4"></i>
-                <h3 class="text-xl font-700 text-slate-800 mb-2">Login Required</h3>
-                <p class="text-slate-500 mb-6">Please login to view your personal records and achievements.</p>
-                <button onclick="showView('login')" class="px-6 py-3 btn-primary text-white rounded-xl font-700">Go to Login</button>
-            </div>
-        </section>
-
-        <!-- ADMIN VIEW -->
-        <section id="view-admin" class="hidden animate-fade-in">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl font-800 text-slate-900">Admin Panel</h2>
-                <button onclick="showView('home')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-600 transition-all">Exit Admin</button>
-            </div>
-
-            <div class="flex gap-4 mb-8 border-b border-slate-200">
-                <button onclick="setAdminTab('submissions')" id="tab-submissions" class="pb-4 px-2 text-sm font-700 text-blue-600 border-b-2 border-blue-600 transition-all">Submissions</button>
-                <button onclick="setAdminTab('questions')" id="tab-questions" class="pb-4 px-2 text-sm font-700 text-slate-400 hover:text-slate-600 transition-all">Manage Questions</button>
-            </div>
-
-            <!-- Submissions Tab -->
-            <div id="admin-submissions" class="space-y-6">
-                <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-x-auto">
-                    <table class="w-full text-left min-w-[800px]">
-                        <thead>
-                            <tr class="bg-slate-50 border-b border-slate-100">
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Student</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Subject</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Question</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Answer</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Expected</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-submissions-body">
-                            <!-- Submissions injected here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Questions Tab -->
-            <div id="admin-questions" class="hidden space-y-8">
-                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
-                    <h3 class="text-xl font-800 mb-6">Add New Question</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <label class="block text-sm font-700 text-slate-700 mb-2">Level</label>
-                            <select id="add-q-level" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none bg-slate-50">
-                                <option value="Basic 6-7">Basic 6-7</option>
-                                <option value="Basic 8">Basic 8</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-700 text-slate-700 mb-2">Subject</label>
-                            <select id="add-q-subject" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none bg-slate-50">
-                                <option value="ENGLISH">ENGLISH</option>
-                                <option value="MATHEMATICS">MATHEMATICS</option>
-                                <option value="SOCIAL STUDIES">SOCIAL STUDIES</option>
-                            </select>
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-700 text-slate-700 mb-2">Question Text</label>
-                            <input type="text" id="add-q-text" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none bg-slate-50">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-700 text-slate-700 mb-2">Type</label>
-                            <select id="add-q-type" onchange="toggleAddOptions()" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none bg-slate-50">
-                                <option value="mcq">Multiple Choice (MCQ)</option>
-                                <option value="theory">Theory</option>
-                            </select>
-                        </div>
-                        <div id="add-q-theory-ans-container" class="hidden">
-                            <label class="block text-sm font-700 text-slate-700 mb-2">Expected Answer (Keywords)</label>
-                            <input type="text" id="add-q-theory-ans" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none bg-slate-50">
-                        </div>
+            <div class="grid grid-cols-1 gap-8">
+                <div class="heddy-card p-8">
+                    <h3 class="text-xl font-800 mb-6">Student Submissions</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left min-w-[800px]">
+                            <thead class="bg-slate-50 border-b border-slate-100">
+                                <tr>
+                                    <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Student</th>
+                                    <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Subject</th>
+                                    <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Score</th>
+                                    <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Details</th>
+                                    <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-submissions-body"></tbody>
+                        </table>
                     </div>
-
-                    <div id="add-q-mcq-options" class="space-y-4 mb-8">
-                        <label class="block text-sm font-700 text-slate-700">Options (Mark the correct one)</label>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="flex items-center gap-3">
-                                <input type="radio" name="correct-opt" value="0" checked>
-                                <input type="text" id="opt-0" placeholder="Option A" class="flex-grow px-4 py-2 rounded-lg border border-slate-200 outline-none bg-slate-50">
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <input type="radio" name="correct-opt" value="1">
-                                <input type="text" id="opt-1" placeholder="Option B" class="flex-grow px-4 py-2 rounded-lg border border-slate-200 outline-none bg-slate-50">
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <input type="radio" name="correct-opt" value="2">
-                                <input type="text" id="opt-2" placeholder="Option C" class="flex-grow px-4 py-2 rounded-lg border border-slate-200 outline-none bg-slate-50">
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <input type="radio" name="correct-opt" value="3">
-                                <input type="text" id="opt-3" placeholder="Option D" class="flex-grow px-4 py-2 rounded-lg border border-slate-200 outline-none bg-slate-50">
-                            </div>
-                        </div>
-                    </div>
-
-                    <button onclick="addNewQuestion()" class="px-8 py-3 btn-primary text-white rounded-xl font-700 shadow-lg">Add Question</button>
-                </div>
-
-                <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr class="bg-slate-50 border-b border-slate-100">
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Level</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Subject</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Question</th>
-                                <th class="px-6 py-4 text-xs font-700 text-slate-400 uppercase">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-questions-body">
-                            <!-- Questions list injected here -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="py-8 text-center text-slate-400 text-sm">
-        <p>&copy; 2026 HEDDY SUPREME Educational Portal. All rights reserved.</p>
+    <footer class="py-8 text-center text-slate-400 text-xs font-700 uppercase tracking-widest">
+        &copy; 2026 HEDDY SUPREME EDUCATIONAL PORTAL • STRICT MODE ENABLED
     </footer>
 
     <script>
-        // --- DATA & INITIALIZATION ---
+        // --- CONFIG & DATA ---
+        const ADMIN_KEY = "1234";
+        const CLOUD_API = "https://kvdb.io/K9pY5z8u7v4m2n1q6w3e/heddy_supreme_results"; // Public KV store for syncing
+
         const STUDENTS = [
             { name: "KENNETH ANTWI", code: "3478", level: "Basic 6-7" },
             { name: "PEACE OF GOD VICTOR", code: "P24", level: "Basic 6-7" },
@@ -498,543 +347,401 @@
             { name: "BRAHANNAH BOATENG", code: "14396", level: "Basic 8" }
         ];
 
-        const PRELOADED_QUESTIONS = [
-            // BASIC 6-7 ENGLISH
-            { id: 1, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Identify the noun in this sentence: 'The quick brown fox jumps over the lazy dog.'", options: ["Quick", "Brown", "Fox", "Jumps"], correctIdx: 2 },
-            { id: 2, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What is the synonym of 'Happy'?", options: ["Sad", "Joyful", "Angry", "Tired"], correctIdx: 1 },
-            { id: 3, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Which of these is a pronoun?", options: ["He", "Run", "Beautiful", "Table"], correctIdx: 0 },
-            { id: 4, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Choose the correct spelling:", options: ["Recieve", "Receive", "Receve", "Recive"], correctIdx: 1 },
-            { id: 5, level: "Basic 6-7", subject: "ENGLISH", type: "theory", text: "Write a short sentence using the word 'Education'.", correctAns: "Education is the key to success." },
+        const QUESTIONS = [
+            // BASIC 6-7 ENGLISH (5)
+            { id: 1, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Which of these is a proper noun?", options: ["city", "London", "boy", "school"], correctIdx: 1, bot: "Proper nouns always start with a capital letter and name specific people, places, or things." },
+            { id: 2, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Identify the verb: 'The student studies hard.'", options: ["student", "studies", "hard", "the"], correctIdx: 1, bot: "A verb is an action word. 'Studies' is what the student is doing." },
+            { id: 3, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Choose the correct spelling:", options: ["Recieve", "Receive", "Receve", "Recive"], correctIdx: 1, bot: "Remember the rule: 'i' before 'e' except after 'c'." },
+            { id: 4, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What is the opposite of 'Ancient'?", options: ["Old", "Modern", "Historic", "Antique"], correctIdx: 1, bot: "Ancient means very old, so the opposite is modern." },
+            { id: 5, level: "Basic 6-7", subject: "ENGLISH", type: "theory", text: "What is a sentence?", correctAns: "complete thought", bot: "A sentence must have a subject and a verb and make sense on its own." },
             
-            // BASIC 6-7 MATHEMATICS
-            { id: 6, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "What is 15 + 27?", options: ["32", "42", "52", "44"], correctIdx: 1 },
-            { id: 7, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Solve for x: x + 5 = 12", options: ["5", "6", "7", "8"], correctIdx: 2 },
-            { id: 8, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "What is 8 x 7?", options: ["54", "56", "58", "60"], correctIdx: 1 },
-            { id: 9, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Which is a prime number?", options: ["4", "9", "13", "15"], correctIdx: 2 },
-            { id: 10, level: "Basic 6-7", subject: "MATHEMATICS", type: "theory", text: "If a rectangle has a length of 5cm and width of 3cm, what is its area?", correctAns: "15" },
+            // BASIC 6-7 MATHEMATICS (5)
+            { id: 6, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "What is 12 x 12?", options: ["124", "144", "164", "184"], correctIdx: 1, bot: "12 squared is 144." },
+            { id: 7, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Solve for x: x + 15 = 30", options: ["10", "15", "20", "25"], correctIdx: 1, bot: "Subtract 15 from both sides to find x." },
+            { id: 8, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "What is the value of 1/2 + 1/4?", options: ["1/6", "2/6", "3/4", "1/8"], correctIdx: 2, bot: "Find a common denominator (4), so 2/4 + 1/4 = 3/4." },
+            { id: 9, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "How many sides does a hexagon have?", options: ["5", "6", "7", "8"], correctIdx: 1, bot: "Hex- means six." },
+            { id: 10, level: "Basic 6-7", subject: "MATHEMATICS", type: "theory", text: "If a shirt costs $20 and is on sale for 50% off, what is the new price?", correctAns: "10", bot: "50% off means you pay half the price." },
 
-            // BASIC 6-7 SOCIAL STUDIES
-            { id: 11, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Which continent is Ghana located in?", options: ["Asia", "Europe", "Africa", "South America"], correctIdx: 2 },
-            { id: 12, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "What is the capital city of Ghana?", options: ["Kumasi", "Accra", "Tamale", "Takoradi"], correctIdx: 1 },
-            { id: 13, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Which of these is a traditional Ghanaian dance?", options: ["Salsa", "Adowa", "Ballet", "Tango"], correctIdx: 1 },
-            { id: 14, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Who was the first President of Ghana?", options: ["J.B. Danquah", "Kwame Nkrumah", "Kofi Annan", "Jerry Rawlings"], correctIdx: 1 },
-            { id: 15, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "theory", text: "Mention one importance of culture in our society.", correctAns: "Identity" },
+            // BASIC 6-7 SOCIAL STUDIES (5)
+            { id: 11, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Which of these is a primary color?", options: ["Green", "Orange", "Red", "Purple"], correctIdx: 2, bot: "Primary colors are Red, Blue, and Yellow." },
+            { id: 12, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Who is the current President of Ghana?", options: ["John Mahama", "Nana Akufo-Addo", "Jerry Rawlings", "John Kufuor"], correctIdx: 1, bot: "Nana Akufo-Addo has been President since 2017." },
+            { id: 13, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "What is the largest ocean in the world?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], correctIdx: 3, bot: "The Pacific Ocean covers more than 30% of the Earth's surface." },
+            { id: 14, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Jupiter", "Saturn"], correctIdx: 1, bot: "Mars appears red due to iron oxide (rust) on its surface." },
+            { id: 15, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "theory", text: "Name one importance of trees to the environment.", correctAns: "oxygen", bot: "Trees produce oxygen and help reduce carbon dioxide." },
 
-            // BASIC 8 ENGLISH
-            { id: 16, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Which literary device is used in 'The wind whispered through the trees'?", options: ["Simile", "Metaphor", "Personification", "Hyperbole"], correctIdx: 2 },
-            { id: 17, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "What is the main purpose of a thesis statement?", options: ["To conclude", "To present the main argument", "To list references", "To introduce the author"], correctIdx: 1 },
-            { id: 18, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Identify the antonym of 'Arrogant':", options: ["Proud", "Humble", "Confident", "Selfish"], correctIdx: 1 },
-            { id: 19, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Which sentence is in the passive voice?", options: ["The boy kicked the ball.", "The ball was kicked by the boy.", "The boy is kicking the ball.", "The boy will kick the ball."], correctIdx: 1 },
-            { id: 20, level: "Basic 8", subject: "ENGLISH", type: "theory", text: "Explain the term 'Alliteration' and give an example.", correctAns: "Repetition of initial consonant sounds" },
+            // BASIC 8 ENGLISH (5)
+            { id: 16, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "What is a metaphor?", options: ["Comparison using like/as", "Direct comparison without like/as", "Exaggeration", "Giving human traits to objects"], correctIdx: 1, bot: "A metaphor says something IS something else to create a symbolic meaning." },
+            { id: 17, level: "Basic 8", subject: "mcq", text: "Which is an example of personification?", options: ["The stars danced", "As brave as a lion", "I'm so hungry I could eat a horse", "The world is a stage"], correctIdx: 0, bot: "Personification gives human actions (dancing) to non-human things (stars)." },
+            { id: 18, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "What does 'Ambiguous' mean?", options: ["Very clear", "Having multiple meanings", "Completely false", "Very old"], correctIdx: 1, bot: "Ambiguous means something is open to more than one interpretation." },
+            { id: 19, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Identify the conjunction: 'I wanted to go, but it was raining.'", options: ["wanted", "go", "but", "raining"], correctIdx: 2, bot: "Conjunctions like 'but' connect two sentences or ideas." },
+            { id: 20, level: "Basic 8", subject: "ENGLISH", type: "theory", text: "Explain the importance of a thesis statement in an essay.", correctAns: "main argument", bot: "The thesis is the 'map' of your essay; without it, the reader gets lost." },
 
-            // BASIC 8 MATHEMATICS
-            { id: 21, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Solve for x: 2x - 4 = 10", options: ["3", "5", "7", "9"], correctIdx: 2 },
-            { id: 22, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Simplify: 3(x + 2) - 2x", options: ["x + 6", "x + 2", "5x + 6", "x - 6"], correctIdx: 0 },
-            { id: 23, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "What is the value of 5 squared plus 3 cubed?", options: ["34", "43", "52", "61"], correctIdx: 2 },
-            { id: 24, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "If a car travels 120km in 2 hours, what is its speed?", options: ["40km/h", "50km/h", "60km/h", "70km/h"], correctIdx: 2 },
-            { id: 25, level: "Basic 8", subject: "MATHEMATICS", type: "theory", text: "Solve for y: 3y + 7 = 22", correctAns: "5" },
+            // BASIC 8 MATHEMATICS (5)
+            { id: 21, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Solve for x: 2x + 10 = 20", options: ["5", "10", "15", "20"], correctIdx: 0, bot: "2x = 10, so x = 5." },
+            { id: 22, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "What is the square root of 169?", options: ["11", "12", "13", "14"], correctIdx: 2, bot: "13 times 13 equals 169." },
+            { id: 23, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Simplify: 3(x + 4)", options: ["3x + 4", "3x + 12", "x + 12", "3x + 7"], correctIdx: 1, bot: "Distribute the 3 to both x and 4." },
+            { id: 24, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "What is the area of a circle with radius 7? (Use π = 22/7)", options: ["44", "154", "196", "616"], correctIdx: 1, bot: "Area = πr² = (22/7) * 7 * 7 = 154." },
+            { id: 25, level: "Basic 8", subject: "MATHEMATICS", type: "theory", text: "If 3x - 5 = 10, find x.", correctAns: "5", bot: "Add 5 to both sides, then divide by 3." },
 
-            // BASIC 8 SOCIAL STUDIES
-            { id: 26, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "What is globalization?", options: ["Isolation of countries", "Integration of world economies", "A type of local farming", "Building more walls"], correctIdx: 1 },
-            { id: 27, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "Which of these is a benefit of cultural diversity?", options: ["Conflict", "Narrow-mindedness", "Innovation and creativity", "Segregation"], correctIdx: 2 },
-            { id: 28, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "What does 'Cosmopolitan' mean?", options: ["Only local", "Worldly and diverse", "Rural and simple", "Strictly traditional"], correctIdx: 1 },
-            { id: 29, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "Which organization promotes global cooperation?", options: ["FIFA", "United Nations", "Local Council", "School Board"], correctIdx: 1 },
-            { id: 30, level: "Basic 8", subject: "SOCIAL STUDIES", type: "theory", text: "How does technology contribute to globalization?", correctAns: "Communication" }
+            // BASIC 8 SOCIAL STUDIES (5)
+            { id: 26, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "What is globalization?", options: ["Isolation", "World integration", "Local farming", "Building walls"], correctIdx: 1, bot: "Globalization is the process of interaction and integration among people, companies, and governments worldwide." },
+            { id: 27, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "Which of these is a benefit of cultural diversity?", options: ["Conflict", "Innovation", "Segregation", "Boredom"], correctIdx: 1, bot: "Diversity brings different perspectives which leads to innovation." },
+            { id: 28, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "What does 'Cosmopolitan' mean?", options: ["Local only", "Worldly and diverse", "Rural", "Traditional"], correctIdx: 1, bot: "A cosmopolitan person or place is familiar with and at ease in many different countries and cultures." },
+            { id: 29, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "Which organization was formed to maintain world peace after WWII?", options: ["League of Nations", "United Nations", "NATO", "African Union"], correctIdx: 1, bot: "The UN was established in 1945 to prevent future conflicts." },
+            { id: 30, level: "Basic 8", subject: "SOCIAL STUDIES", type: "theory", text: "How does technology help in globalization?", correctAns: "communication", bot: "Technology like the internet allows instant communication across the world." }
         ];
 
-        let questions = JSON.parse(localStorage.getItem('heddy_questions')) || PRELOADED_QUESTIONS;
-        let submissions = JSON.parse(localStorage.getItem('heddy_submissions')) || [];
-        let currentUser = JSON.parse(localStorage.getItem('heddy_user')) || null;
-        
-        let currentQuiz = {
-            subject: "",
-            questions: [],
-            currentIndex: 0,
-            score: 0,
-            answers: []
-        };
+        // State
+        let currentUser = JSON.parse(localStorage.getItem('h_user')) || null;
+        let submissions = JSON.parse(localStorage.getItem('h_subs')) || [];
+        let currentQuiz = null;
+        let isStrictModeActive = false;
 
-        // --- NAVIGATION ---
+        // --- CORE FUNCTIONS ---
+
         function showView(viewId) {
-            const views = ['login', 'dashboard', 'assessment', 'results', 'leaderboard', 'records', 'admin'];
-            views.forEach(v => {
-                const el = document.getElementById(`view-${v}`);
-                if (el) el.classList.add('hidden');
+            ['login', 'dashboard', 'quiz', 'result', 'leaderboard', 'admin'].forEach(v => {
+                document.getElementById(`${v}-view`).classList.add('hidden');
             });
-            
-            if (viewId === 'home') {
-                if (currentUser) showView('dashboard');
-                else showView('login');
-                return;
-            }
+            document.getElementById(`${viewId}-view`).classList.remove('hidden');
+            window.scrollTo(0,0);
 
-            document.getElementById(`view-${viewId}`).classList.remove('hidden');
-            window.scrollTo(0, 0);
-
-            if (viewId === 'dashboard') renderDashboard();
-            if (viewId === 'leaderboard') renderLeaderboard();
-            if (viewId === 'records') renderRecords();
-            if (viewId === 'admin') renderAdmin();
+            if(viewId === 'dashboard') renderDashboard();
+            if(viewId === 'leaderboard') renderLeaderboard();
+            if(viewId === 'admin') renderAdmin();
         }
 
-        function toggleMobileMenu() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        }
-
-        // --- AUTHENTICATION ---
         function handleLogin() {
-            const name = document.getElementById('login-student').value;
-            const code = document.getElementById('login-code').value;
-            
+            const name = document.getElementById('login-name').value;
+            const code = document.getElementById('login-code').value.trim();
             const student = STUDENTS.find(s => s.name === name && s.code === code);
-            
-            if (student) {
+
+            if(student) {
                 currentUser = student;
-                localStorage.setItem('heddy_user', JSON.stringify(student));
+                localStorage.setItem('h_user', JSON.stringify(student));
                 showView('dashboard');
             } else {
-                alert("Invalid name or access code. Please try again.");
+                alert("Invalid credentials. Please check your name and access code.");
             }
         }
 
         function logout() {
             currentUser = null;
-            localStorage.removeItem('heddy_user');
+            localStorage.removeItem('h_user');
             showView('login');
         }
 
-        function promptAdmin() {
-            const key = prompt("Enter Admin Key:");
-            if (key === "1234") {
-                showView('admin');
-            } else if (key !== null) {
-                alert("Incorrect Admin Key.");
-            }
-        }
-
-        // --- DASHBOARD ---
         function renderDashboard() {
-            document.getElementById('user-display-name').innerText = currentUser.name;
-            document.getElementById('user-display-level').innerText = currentUser.level;
-            
+            document.getElementById('user-welcome').innerText = `Hello, ${currentUser.name}`;
+            document.getElementById('user-level').innerText = currentUser.level;
+
             const subjects = ['ENGLISH', 'MATHEMATICS', 'SOCIAL STUDIES'];
             subjects.forEach(sub => {
                 const subId = sub.toLowerCase().split(' ')[0];
-                const statusEl = document.getElementById(`status-${subId}`);
-                
-                const hasTaken = submissions.some(s => s.student === currentUser.name && s.subject === sub);
-                
-                if (hasTaken) {
-                    const subData = submissions.find(s => s.student === currentUser.name && s.subject === sub);
-                    statusEl.innerHTML = `
+                const container = document.getElementById(`status-${subId}`);
+                const taken = submissions.find(s => s.student === currentUser.name && s.subject === sub);
+
+                if(taken) {
+                    container.innerHTML = `
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-700 text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">COMPLETED</span>
-                            <span class="text-sm font-800 text-slate-700">${subData.score}%</span>
+                            <span class="text-xs font-800 text-emerald-600 bg-emerald-50 px-2 py-1 rounded">COMPLETED</span>
+                            <span class="text-lg font-800">${taken.score}%</span>
                         </div>
                     `;
                 } else {
-                    statusEl.innerHTML = `
-                        <button onclick="startAssessment('${sub}')" class="w-full py-2 bg-blue-50 text-blue-600 rounded-xl text-sm font-700 hover:bg-blue-600 hover:text-white transition-all">
-                            Start Quiz
-                        </button>
+                    container.innerHTML = `
+                        <button onclick="startQuiz('${sub}')" class="w-full py-2 bg-blue-50 text-blue-900 rounded-lg text-xs font-800 hover:bg-blue-900 hover:text-white transition-all">START ASSESSMENT</button>
                     `;
                 }
             });
         }
 
-        // --- ASSESSMENT ENGINE ---
-        function startAssessment(subject) {
-            const levelQuestions = questions.filter(q => q.level === currentUser.level && q.subject === subject);
-            
-            if (levelQuestions.length === 0) {
-                alert("No questions available for this subject yet.");
-                return;
-            }
+        // --- QUIZ ENGINE ---
+
+        function startQuiz(subject) {
+            const qList = QUESTIONS.filter(q => q.level === currentUser.level && q.subject === subject);
+            if(qList.length === 0) return alert("No questions available for this subject yet.");
 
             currentQuiz = {
                 subject: subject,
-                questions: levelQuestions,
+                questions: qList,
                 currentIndex: 0,
                 score: 0,
                 answers: []
             };
 
-            document.getElementById('quiz-subject-tag').innerText = subject;
-            document.getElementById('quiz-title').innerText = `${subject} Assessment`;
-            document.getElementById('total-q-num').innerText = levelQuestions.length;
+            document.getElementById('quiz-subject').innerText = subject;
+            document.getElementById('q-total').innerText = qList.length;
             
-            showView('assessment');
+            enableStrictMode();
+            showView('quiz');
             loadQuestion();
         }
 
         function loadQuestion() {
             const q = currentQuiz.questions[currentQuiz.currentIndex];
-            document.getElementById('current-q-num').innerText = currentQuiz.currentIndex + 1;
-            
-            const progress = ((currentQuiz.currentIndex) / currentQuiz.questions.length) * 100;
-            document.getElementById('quiz-progress-bar').style.width = `${progress}%`;
-            
-            document.getElementById('question-text').innerText = q.text;
-            
-            const optionsContainer = document.getElementById('options-container');
-            const theoryContainer = document.getElementById('theory-container');
-            
-            optionsContainer.innerHTML = "";
-            theoryContainer.classList.add('hidden');
-            
-            if (q.type === 'mcq') {
-                optionsContainer.classList.remove('hidden');
-                q.options.forEach((opt, idx) => {
-                    const div = document.createElement('div');
-                    div.className = "option-card p-4 rounded-2xl border-2 border-slate-100 flex items-center gap-4";
-                    div.innerHTML = `
-                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-800 text-slate-500">${String.fromCharCode(65 + idx)}</div>
-                        <span class="font-600 text-slate-700">${opt}</span>
-                    `;
-                    div.onclick = () => selectOption(idx, div);
-                    optionsContainer.appendChild(div);
-                });
+            document.getElementById('q-current').innerText = currentQuiz.currentIndex + 1;
+            document.getElementById('quiz-progress').style.width = `${(currentQuiz.currentIndex / currentQuiz.questions.length) * 100}%`;
+            document.getElementById('q-text').innerText = q.text;
+            document.getElementById('bot-feedback').classList.add('hidden');
+
+            const mcqBox = document.getElementById('mcq-options');
+            const theoryBox = document.getElementById('theory-input');
+
+            if(q.type === 'mcq') {
+                mcqBox.classList.remove('hidden');
+                theoryBox.classList.add('hidden');
+                mcqBox.innerHTML = q.options.map((opt, i) => `
+                    <button onclick="submitMCQ(${i})" class="option-btn" id="opt-${i}">${opt}</button>
+                `).join('');
             } else {
-                optionsContainer.classList.add('hidden');
-                theoryContainer.classList.remove('hidden');
-                document.getElementById('theory-answer').value = "";
+                mcqBox.classList.add('hidden');
+                theoryBox.classList.remove('hidden');
+                document.getElementById('theory-ans').value = "";
+                document.getElementById('theory-ans').disabled = false;
+                document.getElementById('theory-submit-btn').classList.remove('hidden');
             }
-
-            document.getElementById('next-btn').innerText = currentQuiz.currentIndex === currentQuiz.questions.length - 1 ? "Finish Assessment" : "Next Question";
         }
 
-        let selectedOptionIdx = null;
-        function selectOption(idx, el) {
-            selectedOptionIdx = idx;
-            document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected', 'border-blue-500'));
-            el.classList.add('selected', 'border-blue-500');
-        }
-
-        function handleNextQuestion() {
+        function submitMCQ(idx) {
             const q = currentQuiz.questions[currentQuiz.currentIndex];
-            let studentAnswer = "";
-            let isCorrect = false;
+            const isCorrect = idx === q.correctIdx;
+            
+            // Lock buttons
+            document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+            const selectedBtn = document.getElementById(`opt-${idx}`);
+            const correctBtn = document.getElementById(`opt-${q.correctIdx}`);
 
-            if (q.type === 'mcq') {
-                if (selectedOptionIdx === null) {
-                    alert("Please select an option.");
-                    return;
-                }
-                studentAnswer = q.options[selectedOptionIdx];
-                isCorrect = selectedOptionIdx === q.correctIdx;
-                selectedOptionIdx = null;
+            if(isCorrect) {
+                selectedBtn.classList.add('correct');
+                currentQuiz.score++;
+                showBotFeedback(true, q.bot);
             } else {
-                studentAnswer = document.getElementById('theory-answer').value.trim();
-                if (!studentAnswer) {
-                    alert("Please type your answer.");
-                    return;
-                }
-                // Simple keyword matching for theory
-                const keywords = q.correctAns.toLowerCase().split(' ');
-                isCorrect = keywords.some(k => studentAnswer.toLowerCase().includes(k));
+                selectedBtn.classList.add('wrong');
+                correctBtn.classList.add('correct');
+                showBotFeedback(false, q.bot);
             }
 
-            if (isCorrect) currentQuiz.score++;
+            currentQuiz.answers.push({
+                question: q.text,
+                studentAnswer: q.options[idx],
+                expectedAnswer: q.options[q.correctIdx],
+                isCorrect: isCorrect
+            });
+        }
+
+        function submitTheory() {
+            const q = currentQuiz.questions[currentQuiz.currentIndex];
+            const ans = document.getElementById('theory-ans').value.trim();
+            if(!ans) return alert("Please type your answer.");
+
+            document.getElementById('theory-ans').disabled = true;
+            document.getElementById('theory-submit-btn').classList.add('hidden');
+
+            // Simple keyword matching
+            const keywords = q.correctAns.toLowerCase().split(' ');
+            const isCorrect = keywords.some(k => ans.toLowerCase().includes(k));
+
+            if(isCorrect) currentQuiz.score++;
             
             currentQuiz.answers.push({
                 question: q.text,
-                studentAnswer: studentAnswer,
-                expectedAnswer: q.type === 'mcq' ? q.options[q.correctIdx] : q.correctAns,
+                studentAnswer: ans,
+                expectedAnswer: q.correctAns,
                 isCorrect: isCorrect
             });
 
-            if (currentQuiz.currentIndex < currentQuiz.questions.length - 1) {
+            showBotFeedback(isCorrect, q.bot);
+        }
+
+        function showBotFeedback(isCorrect, msg) {
+            const botMsg = document.getElementById('bot-msg');
+            botMsg.innerHTML = isCorrect 
+                ? `<span class="text-emerald-400 font-800">EXCELLENT!</span> ${msg}`
+                : `<span class="text-red-400 font-800">NOT QUITE.</span> ${msg}`;
+            
+            document.getElementById('bot-feedback').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            if(currentQuiz.currentIndex < currentQuiz.questions.length - 1) {
                 currentQuiz.currentIndex++;
                 loadQuestion();
             } else {
-                finishAssessment();
+                finishQuiz();
             }
         }
 
-        function finishAssessment() {
+        function finishQuiz() {
+            disableStrictMode();
             const finalScore = Math.round((currentQuiz.score / currentQuiz.questions.length) * 100);
             
-            const submission = {
+            const sub = {
                 id: Date.now(),
                 student: currentUser.name,
                 level: currentUser.level,
                 subject: currentQuiz.subject,
                 score: finalScore,
-                correctCount: currentQuiz.score,
-                totalCount: currentQuiz.questions.length,
-                date: new Date().toLocaleDateString(),
-                details: currentQuiz.answers
+                correct: currentQuiz.score,
+                total: currentQuiz.questions.length,
+                details: currentQuiz.answers,
+                date: new Date().toLocaleString()
             };
 
-            submissions.push(submission);
-            localStorage.setItem('heddy_submissions', JSON.stringify(submissions));
-
-            document.getElementById('result-subject').innerText = currentQuiz.subject;
-            document.getElementById('result-score').innerText = finalScore;
-            document.getElementById('result-correct').innerText = currentQuiz.score;
-            document.getElementById('result-total').innerText = currentQuiz.questions.length;
+            submissions.push(sub);
+            localStorage.setItem('h_subs', JSON.stringify(submissions));
             
-            showView('results');
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#1e40af', '#3b82f6', '#fbbf24']
-            });
+            // SYNC TO CLOUD
+            syncToCloud(sub);
+
+            document.getElementById('res-score').innerText = finalScore;
+            document.getElementById('res-correct').innerText = currentQuiz.score;
+            document.getElementById('res-total').innerText = currentQuiz.questions.length;
+            
+            showView('result');
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
 
-        function exitAssessment() {
-            if (confirm("Are you sure you want to exit? Your progress will be lost.")) {
-                showView('dashboard');
-            }
+        // --- STRICT MODE & SYNC ---
+
+        function enableStrictMode() {
+            isStrictModeActive = true;
+            window.onblur = () => {
+                if(isStrictModeActive) {
+                    document.getElementById('strict-overlay').classList.remove('hidden');
+                    // Log violation
+                    console.warn("Strict mode violation detected.");
+                }
+            };
         }
 
-        // --- LEADERBOARD ---
-        function renderLeaderboard() {
-            const filterLevel = document.getElementById('leaderboard-filter-level').value;
-            const body = document.getElementById('leaderboard-body');
-            const empty = document.getElementById('leaderboard-empty');
-            
-            body.innerHTML = "";
-            
-            // Group submissions by student
-            const studentStats = STUDENTS.map(s => {
-                const studentSubs = submissions.filter(sub => sub.student === s.name);
-                const avgScore = studentSubs.length > 0 
-                    ? Math.round(studentSubs.reduce((acc, curr) => acc + curr.score, 0) / studentSubs.length)
-                    : 0;
-                return {
-                    name: s.name,
-                    level: s.level,
-                    avgScore: avgScore,
-                    count: studentSubs.length
-                };
-            });
+        function disableStrictMode() {
+            isStrictModeActive = false;
+            document.getElementById('strict-overlay').classList.add('hidden');
+        }
 
-            let filtered = studentStats;
-            if (filterLevel !== 'all') {
-                filtered = studentStats.filter(s => s.level === filterLevel);
-            }
+        function resumeAssessment() {
+            document.getElementById('strict-overlay').classList.add('hidden');
+        }
 
-            // Sort by avg score
-            filtered.sort((a, b) => b.avgScore - a.avgScore);
-
-            if (filtered.length === 0 || filtered.every(s => s.count === 0)) {
-                empty.classList.remove('hidden');
-                return;
-            }
-
-            empty.classList.add('hidden');
-            filtered.forEach((s, idx) => {
-                if (s.count === 0) return;
+        async function syncToCloud(data) {
+            document.getElementById('sync-status').innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i> Syncing...`;
+            try {
+                // Fetch existing cloud data
+                const response = await fetch(CLOUD_API);
+                let cloudData = [];
+                if(response.ok) {
+                    cloudData = await response.json();
+                }
                 
-                let medal = "";
-                if (idx === 0) medal = "🥇";
-                else if (idx === 1) medal = "🥈";
-                else if (idx === 2) medal = "🥉";
-                else medal = `<span class="text-slate-400 font-700">${idx + 1}</span>`;
-
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-slate-50 hover:bg-slate-50 transition-colors";
-                tr.innerHTML = `
-                    <td class="px-6 py-4">${medal}</td>
-                    <td class="px-6 py-4 font-700 text-slate-700">${s.name}</td>
-                    <td class="px-6 py-4 text-sm text-slate-500">${s.level}</td>
-                    <td class="px-6 py-4 font-800 text-blue-600">${s.avgScore}%</td>
-                    <td class="px-6 py-4 text-sm text-slate-500">${s.count}</td>
-                `;
-                body.appendChild(tr);
-            });
+                cloudData.push(data);
+                
+                // Save back to cloud
+                await fetch(CLOUD_API, {
+                    method: 'POST',
+                    body: JSON.stringify(cloudData)
+                });
+                
+                document.getElementById('sync-status').innerHTML = `<i class="fas fa-check-circle text-emerald-500 mr-1"></i> Synced`;
+            } catch (e) {
+                console.error("Sync failed", e);
+                document.getElementById('sync-status').innerHTML = `<i class="fas fa-exclamation-circle text-red-500 mr-1"></i> Sync Failed`;
+            }
         }
 
-        // --- RECORDS ---
-        function renderRecords() {
-            const content = document.getElementById('records-content');
-            const prompt = document.getElementById('records-login-prompt');
+        async function syncFromCloud() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerText = "Fetching...";
             
-            if (!currentUser) {
-                content.classList.add('hidden');
-                prompt.classList.remove('hidden');
-                return;
+            try {
+                const response = await fetch(CLOUD_API);
+                if(response.ok) {
+                    const cloudData = await response.json();
+                    // Merge with local (avoid duplicates)
+                    const localIds = new Set(submissions.map(s => s.id));
+                    cloudData.forEach(s => {
+                        if(!localIds.has(s.id)) submissions.push(s);
+                    });
+                    localStorage.setItem('h_subs', JSON.stringify(submissions));
+                    renderAdmin();
+                    alert("Cloud data fetched successfully!");
+                }
+            } catch (e) {
+                alert("Failed to fetch cloud data.");
             }
-
-            content.classList.remove('hidden');
-            prompt.classList.add('hidden');
-
-            const mySubs = submissions.filter(s => s.student === currentUser.name);
-            const scores = mySubs.map(s => s.score);
-            
-            const total = mySubs.length;
-            const avg = total > 0 ? Math.round(scores.reduce((a, b) => a + b) / total) : 0;
-            const best = total > 0 ? Math.max(...scores) : 0;
-            
-            let badges = 0;
-            if (best >= 90) badges++;
-            if (avg >= 80) badges++;
-            if (total >= 3) badges++;
-
-            document.getElementById('rec-total').innerText = total;
-            document.getElementById('rec-avg').innerText = `${avg}%`;
-            document.getElementById('rec-best').innerText = `${best}%`;
-            document.getElementById('rec-badges').innerText = badges;
-
-            const body = document.getElementById('history-body');
-            body.innerHTML = "";
-            
-            if (total === 0) {
-                body.innerHTML = `<tr><td colspan="4" class="px-6 py-8 text-center text-slate-400">No assessments taken yet.</td></tr>`;
-                return;
-            }
-
-            mySubs.reverse().forEach(s => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-slate-50";
-                tr.innerHTML = `
-                    <td class="px-6 py-4 font-700 text-slate-700">${s.subject}</td>
-                    <td class="px-6 py-4 text-sm text-slate-500">${s.date}</td>
-                    <td class="px-6 py-4 font-800 text-blue-600">${s.score}%</td>
-                    <td class="px-6 py-4">
-                        <span class="px-2 py-1 rounded-md text-[10px] font-800 ${s.score >= 50 ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}">
-                            ${s.score >= 50 ? 'PASSED' : 'REVIEW'}
-                        </span>
-                    </td>
-                `;
-                body.appendChild(tr);
-            });
+            btn.disabled = false;
+            btn.innerText = "Fetch Cloud Data";
         }
 
-        // --- ADMIN PANEL ---
-        let activeAdminTab = 'submissions';
-        function setAdminTab(tab) {
-            activeAdminTab = tab;
-            document.getElementById('admin-submissions').classList.toggle('hidden', tab !== 'submissions');
-            document.getElementById('admin-questions').classList.toggle('hidden', tab !== 'questions');
-            
-            document.getElementById('tab-submissions').className = tab === 'submissions' 
-                ? "pb-4 px-2 text-sm font-700 text-blue-600 border-b-2 border-blue-600 transition-all"
-                : "pb-4 px-2 text-sm font-700 text-slate-400 hover:text-slate-600 transition-all";
-            
-            document.getElementById('tab-questions').className = tab === 'questions' 
-                ? "pb-4 px-2 text-sm font-700 text-blue-600 border-b-2 border-blue-600 transition-all"
-                : "pb-4 px-2 text-sm font-700 text-slate-400 hover:text-slate-600 transition-all";
-            
-            renderAdmin();
+        // --- ADMIN & LEADERBOARD ---
+
+        function promptAdmin() {
+            const key = prompt("Enter Teacher Admin Key:");
+            if(key === ADMIN_KEY) showView('admin');
+            else if(key !== null) alert("Access Denied.");
         }
 
         function renderAdmin() {
-            if (activeAdminTab === 'submissions') {
-                const body = document.getElementById('admin-submissions-body');
-                body.innerHTML = "";
-                
-                if (submissions.length === 0) {
-                    body.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400">No submissions yet.</td></tr>`;
-                    return;
-                }
-
-                submissions.slice().reverse().forEach(sub => {
-                    sub.details.forEach(detail => {
-                        const tr = document.createElement('tr');
-                        tr.className = "border-b border-slate-50 hover:bg-slate-50 transition-colors";
-                        tr.innerHTML = `
-                            <td class="px-6 py-4">
-                                <div class="font-700 text-slate-700">${sub.student}</div>
-                                <div class="text-[10px] text-slate-400 font-700 uppercase">${sub.level}</div>
-                            </td>
-                            <td class="px-6 py-4 text-sm font-600 text-slate-600">${sub.subject}</td>
-                            <td class="px-6 py-4 text-sm text-slate-500 max-w-xs truncate">${detail.question}</td>
-                            <td class="px-6 py-4 text-sm font-600 text-slate-700">${detail.studentAnswer}</td>
-                            <td class="px-6 py-4 text-sm text-slate-400 italic">${detail.expectedAnswer}</td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 py-1 rounded-md text-[10px] font-800 ${detail.isCorrect ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}">
-                                    ${detail.isCorrect ? 'CORRECT' : 'NEEDS REVIEW'}
-                                </span>
-                            </td>
-                        `;
-                        body.appendChild(tr);
-                    });
-                });
-            } else {
-                const body = document.getElementById('admin-questions-body');
-                body.innerHTML = "";
-                
-                questions.forEach((q, idx) => {
-                    const tr = document.createElement('tr');
-                    tr.className = "border-b border-slate-50";
-                    tr.innerHTML = `
-                        <td class="px-6 py-4 text-sm font-700 text-slate-500">${q.level}</td>
-                        <td class="px-6 py-4 text-sm font-700 text-blue-600">${q.subject}</td>
-                        <td class="px-6 py-4 text-sm text-slate-700">${q.text}</td>
-                        <td class="px-6 py-4">
-                            <button onclick="deleteQuestion(${q.id})" class="text-red-500 hover:text-red-700 transition-colors">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    `;
-                    body.appendChild(tr);
-                });
-            }
+            const body = document.getElementById('admin-submissions-body');
+            body.innerHTML = submissions.slice().reverse().map(s => `
+                <tr class="border-b border-slate-50">
+                    <td class="px-6 py-4">
+                        <div class="font-800">${s.student}</div>
+                        <div class="text-[10px] text-slate-400 uppercase">${s.level}</div>
+                    </td>
+                    <td class="px-6 py-4 font-700 text-blue-900">${s.subject}</td>
+                    <td class="px-6 py-4 font-800 text-lg">${s.score}%</td>
+                    <td class="px-6 py-4">
+                        <button onclick="viewDetails(${s.id})" class="text-blue-600 text-xs font-800 uppercase">View Answers</button>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button onclick="deleteSubmission(${s.id})" class="text-red-500"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        function toggleAddOptions() {
-            const type = document.getElementById('add-q-type').value;
-            document.getElementById('add-q-mcq-options').classList.toggle('hidden', type !== 'mcq');
-            document.getElementById('add-q-theory-ans-container').classList.toggle('hidden', type !== 'theory');
+        function viewDetails(id) {
+            const s = submissions.find(sub => sub.id === id);
+            let detailMsg = `Submission Details for ${s.student}\n\n`;
+            s.details.forEach((d, i) => {
+                detailMsg += `Q${i+1}: ${d.question}\n`;
+                detailMsg += `Ans: ${d.studentAnswer}\n`;
+                detailMsg += `Expected: ${d.expectedAnswer}\n`;
+                detailMsg += `Result: ${d.isCorrect ? 'CORRECT' : 'WRONG'}\n\n`;
+            });
+            alert(detailMsg);
         }
 
-        function addNewQuestion() {
-            const level = document.getElementById('add-q-level').value;
-            const subject = document.getElementById('add-q-subject').value;
-            const text = document.getElementById('add-q-text').value.trim();
-            const type = document.getElementById('add-q-type').value;
-            
-            if (!text) return alert("Please enter question text.");
-
-            let newQ = {
-                id: Date.now(),
-                level,
-                subject,
-                text,
-                type
-            };
-
-            if (type === 'mcq') {
-                const options = [
-                    document.getElementById('opt-0').value.trim(),
-                    document.getElementById('opt-1').value.trim(),
-                    document.getElementById('opt-2').value.trim(),
-                    document.getElementById('opt-3').value.trim()
-                ];
-                if (options.some(o => !o)) return alert("Please fill all options.");
-                
-                newQ.options = options;
-                newQ.correctIdx = parseInt(document.querySelector('input[name="correct-opt"]:checked').value);
-            } else {
-                const ans = document.getElementById('add-q-theory-ans').value.trim();
-                if (!ans) return alert("Please enter expected answer keywords.");
-                newQ.correctAns = ans;
-            }
-
-            questions.push(newQ);
-            localStorage.setItem('heddy_questions', JSON.stringify(questions));
-            alert("Question added successfully!");
-            
-            // Reset form
-            document.getElementById('add-q-text').value = "";
-            if (type === 'theory') document.getElementById('add-q-theory-ans').value = "";
-            renderAdmin();
-        }
-
-        function deleteQuestion(id) {
-            if (confirm("Are you sure you want to delete this question?")) {
-                questions = questions.filter(q => q.id !== id);
-                localStorage.setItem('heddy_questions', JSON.stringify(questions));
+        function deleteSubmission(id) {
+            if(confirm("Delete this record?")) {
+                submissions = submissions.filter(s => s.id !== id);
+                localStorage.setItem('h_subs', JSON.stringify(submissions));
                 renderAdmin();
             }
         }
 
-        // --- INITIAL RUN ---
+        function renderLeaderboard() {
+            const stats = STUDENTS.map(s => {
+                const sSubs = submissions.filter(sub => sub.student === s.name);
+                const avg = sSubs.length > 0 ? Math.round(sSubs.reduce((a,b) => a + b.score, 0) / sSubs.length) : 0;
+                return { name: s.name, level: s.level, avg: avg, count: sSubs.length };
+            }).sort((a,b) => b.avg - a.avg);
+
+            document.getElementById('leaderboard-body').innerHTML = stats.map((s, i) => `
+                <tr class="border-b border-slate-50">
+                    <td class="px-6 py-4 font-800">${i+1}</td>
+                    <td class="px-6 py-4 font-700">${s.name}</td>
+                    <td class="px-6 py-4 text-slate-500">${s.level}</td>
+                    <td class="px-6 py-4 font-800 text-blue-900">${s.avg}%</td>
+                </tr>
+            `).join('');
+        }
+
+        // Init
         window.onload = () => {
-            if (currentUser) showView('dashboard');
+            if(currentUser) showView('dashboard');
             else showView('login');
         };
     </script>
