@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap');
     
@@ -38,14 +37,12 @@
       background: #dcfce7 !important;
       border-color: #22c55e !important;
       color: #166534 !important;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.3) !important;
     }
     
     .wrong {
       background: #fee2e2 !important;
       border-color: #ef4444 !important;
       color: #991b1b !important;
-      box-shadow: 0 0 20px rgba(239, 68, 68, 0.3) !important;
     }
     
     .hidden {
@@ -63,100 +60,17 @@
       background: white;
       cursor: pointer;
       position: relative;
-      overflow: hidden;
     }
     
     .option-btn:hover:not(:disabled) {
       border-color: #3b82f6;
       background: #eff6ff;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
     }
     
     .option-btn:disabled {
       opacity: 0.7;
     }
-    
-    .option-btn.correct::after {
-      content: '✓';
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    
-    .option-btn.wrong::after {
-      content: '✗';
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    
-    .stat-card {
-      background: white;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      border-left: 4px solid #3b82f6;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-    }
-    
-    .stat-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-    }
-    
-    .stat-value {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #1e3a8a;
-    }
-    
-    .stat-label {
-      font-size: 0.875rem;
-      color: #64748b;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .badge-achievement {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      font-weight: 700;
-      color: white;
-      margin: 0.5rem;
-      text-align: center;
-      font-size: 0.75rem;
-    }
-    
-    .badge-gold { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
-    .badge-silver { background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%); }
-    .badge-bronze { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
-    .badge-blue { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); }
-    
-    .weakness-badge {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-      margin: 0.25rem;
-    }
-    
-    .weakness-critical { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
-    .weakness-moderate { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
-    .weakness-minor { background: #dbeafe; color: #1e40af; border: 1px solid #3b82f6; }
   </style>
 </head>
 <body class="min-h-screen">
@@ -173,10 +87,10 @@
         </div>
       </div>
       <div class="flex gap-3 flex-wrap">
-        <button onclick="showStudentRecords()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
+        <button onclick="showPage('records')" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
           <i class="fas fa-chart-line mr-2"></i>My Records
         </button>
-        <button onclick="showLeaderboard()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
+        <button onclick="showPage('leaderboard')" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
           <i class="fas fa-trophy mr-2"></i>Leaderboard
         </button>
         <button onclick="adminLogin()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-[10px] font-black transition-all uppercase">
@@ -187,8 +101,8 @@
   </nav>
 
   <main class="max-w-7xl mx-auto p-4 md:p-8">
-    <!-- STUDENT LOGIN -->
-    <section id="login-screen" class="mt-8">
+    <!-- LOGIN SCREEN -->
+    <section id="login-screen">
       <div class="text-center mb-10">
         <h2 class="text-3xl md:text-5xl font-black text-white mb-3">WELCOME TO</h2>
         <p class="text-xl md:text-2xl font-bold text-yellow-400 uppercase tracking-tighter">Sir Heddy Supreme Portal</p>
@@ -198,7 +112,7 @@
         <div class="space-y-6">
           <div>
             <label class="text-[10px] font-black text-slate-400 uppercase ml-2 block mb-2">Select Your Name</label>
-            <select id="s-name-dropdown" class="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold outline-none focus:border-blue-500 appearance-none">
+            <select id="s-name" class="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold outline-none focus:border-blue-500">
               <option value="">-- FIND YOUR NAME --</option>
               <optgroup label="BASIC 6 - 7">
                 <option value="KENNETH ANTWI">KENNETH ANTWI</option>
@@ -223,36 +137,47 @@
             ENTER CLASSROOM <i class="fas fa-sign-in-alt ml-2"></i>
           </button>
         </div>
-        <div id="subject-selection" class="hidden mt-10 space-y-4 pt-8 border-t">
-          <div id="welcome-msg" class="p-4 bg-blue-50 rounded-2xl text-blue-900 font-bold text-center italic border border-blue-100"></div>
-          <div id="subject-buttons" class="grid grid-cols-1 gap-3"></div>
-          <button onclick="backToLogin()" class="w-full bg-slate-300 text-slate-800 font-black py-3 rounded-2xl uppercase">Back to Login</button>
-        </div>
       </div>
     </section>
 
-    <!-- QUIZ VIEW -->
+    <!-- SUBJECTS SCREEN -->
+    <section id="subjects-screen" class="hidden">
+      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
+        <h2 class="text-2xl font-black text-slate-800 mb-2">Select Assessment</h2>
+        <p id="welcome-msg" class="text-slate-600 mb-8 font-bold"></p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <button onclick="startAssessment('ENGLISH')" class="p-6 bg-blue-50 hover:bg-blue-100 border-2 border-blue-200 rounded-2xl font-black text-blue-900 transition-all">
+            <i class="fas fa-book text-3xl mb-3 block"></i>ENGLISH
+          </button>
+          <button onclick="startAssessment('MATHEMATICS')" class="p-6 bg-green-50 hover:bg-green-100 border-2 border-green-200 rounded-2xl font-black text-green-900 transition-all">
+            <i class="fas fa-calculator text-3xl mb-3 block"></i>MATHEMATICS
+          </button>
+          <button onclick="startAssessment('SOCIAL STUDIES')" class="p-6 bg-purple-50 hover:bg-purple-100 border-2 border-purple-200 rounded-2xl font-black text-purple-900 transition-all">
+            <i class="fas fa-globe text-3xl mb-3 block"></i>SOCIAL STUDIES
+          </button>
+        </div>
+
+        <button onclick="backToLogin()" class="w-full bg-slate-300 text-slate-800 font-black py-3 rounded-2xl uppercase">Back to Login</button>
+      </div>
+    </section>
+
+    <!-- QUIZ SCREEN -->
     <section id="quiz-screen" class="hidden max-w-4xl mx-auto">
       <div class="flex justify-between items-center mb-6">
         <div class="bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-black uppercase" id="h-subject-badge"></div>
-        <div class="flex gap-4 items-center">
-          <div class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-mono" id="timer-display">00:00</div>
-          <div id="score-ring" class="text-2xl font-black text-blue-900">0%</div>
-        </div>
+        <div id="score-ring" class="text-2xl font-black text-blue-900">0%</div>
       </div>
-      <div class="glass-card rounded-[3rem] p-8 md:p-14 shadow-2xl border-b-[12px] border-blue-900">
+      <div class="glass-card rounded-[3rem] p-8 md:p-14 shadow-2xl">
         <h3 id="q-text" class="text-2xl md:text-3xl font-black text-slate-800 mb-10 leading-tight"></h3>
 
-        <!-- MCQ (A, B, C, D) -->
         <div id="mcq-options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
-        <!-- THEORY (TEXT ENTRY) -->
         <div id="text-entry" class="hidden space-y-4">
           <textarea id="text-answer" placeholder="Type your answer here..." class="w-full p-6 border-2 border-slate-100 rounded-2xl outline-none focus:border-blue-500 text-lg font-bold h-40"></textarea>
           <button onclick="checkTextAns()" class="w-full bg-blue-900 text-white py-5 rounded-2xl font-black uppercase">Submit Response</button>
         </div>
 
-        <!-- HEDDY BOT -->
         <div id="bot-response" class="hidden mt-10 p-8 bg-slate-900 rounded-[2.5rem] text-white">
           <div class="flex gap-6">
             <div class="text-4xl">🤖</div>
@@ -266,55 +191,39 @@
       </div>
     </section>
 
-    <!-- MY RECORDS VIEW -->
+    <!-- RECORDS SCREEN -->
     <section id="records-screen" class="hidden">
-      <div class="space-y-8">
-        <!-- HEADER -->
-        <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
-          <div class="flex justify-between items-center mb-8">
-            <div>
-              <h2 class="text-3xl font-black text-slate-800">My Performance Dashboard</h2>
-              <p id="record-student-name" class="text-lg font-bold text-blue-600 mt-2"></p>
-            </div>
-            <button onclick="backToLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-black uppercase">Back</button>
-          </div>
+      <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-3xl font-black text-slate-800">My Performance Dashboard</h2>
+          <button onclick="backToLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-black uppercase">Back</button>
+        </div>
 
-          <!-- STATS GRID -->
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="stat-card">
-              <div class="stat-value" id="total-assessments">0</div>
-              <div class="stat-label">Assessments</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value" id="average-score">0%</div>
-              <div class="stat-label">Average Score</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value" id="best-score">0%</div>
-              <div class="stat-label">Best Score</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value" id="total-badges">0</div>
-              <div class="stat-label">Badges Earned</div>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+            <p class="text-sm text-slate-600 font-bold uppercase">Total Assessments</p>
+            <p class="text-3xl font-black text-blue-600" id="total-assessments">0</p>
+          </div>
+          <div class="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+            <p class="text-sm text-slate-600 font-bold uppercase">Average Score</p>
+            <p class="text-3xl font-black text-green-600" id="average-score">0%</p>
+          </div>
+          <div class="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+            <p class="text-sm text-slate-600 font-bold uppercase">Best Score</p>
+            <p class="text-3xl font-black text-purple-600" id="best-score">0%</p>
+          </div>
+          <div class="p-4 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+            <p class="text-sm text-slate-600 font-bold uppercase">Badges Earned</p>
+            <p class="text-3xl font-black text-orange-600" id="total-badges">0</p>
           </div>
         </div>
 
-        <!-- ACHIEVEMENTS -->
-        <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
-          <h3 class="text-2xl font-black text-slate-800 mb-6">🏅 Achievements</h3>
-          <div id="achievements-container" class="flex flex-wrap justify-center gap-4"></div>
-        </div>
-
-        <!-- DETAILED RECORDS -->
-        <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
-          <h3 class="text-2xl font-black text-slate-800 mb-6">Assessment History</h3>
-          <div id="records-list" class="space-y-3 max-h-[600px] overflow-y-auto"></div>
-        </div>
+        <h3 class="text-xl font-black text-slate-800 mb-4">Assessment History</h3>
+        <div id="records-list" class="space-y-3 max-h-[600px] overflow-y-auto"></div>
       </div>
     </section>
 
-    <!-- LEADERBOARD VIEW -->
+    <!-- LEADERBOARD SCREEN -->
     <section id="leaderboard-screen" class="hidden">
       <div class="glass-card rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
         <div class="flex justify-between items-center mb-8">
@@ -322,49 +231,24 @@
           <button onclick="backToLogin()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-black uppercase">Back</button>
         </div>
 
-        <div class="flex gap-2 mb-6">
-          <select id="leaderboard-level" onchange="renderLeaderboard()" class="p-3 border rounded-lg font-bold text-sm">
-            <option value="">All Levels</option>
-            <option value="Basic 6-7">Basic 6-7</option>
-            <option value="Basic 8">Basic 8</option>
-          </select>
-          <select id="leaderboard-subject" onchange="renderLeaderboard()" class="p-3 border rounded-lg font-bold text-sm">
-            <option value="">All Subjects</option>
-            <option value="ENGLISH">ENGLISH</option>
-            <option value="MATHEMATICS">MATHEMATICS</option>
-            <option value="SOCIAL STUDIES">SOCIAL STUDIES</option>
-          </select>
-        </div>
-
         <div id="leaderboard-list" class="space-y-3"></div>
       </div>
     </section>
 
-    <!-- ADMIN PANEL -->
+    <!-- ADMIN SCREEN -->
     <section id="admin-screen" class="hidden">
       <div class="bg-white rounded-[2.5rem] p-8 shadow-2xl">
-        <div class="flex flex-col md:flex-row justify-between mb-8 gap-4">
+        <div class="flex justify-between mb-8">
           <h2 class="text-2xl font-black text-blue-950 uppercase">Teacher Administration</h2>
-          <div class="flex gap-2 items-center">
-            <button onclick="backToLogin()" class="bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-[10px] font-black uppercase">Back</button>
-            <input type="text" id="admin-date-input" class="p-2 border rounded-lg font-bold text-xs">
-            <button onclick="updateSystemDate()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase">Set Date</button>
-          </div>
+          <button onclick="backToLogin()" class="bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-[10px] font-black uppercase">Back</button>
         </div>
 
-        <!-- TABS -->
         <div class="mb-6 flex gap-2 border-b overflow-x-auto">
           <button onclick="switchAdminTab('add')" class="admin-tab-btn active px-6 py-3 font-black text-sm border-b-4 border-blue-600 whitespace-nowrap">
             <i class="fas fa-plus mr-2"></i>Add Question
           </button>
-          <button onclick="switchAdminTab('manage')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300 whitespace-nowrap">
-            <i class="fas fa-edit mr-2"></i>Manage Questions
-          </button>
           <button onclick="switchAdminTab('submissions')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300 whitespace-nowrap">
             <i class="fas fa-inbox mr-2"></i>Submissions & Weakness
-          </button>
-          <button onclick="switchAdminTab('analytics')" class="admin-tab-btn px-6 py-3 font-black text-sm border-b-4 border-transparent hover:border-slate-300 whitespace-nowrap">
-            <i class="fas fa-chart-bar mr-2"></i>Analytics
           </button>
         </div>
 
@@ -413,49 +297,13 @@
           </div>
         </div>
 
-        <!-- MANAGE QUESTIONS TAB -->
-        <div id="admin-tab-manage" class="admin-tab-content hidden">
-          <div class="space-y-4">
-            <div class="flex gap-2 mb-4">
-              <select id="filter-level" onchange="renderQuestionsList()" class="p-2 border rounded-lg font-bold text-sm">
-                <option value="">All Levels</option>
-                <option value="Basic 6-7">Basic 6-7</option>
-                <option value="Basic 8">Basic 8</option>
-              </select>
-              <select id="filter-subject" onchange="renderQuestionsList()" class="p-2 border rounded-lg font-bold text-sm">
-                <option value="">All Subjects</option>
-                <option value="ENGLISH">ENGLISH</option>
-                <option value="MATHEMATICS">MATHEMATICS</option>
-                <option value="SOCIAL STUDIES">SOCIAL STUDIES</option>
-              </select>
-            </div>
-            <div id="questions-list" class="space-y-3 max-h-[700px] overflow-y-auto"></div>
-          </div>
-        </div>
-
-        <!-- SUBMISSIONS & WEAKNESS TAB -->
+        <!-- SUBMISSIONS TAB -->
         <div id="admin-tab-submissions" class="admin-tab-content hidden">
-          <div class="space-y-6">
-            <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
-              <p class="text-sm font-black text-blue-900">📊 STUDENT EFFORT & WEAKNESS ANALYSIS</p>
-              <p class="text-xs text-blue-700 mt-1">All submissions displayed below with automatic weakness detection</p>
-            </div>
-            <div id="submissions-list" class="space-y-6 max-h-[900px] overflow-y-auto"></div>
+          <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
+            <p class="text-sm font-black text-blue-900">📊 STUDENT EFFORT & WEAKNESS ANALYSIS</p>
+            <p class="text-xs text-blue-700 mt-1">All submissions displayed below with automatic weakness detection</p>
           </div>
-        </div>
-
-        <!-- ANALYTICS TAB -->
-        <div id="admin-tab-analytics" class="admin-tab-content hidden">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-slate-50 p-6 rounded-2xl">
-              <h4 class="font-black text-slate-800 mb-4">Class Performance</h4>
-              <div id="analytics-stats" class="space-y-3"></div>
-            </div>
-            <div class="bg-slate-50 p-6 rounded-2xl">
-              <h4 class="font-black text-slate-800 mb-4">Subject Breakdown</h4>
-              <div id="analytics-subjects" class="space-y-3"></div>
-            </div>
-          </div>
+          <div id="submissions-list" class="space-y-6 max-h-[900px] overflow-y-auto"></div>
         </div>
       </div>
     </section>
@@ -508,7 +356,7 @@
       // BASIC 8 MATHEMATICS
       { id: "b8_math_1", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "If 3(x - 2) = 15, find x.", options: ["x = 5", "x = 7", "x = 9", "x = 11"], correctIdx: 1, bot: "x - 2 = 5, so x = 7" },
       { id: "b8_math_2", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Solve: 2x + 5 = 3x - 2", options: ["x = 3", "x = 5", "x = 7", "x = 9"], correctIdx: 2, bot: "x = 7" },
-      { id: "b8_math_3", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Rectangle: length (2x+3), width (x-1), perimeter 26. Find x.", options: ["x = 2", "x = 3", "x = 4", "x = 5"], correctIdx: 2, bot: "x ≈ 3.67, closest is x = 4" },
+      { id: "b8_math_3", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Rectangle: length (2x+3), width (x-1), perimeter 26. Find x.", options: ["x = 2", "x = 3", "x = 4", "x = 5"], correctIdx: 2, bot: "x = 4" },
       { id: "b8_math_4", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Two numbers sum to 20. One is 3 more than twice the other.", options: ["5 and 15", "6 and 14", "7 and 13", "8 and 12"], correctIdx: 0, bot: "5 + 15 = 20" },
       { id: "b8_math_5", level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "If 4x - 7 = 2x + 5, find x.", options: ["x = 4", "x = 6", "x = 8", "x = 10"], correctIdx: 1, bot: "x = 6" },
       
@@ -524,90 +372,53 @@
     let assessments = JSON.parse(localStorage.getItem('h_sup_assessments')) || {};
     let submissions = JSON.parse(localStorage.getItem('h_sup_submissions_v2')) || [];
     let sysDate = localStorage.getItem('h_sup_date') || "WEDNESDAY, 13TH MAY, 2026";
-    let activeQ = [], user = {}, cur = 0, score = 0, seconds = 0, timerInterval, currentAssessmentKey = '';
+    let activeQ = [], user = {}, cur = 0, score = 0, timerInterval, currentAssessmentKey = '';
 
     window.onload = () => {
       document.getElementById('display-date').innerText = sysDate;
-      document.getElementById('admin-date-input').value = sysDate;
       renderQuestionsList();
       renderSubmissionsList();
-      renderAnalytics();
     };
 
-    // ANALYZE WEAKNESS
-    function analyzeWeakness(studentAnswer, expectedAnswer, questionText) {
-      const weaknesses = [];
-      const studentLower = studentAnswer.toLowerCase();
-      const expectedLower = expectedAnswer.toLowerCase();
-      
-      // Check length of answer
-      if(studentAnswer.length < expectedAnswer.length * 0.5) {
-        weaknesses.push({ type: 'INCOMPLETE', severity: 'critical', msg: 'Answer too brief - lacks detail' });
+    function showPage(page) {
+      if (page === 'records' && !user.name) {
+        alert("Please login first!");
+        return;
       }
       
-      // Check for key terms
-      const keyTerms = expectedLower.split(' ').filter(w => w.length > 3);
-      const matchedTerms = keyTerms.filter(term => studentLower.includes(term));
-      if(matchedTerms.length < keyTerms.length * 0.5) {
-        weaknesses.push({ type: 'MISSING_CONCEPTS', severity: 'critical', msg: 'Missing key concepts/terms' });
-      }
+      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
       
-      // Check for spelling/typos
-      if(!studentLower.includes(keyTerms[0])) {
-        weaknesses.push({ type: 'SPELLING', severity: 'moderate', msg: 'Possible spelling errors' });
+      if (page === 'records') {
+        document.getElementById('records-screen').classList.remove('hidden');
+        displayRecords();
+      } else if (page === 'leaderboard') {
+        document.getElementById('leaderboard-screen').classList.remove('hidden');
+        displayLeaderboard();
       }
-      
-      // Check for understanding
-      if(studentAnswer.includes('?') || studentAnswer.includes('not sure')) {
-        weaknesses.push({ type: 'UNCERTAIN', severity: 'moderate', msg: 'Shows uncertainty in understanding' });
-      }
-      
-      // Generic response
-      if(studentAnswer.length < 20) {
-        weaknesses.push({ type: 'VAGUE', severity: 'moderate', msg: 'Response is too vague' });
-      }
-      
-      return weaknesses.length > 0 ? weaknesses : [{ type: 'GOOD', severity: 'none', msg: 'Good attempt' }];
     }
 
-    // STUDENT LOGIC
     function validateStudent() {
-      const name = document.getElementById('s-name-dropdown').value;
+      const name = document.getElementById('s-name').value;
       const code = document.getElementById('s-code').value.trim();
       const found = STUDENTS.find(s => s.name === name && s.code === code);
       if(found) {
         user = found;
-        document.querySelector('.space-y-6').classList.add('hidden');
-        document.getElementById('subject-selection').classList.remove('hidden');
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('subjects-screen').classList.remove('hidden');
         document.getElementById('welcome-msg').innerText = `IDENTIFIED: ${user.name} (${user.level})`;
-        renderSubjects();
       } else alert("Invalid Student Credentials.");
     }
 
-    function renderSubjects() {
-      const box = document.getElementById('subject-buttons');
-      const available = questions.filter(q => q.level === user.level);
-      const subs = [...new Set(available.map(q => q.subject))];
-      if(subs.length === 0) {
-        box.innerHTML = `<p class="text-slate-400 font-bold py-4 italic text-sm text-center">No assignments uploaded for your level.</p>`;
-        return;
-      }
-      box.innerHTML = subs.map(s => {
-        const assessmentKey = `${user.name}_${s}`;
-        const completed = assessments[assessmentKey];
-        const btnClass = completed ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'hover:border-blue-500';
-        const btnText = completed ? `✓ COMPLETED (${completed.score}%)` : s;
-        return `
-          <button onclick="${completed ? 'alert("You have already completed this assessment!")' : `start('${s}')`}" class="w-full bg-white border-2 p-5 rounded-2xl font-bold text-blue-900 flex justify-between items-center shadow-sm ${btnClass} transition-all">
-            ${btnText} <i class="fas ${completed ? 'fa-check-circle' : 'fa-play-circle'} text-blue-200"></i>
-          </button>
-        `;
-      }).join('');
-    }
-
-    function start(sub) {
+    function startAssessment(sub) {
       user.activeSub = sub;
       currentAssessmentKey = `${user.name}_${sub}`;
+      
+      // Check if already took this assessment
+      if (assessments[currentAssessmentKey]) {
+        alert("You have already completed this assessment!");
+        return;
+      }
+      
       activeQ = questions.filter(q => q.level === user.level && q.subject === sub);
       if(activeQ.length === 0) {
         alert("No questions available for this subject.");
@@ -615,10 +426,8 @@
       }
       cur = 0;
       score = 0;
-      seconds = 0;
-      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('subjects-screen').classList.add('hidden');
       document.getElementById('quiz-screen').classList.remove('hidden');
-      startTimer();
       load();
     }
 
@@ -647,6 +456,21 @@
             } else {
               b.classList.add('wrong');
             }
+            
+            // Log submission
+            submissions.push({
+              id: Date.now(),
+              student: user.name,
+              level: user.level,
+              subject: user.activeSub,
+              question: q.text,
+              studentAnswer: optText,
+              expectedAnswer: q.options[q.correctIdx],
+              isCorrect: i == q.correctIdx,
+              timestamp: new Date().toLocaleString()
+            });
+            localStorage.setItem('h_sup_submissions_v2', JSON.stringify(submissions));
+            
             showBot(q.bot);
           };
           mcq.appendChild(b);
@@ -665,9 +489,7 @@
       if(!typed) return alert("Please type your response.");
       inp.disabled = true;
       
-      const weaknesses = analyzeWeakness(typed, q.correctAns, q.text);
-      
-      const submission = {
+      submissions.push({
         id: Date.now(),
         student: user.name,
         level: user.level,
@@ -675,12 +497,9 @@
         question: q.text,
         studentAnswer: typed,
         expectedAnswer: q.correctAns,
-        weaknesses: weaknesses,
-        timestamp: new Date().toLocaleString(),
-        questionType: q.type
-      };
-      
-      submissions.push(submission);
+        isCorrect: typed.toLowerCase().includes(q.correctAns.toLowerCase().split(' ')[0]),
+        timestamp: new Date().toLocaleString()
+      });
       localStorage.setItem('h_sup_submissions_v2', JSON.stringify(submissions));
       
       if(typed.toLowerCase().includes(q.correctAns.toLowerCase().split(' ')[0])) {
@@ -706,7 +525,6 @@
     }
 
     function finish() {
-      clearInterval(timerInterval);
       const finalScore = Math.round((score/activeQ.length)*100);
       
       assessments[currentAssessmentKey] = {
@@ -728,15 +546,7 @@
       `;
     }
 
-    // MY RECORDS
-    function showStudentRecords() {
-      if(!user.name) return alert("Please login first!");
-      
-      document.getElementById('login-screen').classList.add('hidden');
-      document.getElementById('records-screen').classList.remove('hidden');
-      
-      document.getElementById('record-student-name').innerText = `${user.name} (${user.level})`;
-      
+    function displayRecords() {
       const studentAssessments = Object.entries(assessments).filter(([key]) => key.startsWith(user.name));
       const scores = studentAssessments.map(([_, data]) => data.score);
       
@@ -751,14 +561,6 @@
         if(Math.min(...scores) >= 70) badges++;
       }
       document.getElementById('total-badges').innerText = badges;
-      
-      const achievementsHTML = [];
-      if(Math.max(...scores) >= 90) achievementsHTML.push('<div class="badge-achievement badge-gold">🌟<br>Perfect<br>Score</div>');
-      if(scores.length >= 3) achievementsHTML.push('<div class="badge-achievement badge-blue">🎯<br>Consistent<br>Learner</div>');
-      if(Math.min(...scores) >= 70) achievementsHTML.push('<div class="badge-achievement badge-silver">✨<br>All<br>Passed</div>');
-      if(scores.length >= 5) achievementsHTML.push('<div class="badge-achievement badge-bronze">🏅<br>Super<br>Active</div>');
-      
-      document.getElementById('achievements-container').innerHTML = achievementsHTML.length > 0 ? achievementsHTML.join('') : '<p class="text-slate-400">Complete more assessments to earn badges!</p>';
       
       const recordsList = document.getElementById('records-list');
       if(studentAssessments.length === 0) {
@@ -785,17 +587,7 @@
       }
     }
 
-    // LEADERBOARD
-    function showLeaderboard() {
-      document.getElementById('login-screen').classList.add('hidden');
-      document.getElementById('leaderboard-screen').classList.remove('hidden');
-      renderLeaderboard();
-    }
-
-    function renderLeaderboard() {
-      const levelFilter = document.getElementById('leaderboard-level')?.value || '';
-      const subjectFilter = document.getElementById('leaderboard-subject')?.value || '';
-      
+    function displayLeaderboard() {
       const leaderboardData = {};
       
       Object.entries(assessments).forEach(([key, data]) => {
@@ -804,8 +596,6 @@
         const student = STUDENTS.find(s => s.name === studentName);
         
         if(!student) return;
-        if(levelFilter && student.level !== levelFilter) return;
-        if(subjectFilter && subject !== subjectFilter) return;
         
         if(!leaderboardData[studentName]) {
           leaderboardData[studentName] = { name: studentName, level: student.level, scores: [] };
@@ -846,7 +636,6 @@
       }
     }
 
-    // ADMIN FUNCTIONS
     function switchAdminTab(tab) {
       document.querySelectorAll('.admin-tab-btn').forEach(btn => {
         btn.classList.remove('border-blue-600');
@@ -858,7 +647,6 @@
       event.target.closest('.admin-tab-btn').classList.add('border-blue-600');
       document.getElementById('admin-tab-' + tab).classList.remove('hidden');
       if(tab === 'submissions') renderSubmissionsList();
-      if(tab === 'analytics') renderAnalytics();
     }
 
     function toggleAdminInput() {
@@ -878,14 +666,13 @@
         subject: sub,
         type: document.getElementById('in-type').value,
         text: txt,
-        img: document.getElementById('in-img').value,
         options: [
           document.getElementById('opt-0').value,
           document.getElementById('opt-1').value,
           document.getElementById('opt-2').value,
           document.getElementById('opt-3').value
         ],
-        correctIdx: document.querySelector('input[name="c-idx"]:checked').value,
+        correctIdx: parseInt(document.querySelector('input[name="c-idx"]:checked').value),
         correctAns: document.getElementById('in-ans').value.trim(),
         bot: document.getElementById('in-bot').value.trim() || "Analysis saved."
       };
@@ -900,7 +687,6 @@
       document.getElementById('opt-2').value = '';
       document.getElementById('opt-3').value = '';
       document.getElementById('in-ans').value = '';
-      document.getElementById('in-img').value = '';
       document.getElementById('in-bot').value = '';
       
       alert("Question added successfully!");
@@ -908,17 +694,10 @@
     }
 
     function renderQuestionsList() {
-      const levelFilter = document.getElementById('filter-level')?.value || '';
-      const subjectFilter = document.getElementById('filter-subject')?.value || '';
-      
-      let filtered = questions;
-      if(levelFilter) filtered = filtered.filter(q => q.level === levelFilter);
-      if(subjectFilter) filtered = filtered.filter(q => q.subject === subjectFilter);
-
-      const list = document.getElementById('questions-list') || document.getElementById('admin-preview');
+      const list = document.getElementById('admin-preview');
       if(!list) return;
 
-      list.innerHTML = filtered.map((q, i) => `
+      list.innerHTML = questions.map((q, i) => `
         <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm">
           <div class="flex justify-between items-start mb-2">
             <div>
@@ -944,14 +723,8 @@
       }
       
       list.innerHTML = submissions.map((s) => {
-        const weaknessHTML = (s.weaknesses || []).map(w => {
-          const severityClass = w.severity === 'critical' ? 'weakness-critical' : w.severity === 'moderate' ? 'weakness-moderate' : 'weakness-minor';
-          return `<span class="weakness-badge ${severityClass}">⚠️ ${w.type}: ${w.msg}</span>`;
-        }).join('');
-        
         return `
           <div class="bg-white rounded-2xl p-6 border-l-8 border-blue-500 shadow-md">
-            <!-- HEADER -->
             <div class="flex justify-between items-start mb-4">
               <div>
                 <p class="text-sm font-black text-blue-900">${s.student}</p>
@@ -960,16 +733,14 @@
               <p class="text-[9px] text-slate-400 font-mono">${s.timestamp}</p>
             </div>
             
-            <!-- QUESTION -->
             <div class="bg-slate-50 p-4 rounded-xl mb-4 border-l-4 border-slate-300">
               <p class="text-[10px] font-black text-slate-600 uppercase mb-1">Question</p>
               <p class="text-sm font-bold text-slate-800">${s.question}</p>
             </div>
             
-            <!-- EFFORT & ANSWER -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                <p class="text-[10px] font-black text-blue-900 uppercase mb-2">📝 Student's Effort</p>
+                <p class="text-[10px] font-black text-blue-900 uppercase mb-2">📝 Student's Answer</p>
                 <p class="text-sm font-bold text-blue-800 italic">"${s.studentAnswer}"</p>
               </div>
               <div class="bg-green-50 p-4 rounded-xl border border-green-200">
@@ -978,60 +749,14 @@
               </div>
             </div>
             
-            <!-- WEAKNESS ANALYSIS -->
-            <div class="bg-red-50 p-4 rounded-xl border border-red-200">
-              <p class="text-[10px] font-black text-red-900 uppercase mb-3">🔍 Weakness Analysis</p>
-              <div class="flex flex-wrap gap-2">
-                ${weaknessHTML || '<span class="text-[10px] text-red-700 font-bold">Good attempt - minimal weaknesses detected</span>'}
-              </div>
+            <div class="mt-4 p-3 rounded-lg ${s.isCorrect ? 'bg-green-100 border border-green-300' : 'bg-red-100 border border-red-300'}">
+              <p class="text-xs font-black ${s.isCorrect ? 'text-green-900' : 'text-red-900'}">
+                ${s.isCorrect ? '✓ CORRECT' : '✗ NEEDS REVIEW'}
+              </p>
             </div>
           </div>
         `;
       }).join('');
-    }
-
-    function renderAnalytics() {
-      const statsDiv = document.getElementById('analytics-stats');
-      const subjectsDiv = document.getElementById('analytics-subjects');
-      
-      const totalAssessments = Object.keys(assessments).length;
-      const avgScore = totalAssessments > 0 ? Math.round(Object.values(assessments).reduce((a, b) => a + b.score, 0) / totalAssessments) : 0;
-      const totalSubmissions = submissions.length;
-      
-      statsDiv.innerHTML = `
-        <div class="bg-white p-4 rounded-lg border-l-4 border-blue-500">
-          <p class="text-sm text-slate-600">Total Assessments Taken</p>
-          <p class="text-3xl font-black text-blue-900">${totalAssessments}</p>
-        </div>
-        <div class="bg-white p-4 rounded-lg border-l-4 border-green-500">
-          <p class="text-sm text-slate-600">Class Average Score</p>
-          <p class="text-3xl font-black text-green-900">${avgScore}%</p>
-        </div>
-        <div class="bg-white p-4 rounded-lg border-l-4 border-purple-500">
-          <p class="text-sm text-slate-600">Total Submissions</p>
-          <p class="text-3xl font-black text-purple-900">${totalSubmissions}</p>
-        </div>
-        <div class="bg-white p-4 rounded-lg border-l-4 border-orange-500">
-          <p class="text-sm text-slate-600">Active Students</p>
-          <p class="text-3xl font-black text-orange-900">${new Set(Object.keys(assessments).map(k => k.split('_')[0])).size}</p>
-        </div>
-      `;
-      
-      const subjectStats = {};
-      Object.entries(assessments).forEach(([key, data]) => {
-        const subject = key.split('_').slice(1).join('_');
-        if(!subjectStats[subject]) subjectStats[subject] = { count: 0, total: 0 };
-        subjectStats[subject].count++;
-        subjectStats[subject].total += data.score;
-      });
-      
-      subjectsDiv.innerHTML = Object.entries(subjectStats).map(([subject, stats]) => `
-        <div class="bg-white p-4 rounded-lg">
-          <p class="text-sm font-black text-slate-700">${subject}</p>
-          <p class="text-2xl font-black text-blue-900">${Math.round(stats.total / stats.count)}%</p>
-          <p class="text-xs text-slate-600">${stats.count} assessments</p>
-        </div>
-      `).join('');
     }
 
     function deleteQ(i) {
@@ -1042,30 +767,20 @@
       }
     }
 
-    function updateSystemDate() {
-      sysDate = document.getElementById('admin-date-input').value.toUpperCase();
-      localStorage.setItem('h_sup_date', sysDate);
-      document.getElementById('display-date').innerText = sysDate;
-      alert("DATE UPDATED");
-    }
-
     function adminLogin() {
-      if(prompt("Enter Admin Key:") === "1234") {
-        document.getElementById('login-screen').classList.add('hidden');
+      const key = prompt("Enter Admin Key:");
+      if(key === "1234") {
+        document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
         document.getElementById('admin-screen').classList.remove('hidden');
+      } else if(key) {
+        alert("Invalid admin key");
       }
     }
 
-    function startTimer() {
-      timerInterval = setInterval(() => {
-        seconds++;
-        let m = Math.floor(seconds/60), s = seconds%60;
-        document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0'+s : s}`;
-      }, 1000);
-    }
-
     function backToLogin() {
-      location.reload();
+      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+      document.getElementById('login-screen').classList.remove('hidden');
+      user = {};
     }
   </script>
 </body>
