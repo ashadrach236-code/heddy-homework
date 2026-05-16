@@ -193,8 +193,8 @@
                     <div id="status-english" class="flex flex-col gap-3"></div>
                 </div>
                 <div class="heddy-card p-6 border-l-4 border-emerald-600">
-                    <h3 class="font-800 text-slate-400 text-xs uppercase tracking-widest mb-4">Mathematics</h3>
-                    <div id="status-mathematics" class="flex flex-col gap-3"></div>
+                    <h3 class="font-800 text-slate-400 text-xs uppercase tracking-widest mb-4">Science</h3>
+                    <div id="status-science" class="flex flex-col gap-3"></div>
                 </div>
                 <div class="heddy-card p-6 border-l-4 border-amber-600">
                     <h3 class="font-800 text-slate-400 text-xs uppercase tracking-widest mb-4">Social Studies</h3>
@@ -303,92 +303,68 @@
                     <button onclick="showView('login')" class="px-4 py-2 bg-slate-200 rounded-lg text-xs font-800 uppercase">Exit</button>
                 </div>
             </div>
-
-            <div class="grid grid-cols-1 gap-8">
-                <div class="heddy-card p-8">
-                    <h3 class="text-xl font-800 mb-6">Student Submissions</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left min-w-[800px]">
-                            <thead class="bg-slate-50 border-b border-slate-100">
-                                <tr>
-                                    <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Student</th>
-                                    <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Subject</th>
-                                    <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Score</th>
-                                    <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Details</th>
-                                    <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-submissions-body"></tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="heddy-card overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 border-b border-slate-100">
+                        <tr>
+                            <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Student</th>
+                            <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Subject</th>
+                            <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Score</th>
+                            <th class="px-6 py-4 text-[10px] font-800 text-slate-400 uppercase">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-submissions-body"></tbody>
+                </table>
             </div>
         </section>
+
     </main>
 
-    <footer class="py-8 text-center text-slate-400 text-xs font-700 uppercase tracking-widest">
-        &copy; 2026 HEDDY SUPREME EDUCATIONAL PORTAL • STRICT MODE ENABLED
-    </footer>
-
     <script>
-        // --- CONFIG & DATA ---
-        const ADMIN_KEY = "1234";
-        const CLOUD_API = "https://kvdb.io/K9pY5z8u7v4m2n1q6w3e/heddy_supreme_results"; // Public KV store for syncing
+        // --- CONFIGURATION ---
+        const ADMIN_KEY = "admin123";
+        const CLOUD_API = "https://api.example.com/submissions"; // Replace with actual API
 
         const STUDENTS = [
-            { name: "KENNETH ANTWI", code: "3478", level: "Basic 6-7" },
-            { name: "PEACE OF GOD VICTOR", code: "P24", level: "Basic 6-7" },
-            { name: "EMMANUEL GADZIE", code: "44", level: "Basic 6-7" },
-            { name: "PRINCE VICTOR SUNDAY", code: "zxcbnabc", level: "Basic 8" },
-            { name: "ROLAND AGBOZO", code: "MIDNIGHTCALLERS", level: "Basic 8" },
-            { name: "EMMANUELLA GYAMFI", code: "4952", level: "Basic 8" },
-            { name: "PATIENCE AMOAKOWAA", code: "9876", level: "Basic 8" },
-            { name: "BLESSING GADZE", code: "080852", level: "Basic 8" },
-            { name: "BRAHANNAH BOATENG", code: "14396", level: "Basic 8" }
+            { name: "KENNETH ANTWI", level: "Basic 6-7", code: "1234" },
+            { name: "PEACE OF GOD VICTOR", level: "Basic 6-7", code: "1234" },
+            { name: "EMMANUEL GADZIE", level: "Basic 6-7", code: "1234" },
+            { name: "PRINCE VICTOR SUNDAY", level: "Basic 8", code: "1234" },
+            { name: "ROLAND AGBOZO", level: "Basic 8", code: "1234" },
+            { name: "EMMANUELLA GYAMFI", level: "Basic 8", code: "1234" },
+            { name: "PATIENCE AMOAKOWAA", level: "Basic 8", code: "1234" },
+            { name: "BLESSING GADZE", level: "Basic 8", code: "1234" },
+            { name: "BRAHANNAH BOATENG", level: "Basic 8", code: "1234" }
         ];
 
         const QUESTIONS = [
-            // BASIC 6-7 ENGLISH (5)
-            { id: 1, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Which of these is a proper noun?", options: ["city", "London", "boy", "school"], correctIdx: 1, bot: "Proper nouns always start with a capital letter and name specific people, places, or things." },
-            { id: 2, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Identify the verb: 'The student studies hard.'", options: ["student", "studies", "hard", "the"], correctIdx: 1, bot: "A verb is an action word. 'Studies' is what the student is doing." },
-            { id: 3, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Choose the correct spelling:", options: ["Recieve", "Receive", "Receve", "Recive"], correctIdx: 1, bot: "Remember the rule: 'i' before 'e' except after 'c'." },
-            { id: 4, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What is the opposite of 'Ancient'?", options: ["Old", "Modern", "Historic", "Antique"], correctIdx: 1, bot: "Ancient means very old, so the opposite is modern." },
-            { id: 5, level: "Basic 6-7", subject: "ENGLISH", type: "theory", text: "What is a sentence?", correctAns: "complete thought", bot: "A sentence must have a subject and a verb and make sense on its own." },
-            
-            // BASIC 6-7 MATHEMATICS (5)
-            { id: 6, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "What is 12 x 12?", options: ["124", "144", "164", "184"], correctIdx: 1, bot: "12 squared is 144." },
-            { id: 7, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "Solve for x: x + 15 = 30", options: ["10", "15", "20", "25"], correctIdx: 1, bot: "Subtract 15 from both sides to find x." },
-            { id: 8, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "What is the value of 1/2 + 1/4?", options: ["1/6", "2/6", "3/4", "1/8"], correctIdx: 2, bot: "Find a common denominator (4), so 2/4 + 1/4 = 3/4." },
-            { id: 9, level: "Basic 6-7", subject: "MATHEMATICS", type: "mcq", text: "How many sides does a hexagon have?", options: ["5", "6", "7", "8"], correctIdx: 1, bot: "Hex- means six." },
-            { id: 10, level: "Basic 6-7", subject: "MATHEMATICS", type: "theory", text: "If a shirt costs $20 and is on sale for 50% off, what is the new price?", correctAns: "10", bot: "50% off means you pay half the price." },
+            // BASIC 6-7 ENGLISH - Introduction to Literature (5)
+            { id: 1, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What is literature?", options: ["A form of entertainment only", "Written or oral works expressing ideas and emotions", "A collection of grammar rules", "A type of music"], correctIdx: 1, bot: "Literature is the art of expressing ideas, emotions, and stories through written or oral works." },
+            { id: 2, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "Which of the following is a literary genre?", options: ["Science", "Poetry", "Mathematics", "History"], correctIdx: 1, bot: "Poetry is a literary genre that uses language in creative and expressive ways." },
+            { id: 3, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "What is the main purpose of a story's setting?", options: ["To confuse the reader", "To provide context for when and where events occur", "To make the story longer", "To replace the plot"], correctIdx: 1, bot: "The setting establishes the time and place where a story takes place, providing important context." },
+            { id: 4, level: "Basic 6-7", subject: "ENGLISH", type: "mcq", text: "A character who opposes the main character is called a/an:", options: ["Protagonist", "Antagonist", "Narrator", "Author"], correctIdx: 1, bot: "An antagonist is a character who opposes or conflicts with the protagonist (main character)." },
+            { id: 5, level: "Basic 6-7", subject: "ENGLISH", type: "theory", text: "What is a theme in literature?", correctAns: "main idea", bot: "A theme is the central idea or message that a literary work conveys to the reader." },
 
-            // BASIC 6-7 SOCIAL STUDIES (5)
-            { id: 11, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Which of these is a primary color?", options: ["Green", "Orange", "Red", "Purple"], correctIdx: 2, bot: "Primary colors are Red, Blue, and Yellow." },
-            { id: 12, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Who is the current President of Ghana?", options: ["John Mahama", "Nana Akufo-Addo", "Jerry Rawlings", "John Kufuor"], correctIdx: 1, bot: "Nana Akufo-Addo has been President since 2017." },
-            { id: 13, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "What is the largest ocean in the world?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], correctIdx: 3, bot: "The Pacific Ocean covers more than 30% of the Earth's surface." },
-            { id: 14, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "mcq", text: "Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Jupiter", "Saturn"], correctIdx: 1, bot: "Mars appears red due to iron oxide (rust) on its surface." },
-            { id: 15, level: "Basic 6-7", subject: "SOCIAL STUDIES", type: "theory", text: "Name one importance of trees to the environment.", correctAns: "oxygen", bot: "Trees produce oxygen and help reduce carbon dioxide." },
+            // BASIC 6-7 SCIENCE - Introduction to Elements and Atoms (5)
+            { id: 6, level: "Basic 6-7", subject: "SCIENCE", type: "mcq", text: "What is an atom?", options: ["A type of molecule", "The smallest unit of an element that retains its properties", "A large particle visible to the naked eye", "A combination of elements"], correctIdx: 1, bot: "An atom is the smallest unit of an element that still has the properties of that element." },
+            { id: 7, level: "Basic 6-7", subject: "SCIENCE", type: "mcq", text: "Which of the following is a chemical element?", options: ["Water", "Salt", "Oxygen", "Sugar"], correctIdx: 2, bot: "Oxygen is a chemical element. Water, salt, and sugar are compounds made of elements." },
+            { id: 8, level: "Basic 6-7", subject: "SCIENCE", type: "mcq", text: "What are the three main parts of an atom?", options: ["Protons, neutrons, and molecules", "Protons, neutrons, and electrons", "Electrons, ions, and compounds", "Shells, nuclei, and particles"], correctIdx: 1, bot: "The three main parts of an atom are protons (positive), neutrons (neutral), and electrons (negative)." },
+            { id: 9, level: "Basic 6-7", subject: "SCIENCE", type: "mcq", text: "Where is the nucleus of an atom located?", options: ["In the electron shells", "At the center of the atom", "Outside the atom", "In the protons"], correctIdx: 1, bot: "The nucleus is at the center of the atom and contains protons and neutrons." },
+            { id: 10, level: "Basic 6-7", subject: "SCIENCE", type: "theory", text: "Name two elements and their chemical symbols.", correctAns: "hydrogen oxygen carbon nitrogen", bot: "Common elements include Hydrogen (H), Oxygen (O), Carbon (C), and Nitrogen (N)." },
 
-            // BASIC 8 ENGLISH (5)
-            { id: 16, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "What is a metaphor?", options: ["Comparison using like/as", "Direct comparison without like/as", "Exaggeration", "Giving human traits to objects"], correctIdx: 1, bot: "A metaphor says something IS something else to create a symbolic meaning." },
-            { id: 17, level: "Basic 8", subject: "mcq", text: "Which is an example of personification?", options: ["The stars danced", "As brave as a lion", "I'm so hungry I could eat a horse", "The world is a stage"], correctIdx: 0, bot: "Personification gives human actions (dancing) to non-human things (stars)." },
-            { id: 18, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "What does 'Ambiguous' mean?", options: ["Very clear", "Having multiple meanings", "Completely false", "Very old"], correctIdx: 1, bot: "Ambiguous means something is open to more than one interpretation." },
-            { id: 19, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Identify the conjunction: 'I wanted to go, but it was raining.'", options: ["wanted", "go", "but", "raining"], correctIdx: 2, bot: "Conjunctions like 'but' connect two sentences or ideas." },
-            { id: 20, level: "Basic 8", subject: "ENGLISH", type: "theory", text: "Explain the importance of a thesis statement in an essay.", correctAns: "main argument", bot: "The thesis is the 'map' of your essay; without it, the reader gets lost." },
+            // BASIC 8 ENGLISH - Introduction to Literature (5)
+            { id: 11, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "What is a metaphor in literature?", options: ["A comparison using 'like' or 'as'", "A direct comparison between two unlike things without using 'like' or 'as'", "A repeated sound at the beginning of words", "A type of poem"], correctIdx: 1, bot: "A metaphor is a direct comparison between two unlike things without using 'like' or 'as'." },
+            { id: 12, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "Which literary device gives human qualities to non-human things?", options: ["Metaphor", "Simile", "Personification", "Alliteration"], correctIdx: 2, bot: "Personification is a literary device that gives human qualities or characteristics to non-human things." },
+            { id: 13, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "What is the climax of a story?", options: ["The beginning of the story", "The turning point where tension is highest", "The conclusion of the story", "The introduction of characters"], correctIdx: 1, bot: "The climax is the turning point of a story where tension reaches its highest point." },
+            { id: 14, level: "Basic 8", subject: "ENGLISH", type: "mcq", text: "A narrative told from the perspective of a character in the story uses which point of view?", options: ["First person", "Second person", "Third person omniscient", "Third person limited"], correctIdx: 0, bot: "First person point of view uses 'I' and 'we' and is told from a character's perspective." },
+            { id: 15, level: "Basic 8", subject: "ENGLISH", type: "theory", text: "Explain the difference between a simile and a metaphor.", correctAns: "like as comparison", bot: "A simile uses 'like' or 'as' for comparison, while a metaphor makes a direct comparison without these words." },
 
-            // BASIC 8 MATHEMATICS (5)
-            { id: 21, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Solve for x: 2x + 10 = 20", options: ["5", "10", "15", "20"], correctIdx: 0, bot: "2x = 10, so x = 5." },
-            { id: 22, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "What is the square root of 169?", options: ["11", "12", "13", "14"], correctIdx: 2, bot: "13 times 13 equals 169." },
-            { id: 23, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "Simplify: 3(x + 4)", options: ["3x + 4", "3x + 12", "x + 12", "3x + 7"], correctIdx: 1, bot: "Distribute the 3 to both x and 4." },
-            { id: 24, level: "Basic 8", subject: "MATHEMATICS", type: "mcq", text: "What is the area of a circle with radius 7? (Use π = 22/7)", options: ["44", "154", "196", "616"], correctIdx: 1, bot: "Area = πr² = (22/7) * 7 * 7 = 154." },
-            { id: 25, level: "Basic 8", subject: "MATHEMATICS", type: "theory", text: "If 3x - 5 = 10, find x.", correctAns: "5", bot: "Add 5 to both sides, then divide by 3." },
-
-            // BASIC 8 SOCIAL STUDIES (5)
-            { id: 26, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "What is globalization?", options: ["Isolation", "World integration", "Local farming", "Building walls"], correctIdx: 1, bot: "Globalization is the process of interaction and integration among people, companies, and governments worldwide." },
-            { id: 27, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "Which of these is a benefit of cultural diversity?", options: ["Conflict", "Innovation", "Segregation", "Boredom"], correctIdx: 1, bot: "Diversity brings different perspectives which leads to innovation." },
-            { id: 28, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "What does 'Cosmopolitan' mean?", options: ["Local only", "Worldly and diverse", "Rural", "Traditional"], correctIdx: 1, bot: "A cosmopolitan person or place is familiar with and at ease in many different countries and cultures." },
-            { id: 29, level: "Basic 8", subject: "SOCIAL STUDIES", type: "mcq", text: "Which organization was formed to maintain world peace after WWII?", options: ["League of Nations", "United Nations", "NATO", "African Union"], correctIdx: 1, bot: "The UN was established in 1945 to prevent future conflicts." },
-            { id: 30, level: "Basic 8", subject: "SOCIAL STUDIES", type: "theory", text: "How does technology help in globalization?", correctAns: "communication", bot: "Technology like the internet allows instant communication across the world." }
+            // BASIC 8 SCIENCE - Atoms (5)
+            { id: 16, level: "Basic 8", subject: "SCIENCE", type: "mcq", text: "What is the atomic number of an element?", options: ["The total number of protons and neutrons", "The number of protons in an atom", "The number of electrons in an atom", "The mass of the atom"], correctIdx: 1, bot: "The atomic number is the number of protons in an atom, which defines the element." },
+            { id: 17, level: "Basic 8", subject: "SCIENCE", type: "mcq", text: "How many electrons are in a neutral atom of carbon (atomic number 6)?", options: ["3", "6", "12", "4"], correctIdx: 1, bot: "A neutral atom has equal numbers of protons and electrons. Carbon has 6 protons, so it has 6 electrons." },
+            { id: 18, level: "Basic 8", subject: "SCIENCE", type: "mcq", text: "What is an ion?", options: ["A neutral atom", "An atom that has gained or lost electrons", "A type of element", "A compound of atoms"], correctIdx: 1, bot: "An ion is an atom that has gained or lost electrons, giving it a positive or negative charge." },
+            { id: 19, level: "Basic 8", subject: "SCIENCE", type: "mcq", text: "Which particle has a negative charge?", options: ["Proton", "Neutron", "Electron", "Nucleus"], correctIdx: 2, bot: "The electron carries a negative charge. Protons are positive, and neutrons are neutral." },
+            { id: 20, level: "Basic 8", subject: "SCIENCE", type: "theory", text: "Draw and label the structure of an atom.", correctAns: "nucleus electrons shells protons neutrons", bot: "An atom has a nucleus at the center containing protons and neutrons, with electrons in shells around it." }
         ];
 
         // State
@@ -428,6 +404,7 @@
         function logout() {
             currentUser = null;
             localStorage.removeItem('h_user');
+            localStorage.removeItem('h_quiz_state');
             showView('login');
         }
 
@@ -435,7 +412,7 @@
             document.getElementById('user-welcome').innerText = `Hello, ${currentUser.name}`;
             document.getElementById('user-level').innerText = currentUser.level;
 
-            const subjects = ['ENGLISH', 'MATHEMATICS', 'SOCIAL STUDIES'];
+            const subjects = ['ENGLISH', 'SCIENCE', 'SOCIAL STUDIES'];
             subjects.forEach(sub => {
                 const subId = sub.toLowerCase().split(' ')[0];
                 const container = document.getElementById(`status-${subId}`);
@@ -460,7 +437,10 @@
 
         function startQuiz(subject) {
             const qList = QUESTIONS.filter(q => q.level === currentUser.level && q.subject === subject);
-            if(qList.length === 0) return alert("No questions available for this subject yet.");
+            if(qList.length === 0) {
+                alert("No questions available for this subject.");
+                return;
+            }
 
             currentQuiz = {
                 subject: subject,
@@ -470,34 +450,68 @@
                 answers: []
             };
 
-            document.getElementById('quiz-subject').innerText = subject;
-            document.getElementById('q-total').innerText = qList.length;
-            
+            // Save quiz state to localStorage
+            saveQuizState();
+
             enableStrictMode();
             showView('quiz');
             loadQuestion();
         }
 
+        function saveQuizState() {
+            if(currentQuiz) {
+                localStorage.setItem('h_quiz_state', JSON.stringify({
+                    subject: currentQuiz.subject,
+                    currentIndex: currentQuiz.currentIndex,
+                    score: currentQuiz.score,
+                    answers: currentQuiz.answers
+                }));
+            }
+        }
+
+        function restoreQuizState() {
+            const saved = localStorage.getItem('h_quiz_state');
+            if(saved && currentUser) {
+                const state = JSON.parse(saved);
+                const qList = QUESTIONS.filter(q => q.level === currentUser.level && q.subject === state.subject);
+                if(qList.length > 0) {
+                    currentQuiz = {
+                        subject: state.subject,
+                        questions: qList,
+                        currentIndex: state.currentIndex,
+                        score: state.score,
+                        answers: state.answers
+                    };
+                    enableStrictMode();
+                    showView('quiz');
+                    loadQuestion();
+                }
+            }
+        }
+
         function loadQuestion() {
             const q = currentQuiz.questions[currentQuiz.currentIndex];
-            document.getElementById('q-current').innerText = currentQuiz.currentIndex + 1;
-            document.getElementById('quiz-progress').style.width = `${(currentQuiz.currentIndex / currentQuiz.questions.length) * 100}%`;
             document.getElementById('q-text').innerText = q.text;
+            document.getElementById('q-current').innerText = currentQuiz.currentIndex + 1;
+            document.getElementById('q-total').innerText = currentQuiz.questions.length;
+            document.getElementById('quiz-subject').innerText = currentQuiz.subject;
+            
+            const progress = ((currentQuiz.currentIndex + 1) / currentQuiz.questions.length) * 100;
+            document.getElementById('quiz-progress').style.width = progress + '%';
+
+            // Hide bot feedback
             document.getElementById('bot-feedback').classList.add('hidden');
 
-            const mcqBox = document.getElementById('mcq-options');
-            const theoryBox = document.getElementById('theory-input');
-
             if(q.type === 'mcq') {
-                mcqBox.classList.remove('hidden');
-                theoryBox.classList.add('hidden');
-                mcqBox.innerHTML = q.options.map((opt, i) => `
-                    <button onclick="submitMCQ(${i})" class="option-btn" id="opt-${i}">${opt}</button>
+                document.getElementById('theory-input').classList.add('hidden');
+                const optionsDiv = document.getElementById('mcq-options');
+                optionsDiv.innerHTML = q.options.map((opt, idx) => `
+                    <button id="opt-${idx}" class="option-btn" onclick="submitMCQ(${idx})">${opt}</button>
                 `).join('');
             } else {
-                mcqBox.classList.add('hidden');
-                theoryBox.classList.remove('hidden');
-                document.getElementById('theory-ans').value = "";
+                document.getElementById('mcq-options').innerHTML = '';
+                document.getElementById('theory-input').classList.remove('hidden');
+                document.getElementById('theory-ans').value = '';
                 document.getElementById('theory-ans').disabled = false;
                 document.getElementById('theory-submit-btn').classList.remove('hidden');
             }
@@ -528,6 +542,9 @@
                 expectedAnswer: q.options[q.correctIdx],
                 isCorrect: isCorrect
             });
+
+            // Save quiz state after each answer
+            saveQuizState();
         }
 
         function submitTheory() {
@@ -551,6 +568,9 @@
                 isCorrect: isCorrect
             });
 
+            // Save quiz state after each answer
+            saveQuizState();
+
             showBotFeedback(isCorrect, q.bot);
         }
 
@@ -566,6 +586,7 @@
         function nextQuestion() {
             if(currentQuiz.currentIndex < currentQuiz.questions.length - 1) {
                 currentQuiz.currentIndex++;
+                saveQuizState();
                 loadQuestion();
             } else {
                 finishQuiz();
@@ -590,6 +611,7 @@
 
             submissions.push(sub);
             localStorage.setItem('h_subs', JSON.stringify(submissions));
+            localStorage.removeItem('h_quiz_state');
             
             // SYNC TO CLOUD
             syncToCloud(sub);
@@ -741,8 +763,18 @@
 
         // Init
         window.onload = () => {
-            if(currentUser) showView('dashboard');
-            else showView('login');
+            if(currentUser) {
+                // Check if there's a saved quiz state
+                const savedQuizState = localStorage.getItem('h_quiz_state');
+                if(savedQuizState) {
+                    // Restore the quiz
+                    restoreQuizState();
+                } else {
+                    showView('dashboard');
+                }
+            } else {
+                showView('login');
+            }
         };
     </script>
 </body>
